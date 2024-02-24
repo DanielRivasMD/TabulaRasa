@@ -17,6 +17,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -38,11 +40,11 @@ var rootCmd = &cobra.Command{
 	Short: "",
 	Long: chalk.Green.Color("Daniel Rivas <danielrivasmd@gmail.com>") + `
 
-` + chalk.Green.Color("tabularasa") + chalk.Blue.Color(`
+` + chalk.Cyan.Color("tabularasa") + chalk.Blue.Color(`
 
 `) + ``,
 
-		Example: `
+	Example: `
 ` + chalk.Cyan.Color("tabularasa") + ` help`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,18 +96,19 @@ func initializeConfig(κ *cobra.Command, configPath string, configName string) e
 // bind each cobra flag viper configuration
 func bindFlags(κ *cobra.Command, ω *viper.Viper) {
 
-	κ.Flags().VisitAll(func(∫ *pflag.Flag) {
+	κ.Flags().VisitAll(func(ζ *pflag.Flag) {
 
 		// apply viper config value flag
-		if !∫.Changed && ω.IsSet(σ.Name) {
-			ν := ω.Get(∫.Name)
-			κ.Flags().Set(∫.Name, fmt.Sprintf("%v", ν))
+		if !ζ.Changed && ω.IsSet(ζ.Name) {
+			ν := ω.Get(ζ.Name)
+			κ.Flags().Set(ζ.Name, fmt.Sprintf("%v", ν))
 		}
 	})
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// execute prior main
 func init() {
 
 	// persistent flags
