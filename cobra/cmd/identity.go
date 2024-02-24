@@ -1,5 +1,5 @@
 /*
-Copyright © 2024 Daniel Rivas <danielrivasmd@gmail.com>
+Copyright © YEAR AUTHOR_EMAIL
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )

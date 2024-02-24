@@ -1,5 +1,5 @@
 /*
-Copyright © 2024 Daniel Rivas <danielrivasmd@gmail.com>
+Copyright © YEAR AUTHOR_EMAIL
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ var ()
 var rootCmd = &cobra.Command{
 	Use:   "COMMAND",
 	Short: "",
-	Long: chalk.Green.Color("Daniel Rivas <danielrivasmd@gmail.com>") + `
+	Long: chalk.Green.Color("AUTHOR_EMAIL") + `
 
 ` + chalk.Cyan.Color("COMMAND") + chalk.Blue.Color(`
 

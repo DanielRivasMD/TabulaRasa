@@ -1,5 +1,5 @@
 /*
-Copyright © 2024 Daniel Rivas <danielrivasmd@gmail.com>
+Copyright © YEAR AUTHOR_EMAIL
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/DanielRivasMD/REPOSITORY/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -74,7 +73,7 @@ PowerShell:
   # To load completions for every new session, run:
   PS> %[1]s completion powershell > %[1]s.ps1
   # and source this file from your PowerShell profile.
-`, cmd.Root().Name()),
+`, rootCmd.Name()),
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
