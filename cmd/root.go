@@ -1,5 +1,5 @@
 /*
-Copyright © 2024 danielrivasmd@gmail.com
+Copyright © 2024 Daniel Rivas <danielrivasmd@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,44 +20,95 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
+	"github.com/ttacon/chalk"
 )
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// declarations
+var ()
 
-// rootCmd represents the base command when called without any subcommands
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// rootCmd
 var rootCmd = &cobra.Command{
-	Use:   "TabulaRasa",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "tabularasa",
+	Short: "",
+	Long: chalk.Green.Color("Daniel Rivas <danielrivasmd@gmail.com>") + `
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+` + chalk.Green.Color("tabularasa") + chalk.Blue.Color(`
+
+`) + ``,
+
+		Example: `
+` + chalk.Cyan.Color("tabularasa") + ` help`,
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// execute
 func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
+	ε := rootCmd.Execute()
+	if ε != nil {
+		log.Fatal(ε)
 		os.Exit(1)
 	}
 }
 
-func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.TabulaRasa.yaml)")
+// initialize config
+func initializeConfig(κ *cobra.Command, configPath string, configName string) error {
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// initialize viper
+	ω := viper.New()
+
+	// collect config path & file from persistent flags
+	ω.AddConfigPath(configPath)
+	ω.SetConfigName(configName)
+
+	// read config file
+	ε := ω.ReadInConfig()
+	if ε != nil {
+		// okay if no config file
+		_, ϙ := ε.(viper.ConfigFileNotFoundError)
+		if !ϙ {
+			// error if not parse config file
+			return ε
+		}
+	}
+
+	// bind flags viper
+	bindFlags(κ, ω)
+
+	return nil
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// bind each cobra flag viper configuration
+func bindFlags(κ *cobra.Command, ω *viper.Viper) {
+
+	κ.Flags().VisitAll(func(∫ *pflag.Flag) {
+
+		// apply viper config value flag
+		if !∫.Changed && ω.IsSet(σ.Name) {
+			ν := ω.Get(∫.Name)
+			κ.Flags().Set(∫.Name, fmt.Sprintf("%v", ν))
+		}
+	})
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func init() {
+
+	// persistent flags
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
