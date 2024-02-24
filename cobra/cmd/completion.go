@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/DanielRivasMD/REPOSITORY/cmd"
 	"github.com/spf13/cobra"
 )
 
