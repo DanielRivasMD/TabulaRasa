@@ -46,6 +46,7 @@ install APP=_app exe=_exe als=_als:
   go install
   @cp -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{als}}"
   @mv -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{exe}}"
+  @cp -v -R "cobra" "${HOME}/bin/go"
 
 ####################################################################################################
 
