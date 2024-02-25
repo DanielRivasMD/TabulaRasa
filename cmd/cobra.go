@@ -24,7 +24,15 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // declarations
-var ()
+const (
+	gobin = "/bin/go"
+)
+
+var (
+	author_email string
+	path         string
+	repo         string
+)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +53,8 @@ Commands include:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
-
+		// execute shell
+		deployCmd(path, repo, author_email)
 	},
 }
 
@@ -54,6 +63,13 @@ Commands include:
 // execute prior main
 func init() {
 	rootCmd.AddCommand(cobraCmd)
+
+	// flags
+	cobraCmd.Flags().StringVarP(&path, "path", "p", "", "Path to deploy the app")
+	cobraCmd.MarkFlagRequired("path")
+	cobraCmd.Flags().StringVarP(&repo, "repo", "r", "", "Repository name")
+	cobraCmd.MarkFlagRequired("repo")
+	cobraCmd.Flags().StringVarP(&author_email, "author_email", "a", "Daniel Rivas <danielrivasmd@gmail.com>", "Provide author details")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
