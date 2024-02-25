@@ -31,7 +31,6 @@ const (
 var (
 	author_email string
 	repo         string
-	tool         string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,8 +52,8 @@ Commands include:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
-		// execute shell
-		deploy(path, repo, author_email)
+		// copy templates
+		copyDir(findHome()+configDir, path)
 	},
 }
 
