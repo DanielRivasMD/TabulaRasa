@@ -7,6 +7,7 @@ package cmd
 import (
 	"bytes"
 	"os/exec"
+	"strings"
 
 	"github.com/labstack/gommon/color"
 )
@@ -15,6 +16,9 @@ import (
 
 // execute shell command
 func deployCmd(path, repo, author_email string) {
+
+	// declare
+	tool := strings.ToLower(repo)
 
 	// buffers
 	var stdout bytes.Buffer
@@ -27,11 +31,9 @@ func deployCmd(path, repo, author_email string) {
 	copyCmd.Stderr = &stderr
 	_ = copyCmd.Run()
 
-	println(copyShell)
-
 	// replace
 	replaceShell := findHome() + gobin + "/" + "cobra" + "/" + "replace.sh"
-	replaceCmd := exec.Command(replaceShell, repo, author_email)
+	replaceCmd := exec.Command(replaceShell, repo, tool, author_email)
 	replaceCmd.Stdout = &stdout
 	replaceCmd.Stderr = &stderr
 	_ = replaceCmd.Run()
