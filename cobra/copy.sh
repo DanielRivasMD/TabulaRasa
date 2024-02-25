@@ -7,8 +7,8 @@ path=$1
 ####################################################################################################
 
 # execute
-cp -R "${HOME}/bin/go/cobra/LICENSE" "${path}"
-cp -R "${HOME}/bin/go/cobra/main.go" "${path}"
-cp -R "${HOME}/bin/go/cobra/cmd" "${path}"
+cp -R "${HOME}/.tabularasa/LICENSE" "${path}"
+cp -R "${HOME}/.tabularasa/main.go" "${path}"
+cp -R "${HOME}/.tabularasa/cmd" "${path}"
 
 ####################################################################################################
