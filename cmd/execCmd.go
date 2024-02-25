@@ -39,7 +39,9 @@ func deployCmd(path, repo, author_email string) {
 	_ = replaceCmd.Run()
 
 	// stdout
-	color.Println(color.Cyan(stdout.String(), color.B))
+	if stdout.String() != "" {
+		color.Println(color.Cyan(stdout.String(), color.B))
+	}
 
 	// stderr
 	if stderr.String() != "" {
