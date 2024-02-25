@@ -40,7 +40,7 @@ var (
 // cobraCmd
 var cobraCmd = &cobra.Command{
 	Use:   "cobra",
-	Short: "Construct " + chalk.Yellow.Color("cobra") + " app",
+	Short: "Construct " + chalk.Yellow.Color("cobra") + " app.",
 	Long: `Construct ` + chalk.Yellow.Color("cobra") + ` app from template
 
 Commands include:
@@ -55,7 +55,7 @@ Commands include:
 
 	Run: func(κ *cobra.Command, args []string) {
 		// execute shell
-		deployCmd(path, repo, author_email)
+		deploy(path, repo, author_email)
 	},
 }
 
@@ -66,7 +66,7 @@ func init() {
 	rootCmd.AddCommand(cobraCmd)
 
 	// flags
-	cobraCmd.Flags().StringVarP(&path, "path", "p", "", "Path to deploy the app")
+	cobraCmd.Flags().StringVarP(&path, "path", "p", "", "Path to deploy")
 	cobraCmd.MarkFlagRequired("path")
 	cobraCmd.Flags().StringVarP(&repo, "repo", "r", "", "Repository name")
 	cobraCmd.MarkFlagRequired("repo")

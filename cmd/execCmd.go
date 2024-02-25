@@ -15,7 +15,7 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // execute shell command
-func deployCmd(path, repo, author_email string) {
+func deploy(path, repo, author_email string) {
 
 	// declare
 	tool := strings.ToLower(repo)
