@@ -30,7 +30,6 @@ const (
 
 var (
 	author_email string
-	path         string
 	repo         string
 	tool         string
 )
@@ -66,8 +65,6 @@ func init() {
 	rootCmd.AddCommand(cobraCmd)
 
 	// flags
-	cobraCmd.Flags().StringVarP(&path, "path", "p", "", "Path to deploy")
-	cobraCmd.MarkFlagRequired("path")
 	cobraCmd.Flags().StringVarP(&repo, "repo", "r", "", "Repository name")
 	cobraCmd.MarkFlagRequired("repo")
 	cobraCmd.Flags().StringVarP(&author_email, "author_email", "a", "Daniel Rivas <danielrivasmd@gmail.com>", "Provide author details")
