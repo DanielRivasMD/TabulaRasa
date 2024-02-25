@@ -16,6 +16,9 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// TODO: refactor as reusable
+// TODO: split & rename
+
 // copy file
 func copyFile(orig, dest string) {
 	// handle original
@@ -118,8 +121,11 @@ func replace(fullpath string) {
 		toPrint = strings.Replace(toPrint, "TOOL", strings.ToLower(repo), -1)
 		toPrint = strings.Replace(toPrint, "AUTHOR_EMAIL", author_email, -1)
 
+		// format
+		toPrint = toPrint + "\n"
+
 		// write
-		_, ε = ϖ.WriteString(toPrint + "\n")
+		_, ε = ϖ.WriteString(toPrint)
 		if ε != nil {
 			log.Fatal(ε)
 		}

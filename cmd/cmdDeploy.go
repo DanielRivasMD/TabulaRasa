@@ -43,7 +43,11 @@ var deployCmd = &cobra.Command{
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-		println("deploy called")
+		switch args[0] {
+		case "just":
+
+		case "todor":
+		}
 	},
 }
 
