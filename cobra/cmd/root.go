@@ -36,16 +36,16 @@ var ()
 
 // rootCmd
 var rootCmd = &cobra.Command{
-	Use:   "COMMAND",
+	Use:   "TOOL",
 	Short: "",
 	Long: chalk.Green.Color("AUTHOR_EMAIL") + `
 
-` + chalk.Cyan.Color("COMMAND") + chalk.Blue.Color(`
+` + chalk.Cyan.Color("TOOL") + chalk.Blue.Color(`
 
 `) + ``,
 
 	Example: `
-` + chalk.Cyan.Color("COMMAND") + ` help`,
+` + chalk.Cyan.Color("TOOL") + ` help`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
