@@ -24,31 +24,31 @@ import '.config.just'
 ####################################################################################################
 
 # build for OSX
-osx APP=_app:
+osx APP=app:
   @echo "Building..."
   go build -v -o excalibur/{{APP}}
 
 ####################################################################################################
 
 # build for linux
-linux APP=_app:
+linux APP=app:
   @echo "Building..."
   env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{APP}}
 
 ####################################################################################################
 
 # install locally
-install APP=_app exe=_exe als=_als:
+install APP=app exe=exe als=als:
   @echo "Install..."
   go install
   @cp -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{als}}"
   @mv -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{exe}}"
-  @cp -v -R "cobra" "${HOME}/bin/go"
+  @cp -v -R "cobra" "${HOME}/{{dir}}"
 
 ####################################################################################################
 
 # watch changes
-watch:
+dev:
   watchexec --clear --watch cmd -- 'just install'
 
 ####################################################################################################
