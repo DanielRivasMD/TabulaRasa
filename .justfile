@@ -43,7 +43,7 @@ install APP=app exe=exe als=als:
   go install
   @cp -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{als}}"
   @mv -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{exe}}"
-  @cp -v -R "cobra" "${HOME}/{{dir}}"
+  @if test -e "${HOME}/{{dir}}"; then rm -r "${HOME}/{{dir}}"; fi && cp -v -R "cobra" "${HOME}/{{dir}}"
 
 ####################################################################################################
 
