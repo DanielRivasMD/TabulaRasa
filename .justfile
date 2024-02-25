@@ -22,28 +22,30 @@ _default:
 # declaration
 _app := 'TabulaRasa'
 _exe := 'tabularasa'
+_als := 'tbr'
 
 ####################################################################################################
 
 # build for OSX
-osx OUT=_app:
+osx APP=_app:
   @echo "Building..."
-  go build -v -o excalibur/{{OUT}}
+  go build -v -o excalibur/{{APP}}
 
 ####################################################################################################
 
 # build for linux
-linux OUT=_app:
+linux APP=_app:
   @echo "Building..."
-  env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{OUT}}
+  env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{APP}}
 
 ####################################################################################################
 
 # install locally
-install OUT=_app out=_exe:
+install APP=_app exe=_exe als=_als:
   @echo "Install..."
   go install
-  mv -v "${HOME}/.go/bin/{{OUT}}" "${HOME}/.go/bin/{{out}}"
+  @cp -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{als}}"
+  @mv -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{exe}}"
 
 ####################################################################################################
 
