@@ -17,6 +17,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"log"
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -25,7 +28,7 @@ import (
 
 // declarations
 const (
-	gobin = "/bin/go"
+	gobin = "/.tabularasa/"
 )
 
 var (
@@ -54,6 +57,15 @@ Commands include:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
+
+		// check dir
+		if dirExist(findHome() + gobin) {
+			ε := os.Mkdir(findHome()+gobin, 0755)
+			if ε != nil {
+				log.Fatal(ε.Error())
+			}
+		}
+
 		// execute shell
 		deployCmd(path, repo, author_email)
 	},
