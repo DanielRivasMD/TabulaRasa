@@ -25,14 +25,14 @@ func deployCmd(path, repo, author_email string) {
 	var stderr bytes.Buffer
 
 	// copy
-	copyShell := findHome() + gobin + "/" + "cobra" + "/" + "copy.sh"
+	copyShell := findHome() + configDir + "/" + "copy.sh"
 	copyCmd := exec.Command(copyShell, path)
 	copyCmd.Stdout = &stdout
 	copyCmd.Stderr = &stderr
 	_ = copyCmd.Run()
 
 	// replace
-	replaceShell := findHome() + gobin + "/" + "cobra" + "/" + "replace.sh"
+	replaceShell := findHome() + configDir + "/" + "replace.sh"
 	replaceCmd := exec.Command(replaceShell, repo, tool, author_email)
 	replaceCmd.Stdout = &stdout
 	replaceCmd.Stderr = &stderr
