@@ -23,7 +23,9 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // declarations
-var ()
+var (
+	lang string
+)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,8 +47,11 @@ var deployCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		switch args[0] {
 		case "just":
-
+			// TODO: write concatenate & finish development
+			// concatenateFiles(path, )
 		case "todor":
+			// TODO: relocate template & finish development
+			// copyFile(findHome()+configDir + .todor, path)
 		}
 	},
 }
@@ -58,6 +63,8 @@ func init() {
 	rootCmd.AddCommand(deployCmd)
 
 	// flags
+	deployCmd.Flags().StringVarP(&lang, "lang", "l", "", "Language template")
+	// deployCmd.MarkFlagRequired("lang")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
