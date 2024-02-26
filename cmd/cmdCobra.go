@@ -35,11 +35,19 @@ var (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// replace values
+type replacement struct {
+	old string
+	new string
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // cobraCmd
 var cobraCmd = &cobra.Command{
 	Use:   "cobra",
 	Short: "Construct " + chalk.Yellow.Color("cobra") + " app.",
-	Long: `Construct ` + chalk.Yellow.Color("cobra") + ` app from template
+	Long: `Construct ` + chalk.Yellow.Color("cobra") + ` app from template.
 
 Commands include:
 	` + chalk.Magenta.Color("completion") + `
@@ -52,8 +60,10 @@ Commands include:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
+		// assign replacement values
+		reps := replacements()
 		// copy templates
-		copyDir(findHome()+configDir, path)
+		dirCopyReplace(findHome()+configDir, path, reps)
 	},
 }
 
