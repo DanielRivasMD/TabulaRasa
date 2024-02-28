@@ -24,7 +24,8 @@ import (
 
 // declarations
 var (
-	lang string
+	header string
+	lang []string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +64,8 @@ func init() {
 	rootCmd.AddCommand(deployCmd)
 
 	// flags
-	deployCmd.Flags().StringVarP(&lang, "lang", "l", "", "Language template")
+	deployCmd.Flags().StringVarP(&header, "head", "e", "head", "Header")
+	deployCmd.Flags().StringArrayVarP(&lang, "lang", "l", []string{}, "Languages to deploy")
 	// deployCmd.MarkFlagRequired("lang")
 }
 
