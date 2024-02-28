@@ -33,6 +33,12 @@ import (
 const (
 	configDir = "/" + ".tabularasa"
 	cobraDir = configDir + "/" + "cobra"
+	justDir = configDir + "/" + "just"
+	justfile = ".justfile"
+	justconfig = ".config.just"
+	todorDir = configDir + "/" + "todor"
+	todorconfig = "todor"
+	todor = ".todor"
 )
 
 var (

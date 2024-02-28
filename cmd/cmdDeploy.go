@@ -46,13 +46,12 @@ var deployCmd = &cobra.Command{
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
+		// TODO: spawn into subcmds
 		switch args[0] {
 		case "just":
-			// TODO: write concatenate & finish development
-			// concatenateFiles(path, )
+			concatenateFiles(findHome() + justDir, path + "/" + justfile, append([]string{header}, lang...))
 		case "todor":
-			// TODO: relocate template & finish development
-			// copyFile(findHome()+configDir + .todor, path)
+			copyFile(findHome() + todorDir + "/" + todorconfig, path + "/" + todor)
 		}
 	},
 }
