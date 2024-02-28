@@ -24,10 +24,6 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // declarations
-const (
-	configDir = "/.tabularasa/"
-)
-
 var (
 	author_email string
 	repo         string
@@ -63,7 +59,7 @@ Commands include:
 		// assign replacement values
 		reps := replacements()
 		// copy templates
-		dirCopyReplace(findHome()+configDir, path, reps)
+		dirCopyReplace(findHome() + cobraDir, path, reps)
 	},
 }
 

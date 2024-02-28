@@ -30,6 +30,11 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // declarations
+const (
+	configDir = "/" + ".tabularasa"
+	cobraDir = configDir + "/" + "cobra"
+)
+
 var (
 	path string
 )
