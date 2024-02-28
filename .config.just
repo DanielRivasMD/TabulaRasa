@@ -5,5 +5,8 @@ app := 'TabulaRasa'
 exe := 'tabularasa'
 als := 'tbr'
 dir := '.tabularasa'
+cobra := dir / 'cobra'
+just := dir / 'just'
+todor := dir / 'todor'
 
 ####################################################################################################

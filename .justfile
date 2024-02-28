@@ -43,7 +43,9 @@ install APP=app exe=exe als=als:
   go install
   @cp -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{als}}"
   @mv -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{exe}}"
-  @if test -e "${HOME}/{{dir}}"; then rm -r "${HOME}/{{dir}}"; fi && cp -v -R "cobra" "${HOME}/{{dir}}"
+  @if test -e "${HOME}/{{cobra}}"; then rm -rv "${HOME}/{{cobra}}"; fi && cp -v -R "cobra" "${HOME}/{{cobra}}"
+  @if test -e "${HOME}/{{just}}"; then rm -rv "${HOME}/{{just}}"; fi && cp -v -R "just" "${HOME}/{{just}}"
+  @if test -e "${HOME}/{{todor}}"; then rm -rv "${HOME}/{{todor}}"; fi && cp -v -R "todor" "${HOME}/{{todor}}"
 
 ####################################################################################################
 
