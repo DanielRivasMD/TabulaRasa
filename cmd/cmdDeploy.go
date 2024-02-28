@@ -22,17 +22,9 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
-var (
-	header string
-	lang []string
-)
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // deployCmd
 var deployCmd = &cobra.Command{
-	Use:   "deploy [just|todor]",
+	Use:   "deploy",
 	Short: "Deploy config templates.",
 	Long:  `.`,
 
@@ -40,20 +32,6 @@ var deployCmd = &cobra.Command{
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	ValidArgs: []string{"just", "todor"},
-	Args:      cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: spawn into subcmds
-		switch args[0] {
-		case "just":
-			concatenateFiles(findHome() + justDir, path + "/" + justfile, append([]string{header}, lang...))
-		case "todor":
-			copyFile(findHome() + todorDir + "/" + todorconfig, path + "/" + todor)
-		}
-	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,9 +41,6 @@ func init() {
 	rootCmd.AddCommand(deployCmd)
 
 	// flags
-	deployCmd.Flags().StringVarP(&header, "head", "e", "head", "Header")
-	deployCmd.Flags().StringArrayVarP(&lang, "lang", "l", []string{}, "Languages to deploy")
-	// deployCmd.MarkFlagRequired("lang")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
