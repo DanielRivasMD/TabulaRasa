@@ -14,7 +14,7 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // replace values
-func replace(target string, reps []replacement) {
+func replace(target string, reps []rep) {
 	// open reader
 	fread, ε := os.Open(target)
 	if ε != nil {
