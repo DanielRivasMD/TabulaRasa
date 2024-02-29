@@ -13,19 +13,19 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // copy file
-func copyFile(orig, dest string) {
+func copyFile(params paramsCR) {
 	// clean prior copying
-	if fileExist(dest) { os.Remove(dest) }
+	if fileExist(params.dest) { os.Remove(params.dest) }
 
 	// handle origin
-	origFile, ε := os.Open(orig)
+	origFile, ε := os.Open(params.orig)
 	if ε != nil {
 		log.Fatal(ε)
 	}
 	defer origFile.Close()
 
 	// handle destiny
-	destFile, ε := os.Create(dest)
+	destFile, ε := os.Create(params.dest)
 	if ε != nil {
 		log.Fatal(ε)
 	}
@@ -34,11 +34,13 @@ func copyFile(orig, dest string) {
 	// copy file
 	_, ε = io.Copy(destFile, origFile)
 	if ε == nil {
-		origInfo, ε := os.Stat(orig)
+		origInfo, ε := os.Stat(params.orig)
 		if ε != nil {
-			ε = os.Chmod(dest, origInfo.Mode())
+			ε = os.Chmod(params.dest, origInfo.Mode())
 		}
 	}
+	// replace
+	if len(params.reps) > 0 { replace(params.dest, params.reps) }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
