@@ -26,7 +26,7 @@ func concatenateFiles(orig, dest string, files []string) {
 
 	for _, file := range files {
 		// open reader
-		fread, ε := os.Open(orig + "/" + file + justfile)
+		fread, ε := os.Open(orig + "/" + file + "." + justfile)
 		if ε != nil {
 			log.Fatal(ε)
 		}

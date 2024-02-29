@@ -29,7 +29,7 @@ var todorCmd = &cobra.Command{
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-		copyFile(findHome() + todorDir + "/" + todorconfig, path + "/" + todor)
+		copyFile(findHome() + todorDir + "/" + todor, path + "/" + "." + todor)
 	},
 }
 

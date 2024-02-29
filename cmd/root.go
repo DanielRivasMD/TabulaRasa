@@ -34,11 +34,11 @@ const (
 	configDir = "/" + ".tabularasa"
 	cobraDir = configDir + "/" + "cobra"
 	justDir = configDir + "/" + "just"
-	justfile = ".justfile"
-	justconfig = ".config.just"
 	todorDir = configDir + "/" + "todor"
-	todorconfig = "todor"
-	todor = ".todor"
+
+	justfile = "justfile"
+	justconfig = "config.just"
+	todor = "todor"
 )
 
 var (
