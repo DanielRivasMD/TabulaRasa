@@ -1,31 +1,33 @@
-# aliases
+####################################################################################################
+# import
 ####################################################################################################
 
-# declaration
-_app := 'APP'
-_exe := 'EXE'
+# config
+import '.config.just'
 
+####################################################################################################
+# jobs
 ####################################################################################################
 
 # build for OSX
-osx OUT=_app:
+osx app=app:
   @echo "Building..."
-  go build -v -o excalibur/{{OUT}}
+  go build -v -o excalibur/{{app}}
 
 ####################################################################################################
 
 # build for linux
-linux OUT=_app:
+linux app=app:
   @echo "Building..."
-  env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{OUT}}
+  env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{app}}
 
 ####################################################################################################
 
 # install locally
-install OUT=_app out=_exe:
+install app=app exe=exe:
   @echo "Install..."
   go install
-  mv -v "${HOME}/.go/bin/{{OUT}}" "${HOME}/.go/bin/{{out}}"
+  mv -v "${HOME}/.go/bin/{{app}}" "${HOME}/.go/bin/{{exe}}"
 
 ####################################################################################################
 
