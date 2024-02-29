@@ -13,41 +13,42 @@ import (
 
 // TODO: use struct to control optional parameters
 // copy & replace dir
-func dirCopyReplace(orig, dest string, reps []replacement) {
+// func dirCopyReplace(orig, dest string, reps []replacement) {
+func dirCopyReplace(params paramsCR) {
 	// clean prior copying
-	if fileExist(dest) { os.Remove(dest) }
+	if fileExist(params.dest) { os.Remove(params.dest) }
 
 	// original properties
-	origInfo, ε := os.Stat(orig)
+	origInfo, ε := os.Stat(params.orig)
 	if ε != nil {
 		log.Fatal(ε)
 	}
 
 	// create destiny dir
-	ε = os.MkdirAll(dest, origInfo.Mode())
+	ε = os.MkdirAll(params.dest, origInfo.Mode())
 	if ε != nil {
 		log.Fatal(ε)
 	}
 
 	// origin files
-	dir, _ := os.Open(orig)
+	dir, _ := os.Open(params.orig)
 	objs, ε := dir.Readdir(-1)
 
 	// iterate origin
 	for _, obj := range objs {
 
 		// pointers
-		origPointer := orig + "/" + obj.Name()
-		destPointer := dest + "/" + obj.Name()
+		params.orig = params.orig + "/" + obj.Name()
+		params.dest = params.dest + "/" + obj.Name()
 
 		if obj.IsDir() {
 			// create dirs recursive
-			dirCopyReplace(origPointer, destPointer, reps)
+			dirCopyReplace(params)
 		} else {
 			// copy
-			copyFile(origPointer, destPointer)
+			copyFile(params)
 			// replace
-			replace(destPointer, reps)
+			replace(params.dest, params.reps)
 		}
 	}
 }
