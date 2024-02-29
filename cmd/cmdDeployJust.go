@@ -40,7 +40,7 @@ var justCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		// deploy justfile
-		concatenateFiles(findHome() + justDir, path + "/" + "." + justfile, append([]string{header}, lang...))
+		catFiles(findHome() + justDir, path + "/" + "." + justfile, append([]string{header}, lang...))
 
 		// deploy config
 		params := copyCR(findHome() + justDir + "/" + justconfig, path + "/" + "." + justconfig)

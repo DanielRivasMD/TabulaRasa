@@ -48,7 +48,7 @@ Commands include:
 		// copy templates
 		params := copyCR(findHome() + cobraDir, path)
 		params.reps = repsCobra() // automatic binding cli flags
-		dirCopyReplace(params)
+		copyDir(params)
 	},
 }
 

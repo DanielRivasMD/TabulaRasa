@@ -13,7 +13,7 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // copy file
-func concatenateFiles(orig, dest string, files []string) {
+func catFiles(orig, dest string, files []string) {
 	// clean prior copying
 	if fileExist(dest) { os.Remove(dest) }
 

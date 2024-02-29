@@ -11,10 +11,8 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// TODO: use struct to control optional parameters
 // copy & replace dir
-// func dirCopyReplace(orig, dest string, reps []replacement) {
-func dirCopyReplace(params paramsCR) {
+func copyDir(params paramsCR) {
 	// clean prior copying
 	if fileExist(params.dest) { os.Remove(params.dest) }
 
@@ -43,7 +41,7 @@ func dirCopyReplace(params paramsCR) {
 
 		if obj.IsDir() {
 			// create dirs recursive
-			dirCopyReplace(params)
+			copyDir(params)
 		} else {
 			// copy
 			copyFile(params)
