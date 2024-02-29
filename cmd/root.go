@@ -43,6 +43,8 @@ const (
 
 var (
 	path string
+	author_email string
+	repo         string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,6 +129,9 @@ func init() {
 	// persistent flags
 	rootCmd.PersistentFlags().StringVarP(&path, "path", "p", "", "Path to deploy")
 	rootCmd.MarkFlagRequired("path")
+	rootCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "Repository name")
+	rootCmd.MarkFlagRequired("repo")
+	rootCmd.PersistentFlags().StringVarP(&author_email, "author_email", "a", "Daniel Rivas <danielrivasmd@gmail.com>", "Provide author details")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

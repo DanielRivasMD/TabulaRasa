@@ -24,18 +24,7 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // declarations
-var (
-	author_email string
-	repo         string
-)
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// replace values
-type replacement struct {
-	old string
-	new string
-}
+var ()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,10 +45,8 @@ Commands include:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
-		// assign replacement values
-		reps := replacements()
 		// copy templates
-		dirCopyReplace(findHome() + cobraDir, path, reps)
+		dirCopyReplace(findHome() + cobraDir, path, replaceCobra())
 	},
 }
 
@@ -70,9 +57,6 @@ func init() {
 	rootCmd.AddCommand(cobraCmd)
 
 	// flags
-	cobraCmd.Flags().StringVarP(&repo, "repo", "r", "", "Repository name")
-	cobraCmd.MarkFlagRequired("repo")
-	cobraCmd.Flags().StringVarP(&author_email, "author_email", "a", "Daniel Rivas <danielrivasmd@gmail.com>", "Provide author details")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
