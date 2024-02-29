@@ -19,30 +19,36 @@ _default:
 # aliases
 ####################################################################################################
 
+####################################################################################################
+# import
+####################################################################################################
+
+# config
 import '.config.just'
 
 ####################################################################################################
+# jobs
+####################################################################################################
 
 # build for OSX
-osx APP=app:
+osx app=app:
   @echo "Building..."
-  go build -v -o excalibur/{{APP}}
+  go build -v -o excalibur/{{app}}
 
 ####################################################################################################
 
 # build for linux
-linux APP=app:
+linux app=app:
   @echo "Building..."
-  env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{APP}}
+  env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{app}}
 
 ####################################################################################################
 
 # install locally
-install APP=app exe=exe als=als:
+install app=app exe=exe:
   @echo "Install..."
   go install
-  @cp -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{als}}"
-  @mv -v "${HOME}/.go/bin/{{APP}}" "${HOME}/.go/bin/{{exe}}"
+  @mv -v "${HOME}/.go/bin/{{app}}" "${HOME}/.go/bin/{{exe}}"
   @if test -e "${HOME}/{{cobra}}"; then rm -rv "${HOME}/{{cobra}}"; fi && cp -v -R "cobra" "${HOME}/{{cobra}}"
   @if test -e "${HOME}/{{just}}"; then rm -rv "${HOME}/{{just}}"; fi && cp -v -R "just" "${HOME}/{{just}}"
   @if test -e "${HOME}/{{todor}}"; then rm -rv "${HOME}/{{todor}}"; fi && cp -v -R "todor" "${HOME}/{{todor}}"
@@ -50,7 +56,7 @@ install APP=app exe=exe als=als:
 ####################################################################################################
 
 # watch changes
-dev:
+watch:
   watchexec --clear --watch cmd -- 'just install'
 
 ####################################################################################################
