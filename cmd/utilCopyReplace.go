@@ -11,8 +11,11 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// TODO: use struct to control optional parameters
 // copy & replace dir
 func dirCopyReplace(orig, dest string, reps []replacement) {
+	// clean prior copying
+	if fileExist(dest) { os.Remove(dest) }
 
 	// original properties
 	origInfo, ε := os.Stat(orig)

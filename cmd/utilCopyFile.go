@@ -14,6 +14,9 @@ import (
 
 // copy file
 func copyFile(orig, dest string) {
+	// clean prior copying
+	if fileExist(dest) { os.Remove(dest) }
+
 	// handle origin
 	origFile, ε := os.Open(orig)
 	if ε != nil {
