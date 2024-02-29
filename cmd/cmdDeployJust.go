@@ -43,8 +43,9 @@ var justCmd = &cobra.Command{
 		concatenateFiles(findHome() + justDir, path + "/" + "." + justfile, append([]string{header}, lang...))
 
 		// deploy config
-		copyFile(findHome() + justDir + "/" + justconfig, path + "/" + "." + justconfig)
-		replace(path + "/" + "." + justconfig, replaceDeployJust())
+		params := copyCR(findHome() + justDir + "/" + justconfig, path + "/" + "." + justconfig)
+		params.reps = repsDeployJust() // automatic binding cli flags
+		copyFile(params)
 	},
 }
 

@@ -29,7 +29,9 @@ var todorCmd = &cobra.Command{
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-		copyFile(findHome() + todorDir + "/" + todor, path + "/" + "." + todor)
+		// deploy todor
+		params := copyCR(findHome() + todorDir + "/" + todor, path + "/" + "." + todor)
+		copyFile(params)
 	},
 }
 
