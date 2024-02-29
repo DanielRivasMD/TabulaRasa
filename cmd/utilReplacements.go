@@ -12,13 +12,23 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// bind replace values
-func replacements() []replacement {
+// bind cobra replace values
+func replaceCobra() []replacement {
 	out := make([]replacement, 4)
 	out[0] = replacement{old: "YEAR", new: strconv.Itoa(time.Now().Year())}
 	out[1] = replacement{old: "REPOSITORY", new: repo}
 	out[2] = replacement{old: "TOOL", new: strings.ToLower(repo)}
 	out[3] = replacement{old: "AUTHOR_EMAIL", new: author_email}
+	return out
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// bind deploy just replace values
+func replaceDeployJust() []replacement {
+	out := make([]replacement, 2)
+	out[0] = replacement{old: "APP", new: repo}
+	out[1] = replacement{old: "EXE", new: strings.ToLower(repo)}
 	return out
 }
 
