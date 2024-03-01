@@ -13,22 +13,22 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // copy file
-func catFiles(orig, dest string, files []string) {
+func catFiles(params paramsCR) {
 	// clean prior copying
-	if fileExist(dest) {
-		os.Remove(dest)
+	if fileExist(params.dest) {
+		os.Remove(params.dest)
 	}
 
 	// open writer
-	fwrite, ε := os.OpenFile(dest, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
+	fwrite, ε := os.OpenFile(params.dest, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 	if ε != nil {
 		log.Fatal(ε)
 	}
 	defer fwrite.Close()
 
-	for _, file := range files {
+	for _, file := range params.files {
 		// open reader
-		fread, ε := os.Open(orig + "/" + file + "." + justfile)
+		fread, ε := os.Open(params.orig + "/" + file + "." + justfile)
 		if ε != nil {
 			log.Fatal(ε)
 		}
@@ -57,6 +57,10 @@ func catFiles(orig, dest string, files []string) {
 
 		// flush writer
 		ϖ.Flush()
+	}
+	// replace
+	if len(params.reps) > 0 {
+		replace(params.dest, params.reps)
 	}
 }
 
