@@ -15,7 +15,9 @@ import (
 // copy file
 func copyFile(params paramsCR) {
 	// clean prior copying
-	if fileExist(params.dest) { os.Remove(params.dest) }
+	if fileExist(params.dest) {
+		os.Remove(params.dest)
+	}
 
 	// handle origin
 	origFile, ε := os.Open(params.orig)
@@ -40,7 +42,9 @@ func copyFile(params paramsCR) {
 		}
 	}
 	// replace
-	if len(params.reps) > 0 { replace(params.dest, params.reps) }
+	if len(params.reps) > 0 {
+		replace(params.dest, params.reps)
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -14,7 +14,9 @@ import (
 // copy & replace dir
 func copyDir(params paramsCR) {
 	// clean prior copying
-	if fileExist(params.dest) { os.Remove(params.dest) }
+	if fileExist(params.dest) {
+		os.Remove(params.dest)
+	}
 
 	// original properties
 	origInfo, ε := os.Stat(params.orig)

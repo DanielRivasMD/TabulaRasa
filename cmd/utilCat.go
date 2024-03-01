@@ -15,7 +15,9 @@ import (
 // copy file
 func catFiles(orig, dest string, files []string) {
 	// clean prior copying
-	if fileExist(dest) { os.Remove(dest) }
+	if fileExist(dest) {
+		os.Remove(dest)
+	}
 
 	// open writer
 	fwrite, ε := os.OpenFile(dest, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)

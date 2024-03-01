@@ -25,7 +25,7 @@ import (
 // declarations
 var (
 	header string
-	lang []string
+	lang   []string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,16 +34,16 @@ var (
 var justCmd = &cobra.Command{
 	Use:   "just",
 	Short: "",
-	Long: `.`,
+	Long:  `.`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
 		// deploy justfile
-		catFiles(findHome() + justDir, path + "/" + "." + justfile, append([]string{header}, lang...))
+		catFiles(findHome()+justDir, path+"/"+"."+justfile, append([]string{header}, lang...))
 
 		// deploy config
-		params := copyCR(findHome() + justDir + "/" + justconfig, path + "/" + "." + justconfig)
+		params := copyCR(findHome()+justDir+"/"+justconfig, path+"/"+"."+justconfig)
 		params.reps = repsDeployJust() // automatic binding cli flags
 		copyFile(params)
 	},

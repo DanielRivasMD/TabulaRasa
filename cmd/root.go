@@ -32,17 +32,17 @@ import (
 // declarations
 const (
 	configDir = "/" + ".tabularasa"
-	cobraDir = configDir + "/" + "cobra"
-	justDir = configDir + "/" + "just"
-	todorDir = configDir + "/" + "todor"
+	cobraDir  = configDir + "/" + "cobra"
+	justDir   = configDir + "/" + "just"
+	todorDir  = configDir + "/" + "todor"
 
-	justfile = "justfile"
+	justfile   = "justfile"
 	justconfig = "config.just"
-	todor = "todor"
+	todor      = "todor"
 )
 
 var (
-	path string
+	path         string
 	author_email string
 	repo         string
 )

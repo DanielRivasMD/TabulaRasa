@@ -24,13 +24,13 @@ import (
 var todorCmd = &cobra.Command{
 	Use:   "todor",
 	Short: "",
-	Long: `.`,
+	Long:  `.`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
 		// deploy todor
-		params := copyCR(findHome() + todorDir + "/" + todor, path + "/" + "." + todor)
+		params := copyCR(findHome()+todorDir+"/"+todor, path+"/"+"."+todor)
 		copyFile(params)
 	},
 }
