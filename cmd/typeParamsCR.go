@@ -8,15 +8,17 @@ package cmd
 
 // copy & replace
 type paramsCR struct {
-	orig string
-	dest string
-	reps []rep
+	orig  string
+	dest  string
+	files []string
+	reps  []rep
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func newCR() paramsCR {
 	params := paramsCR{}
+	params.files = []string{}
 	params.reps = []rep{}
 	return params
 }
