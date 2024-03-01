@@ -40,12 +40,14 @@ var justCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		// deploy justfile
-		catFiles(findHome()+justDir, path+"/"+"."+justfile, append([]string{header}, lang...))
+		djust := copyCR(findHome()+justDir, path+"/"+"."+justfile)
+		djust.files = append([]string{header}, lang...)
+		catFiles(djust)
 
 		// deploy config
-		params := copyCR(findHome()+justDir+"/"+justconfig, path+"/"+"."+justconfig)
-		params.reps = repsDeployJust() // automatic binding cli flags
-		copyFile(params)
+		cjust := copyCR(findHome()+justDir+"/"+justconfig, path+"/"+"."+justconfig)
+		cjust.reps = repsDeployJust() // automatic binding cli flags
+		copyFile(cjust)
 	},
 }
 
