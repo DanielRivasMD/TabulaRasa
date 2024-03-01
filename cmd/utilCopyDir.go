@@ -45,10 +45,8 @@ func copyDir(params paramsCR) {
 			// create dirs recursive
 			copyDir(params)
 		} else {
-			// copy
+			// copy & replace
 			copyFile(params)
-			// replace
-			replace(params.dest, params.reps)
 		}
 	}
 }
