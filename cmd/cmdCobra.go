@@ -32,12 +32,14 @@ var ()
 var cobraCmd = &cobra.Command{
 	Use:   "cobra",
 	Short: "Construct " + chalk.Yellow.Color("cobra") + " app.",
-	Long: `Construct ` + chalk.Yellow.Color("cobra") + ` app from template.
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+
+Construct ` + chalk.Yellow.Color("cobra") + ` app from template.
 
 Commands include:
 	` + chalk.Magenta.Color("completion") + `
 	` + chalk.Magenta.Color("identity") + `
-	`,
+`,
 
 	Example: `
 ` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("cobra"),

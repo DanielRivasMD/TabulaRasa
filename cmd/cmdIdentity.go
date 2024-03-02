@@ -30,10 +30,9 @@ var ()
 
 // identityCmd
 var identityCmd = &cobra.Command{
-	Use:     "identity",
-	Short:   `Reveal ` + chalk.Yellow.Color("identity"),
-	Long:    `Reveal ` + chalk.Yellow.Color("identity"),
-	Example: ``,
+	Use:   "identity",
+	Short: `Reveal ` + chalk.Yellow.Color("identity") + `.`,
+	Long:  `Reveal ` + chalk.Yellow.Color("identity") + `.`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 

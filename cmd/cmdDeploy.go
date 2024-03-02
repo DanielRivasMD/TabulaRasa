@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,9 +27,18 @@ import (
 var deployCmd = &cobra.Command{
 	Use:   "deploy",
 	Short: "Deploy config templates.",
-	Long:  `.`,
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-	Example: ``,
+Deploy config templates over target.
+
+Templates include:
+	` + chalk.Magenta.Color("just") + `
+	` + chalk.Magenta.Color("todor") + `
+
+	`,
+
+	Example: `
+` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("deploy"),
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,8 +34,15 @@ var (
 // justCmd represents the just command
 var justCmd = &cobra.Command{
 	Use:   "just",
-	Short: "",
-	Long:  `.`,
+	Short: "Deploy " + chalk.Yellow.Color("just") + " config templates.",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+
+Deploy ` + chalk.Yellow.Color("just") + ` config templates over target.
+Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.just") + `
+`,
+
+	Example: `
+` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("deploy") + ` just`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 

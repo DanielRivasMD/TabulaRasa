@@ -53,10 +53,10 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "tabularasa",
 	Short: "Provide a canvas to write on.",
-	Long: chalk.Green.Color("Daniel Rivas <danielrivasmd@gmail.com>") + `
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-` + chalk.Cyan.Color("tabularasa") + chalk.Blue.Color(` provides a set of
-templates to facilite software deployment.
+` + chalk.Cyan.Color("tabularasa") + chalk.Magenta.Color(` provides a set of templates
+to facilite software deployment.
 `) + ``,
 
 	Example: `

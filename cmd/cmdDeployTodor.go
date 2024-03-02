@@ -18,13 +18,21 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/ttacon/chalk"
 )
 
 // todorCmd represents the todor command
 var todorCmd = &cobra.Command{
 	Use:   "todor",
-	Short: "",
-	Long:  `.`,
+	Short: "Deploy " + chalk.Yellow.Color("todor") + " config template.",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+
+Deploy ` + chalk.Yellow.Color("todor") + ` config template over target.
+Including ` + chalk.Red.Color(".todor") + `
+`,
+
+	Example: `
+` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("deploy") + ` todor`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
