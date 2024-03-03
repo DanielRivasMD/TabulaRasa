@@ -37,4 +37,13 @@ func copyCR(orig, dest string) paramsCR {
 	return params
 }
 
+func cloneCR(params paramsCR) paramsCR {
+	out := newCR()
+	out.orig = params.orig
+	out.dest = params.dest
+	out.files = params.files
+	out.reps = params.reps
+	return out
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
