@@ -14,11 +14,12 @@ import (
 
 // bind cobra replace values
 func repsCobra() []rep {
-	out := make([]rep, 4)
+	out := make([]rep, 5)
 	out[0] = rep{old: "YEAR", new: strconv.Itoa(time.Now().Year())}
 	out[1] = rep{old: "REPOSITORY", new: repo}
 	out[2] = rep{old: "TOOL", new: strings.ToLower(repo)}
-	out[3] = rep{old: "AUTHOR_EMAIL", new: author_email}
+	out[3] = rep{old: "AUTHOR", new: author}
+	out[4] = rep{old: "EMAIL", new: email}
 	return out
 }
 

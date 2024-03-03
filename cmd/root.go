@@ -42,9 +42,10 @@ const (
 )
 
 var (
-	path         string
-	author_email string
-	repo         string
+	path   string
+	author string
+	email  string
+	repo   string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,7 +132,8 @@ func init() {
 	rootCmd.MarkFlagRequired("path")
 	rootCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "Repository name")
 	rootCmd.MarkFlagRequired("repo")
-	rootCmd.PersistentFlags().StringVarP(&author_email, "author_email", "a", "Daniel Rivas <danielrivasmd@gmail.com>", "Provide author details")
+	rootCmd.PersistentFlags().StringVarP(&author, "author", "a", "Daniel Rivas", "Provide author")
+	rootCmd.PersistentFlags().StringVarP(&email, "email", "e", "<danielrivasmd@gmail.com>", "Provide email")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
