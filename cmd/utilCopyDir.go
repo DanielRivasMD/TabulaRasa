@@ -34,12 +34,15 @@ func copyDir(params paramsCR) {
 	dir, _ := os.Open(params.orig)
 	objs, ε := dir.Readdir(-1)
 
+	orig := params.orig
+	dest := params.dest
+
 	// iterate origin
 	for _, obj := range objs {
 
 		// pointers
-		params.orig = params.orig + "/" + obj.Name()
-		params.dest = params.dest + "/" + obj.Name()
+		params.orig = orig + "/" + obj.Name()
+		params.dest = dest + "/" + obj.Name()
 
 		if obj.IsDir() {
 			// create dirs recursive
