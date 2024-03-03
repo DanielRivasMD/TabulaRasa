@@ -1,5 +1,5 @@
 /*
-Copyright © YEAR AUTHOR_EMAIL
+Copyright © YEAR AUTHOR EMAIL
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ var ()
 var rootCmd = &cobra.Command{
 	Use:   "TOOL",
 	Short: "",
-	Long: chalk.Green.Color("AUTHOR_EMAIL") + `
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("AUTHOR")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("EMAIL")) + `
 
 ` + chalk.Cyan.Color("TOOL") + chalk.Blue.Color(`
 
