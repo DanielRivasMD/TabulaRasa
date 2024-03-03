@@ -66,7 +66,7 @@ func init() {
 	deployCmd.AddCommand(justCmd)
 
 	// flags
-	justCmd.Flags().StringVarP(&header, "head", "e", "head", "Header")
+	justCmd.Flags().StringVarP(&header, "header", "t", "head", "Header")
 	justCmd.Flags().StringArrayVarP(&lang, "lang", "l", []string{}, "Languages to deploy")
 	justCmd.MarkFlagRequired("lang")
 }
