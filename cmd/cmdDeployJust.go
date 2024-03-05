@@ -31,7 +31,7 @@ var (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// justCmd represents the just command
+// justCmd
 var justCmd = &cobra.Command{
 	Use:   "just",
 	Short: "Deploy " + chalk.Yellow.Color("just") + " config templates.",

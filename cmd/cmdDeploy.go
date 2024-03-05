@@ -23,6 +23,11 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// declarations
+var ()
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // deployCmd
 var deployCmd = &cobra.Command{
 	Use:   "deploy",
@@ -35,7 +40,7 @@ Templates include:
 	` + chalk.Magenta.Color("just") + `
 	` + chalk.Magenta.Color("todor") + `
 
-	`,
+`,
 
 	Example: `
 ` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("deploy"),
