@@ -27,9 +27,10 @@ func repsCobra() []rep {
 
 // bind deploy just replace values
 func repsDeployJust() []rep {
-	out := make([]rep, 2)
-	out[0] = rep{old: "APP", new: repo}
-	out[1] = rep{old: "EXE", new: strings.ToLower(repo)}
+	out := make([]rep, 3)
+	out[0] = rep{"APP", repo}
+	out[1] = rep{"EXE", strings.ToLower(repo)}
+	out[2] = rep{"VER", ver}
 	return out
 }
 
