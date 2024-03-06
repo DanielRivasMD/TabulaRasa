@@ -12,6 +12,7 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// TODO: add suffix argument
 // copy file
 func catFiles(params paramsCR) {
 	// clean prior copying
@@ -28,7 +29,7 @@ func catFiles(params paramsCR) {
 
 	for _, file := range params.files {
 		// open reader
-		fread, ε := os.Open(params.orig + "/" + file + "." + justfile)
+		fread, ε := os.Open(params.orig + "/" + file + dotjust)
 		if ε != nil {
 			log.Fatal(ε)
 		}
