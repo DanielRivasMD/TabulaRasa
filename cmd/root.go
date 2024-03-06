@@ -36,9 +36,10 @@ const (
 	justDir   = configDir + "/" + "just"
 	todorDir  = configDir + "/" + "todor"
 
-	justfile   = "justfile"
-	justconfig = "config.just"
-	todor      = "todor"
+	dotconf  = ".conf"
+	dotjust  = ".just"
+	justfile = "justfile"
+	todor    = "todor"
 )
 
 var (
