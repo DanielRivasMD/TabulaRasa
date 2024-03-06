@@ -3,28 +3,28 @@
 ####################################################################################################
 
 # config
-import '.config.just'
+import '.just/go.conf'
 
 ####################################################################################################
 # jobs
 ####################################################################################################
 
 # build for OSX
-osx app=app:
+osx app=goapp:
   @echo "Building..."
   go build -v -o excalibur/{{app}}
 
 ####################################################################################################
 
 # build for linux
-linux app=app:
+linux app=goapp:
   @echo "Building..."
   env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{app}}
 
 ####################################################################################################
 
 # install locally
-install app=app exe=exe:
+install app=goapp exe=goexe:
   @echo "Install..."
   go install
   mv -v "${HOME}/.go/bin/{{app}}" "${HOME}/.go/bin/{{exe}}"
