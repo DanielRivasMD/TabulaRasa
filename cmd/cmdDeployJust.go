@@ -17,6 +17,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -25,8 +27,10 @@ import (
 
 // declarations
 var (
-	header string
-	lang   []string
+	header     string
+	lang       []string
+	justconfig []string
+	ver        string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,10 +56,17 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 		djust.files = append([]string{header}, lang...)
 		catFiles(djust)
 
-		// deploy config
-		cjust := copyCR(findHome()+justDir+"/"+justconfig, path+"/"+"."+justconfig)
-		cjust.reps = repsDeployJust() // automatic binding cli flags
-		copyFile(cjust)
+		// create config dir
+		if !dirExist(path + "/" + dotjust) {
+			os.MkdirAll(path+"/"+dotjust, os.ModePerm)
+		}
+
+		// deploy configs
+		for _, j := range lang {
+			cjust := copyCR(findHome()+justDir+"/"+j+dotconf, path+"/"+dotjust+"/"+j+dotconf)
+			cjust.reps = repsDeployJust() // automatic binding cli flags
+			copyFile(cjust)
+		}
 	},
 }
 
@@ -69,6 +80,8 @@ func init() {
 	justCmd.Flags().StringVarP(&header, "header", "t", "head", "Header")
 	justCmd.Flags().StringArrayVarP(&lang, "lang", "l", []string{}, "Languages to deploy")
 	justCmd.MarkFlagRequired("lang")
+	justCmd.Flags().StringArrayVarP(&justconfig, "conf", "c", []string{}, "Language configurations to deploy")
+	justCmd.Flags().StringVarP(&ver, "ver", "v", "", "Version to deploy")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
