@@ -129,7 +129,7 @@ func bindFlags(κ *cobra.Command, ω *viper.Viper) {
 func init() {
 
 	// persistent flags
-	rootCmd.PersistentFlags().StringVarP(&path, "path", "p", "", "Path to deploy")
+	rootCmd.PersistentFlags().StringVarP(&path, "path", "p", ".", "Path to deploy")
 	rootCmd.MarkFlagRequired("path")
 	rootCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "Repository name")
 	rootCmd.MarkFlagRequired("repo")
