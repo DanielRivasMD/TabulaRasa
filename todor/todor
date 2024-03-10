@@ -1,19 +1,24 @@
 {
   // tags to search for. These are case-insensitive
   "tags": [
-    "todo",
     "bug",
-    "idea",
-    "fix",
     "doc",
+    "fix",
+    "idea",
+    "key",
+    "todo",
+    "wip",
   ],
 
   "styles": {
     "tags": {
-        "bug": "yellow",
-        "idea": "magenta",
-        "fix": "red",
+        "bug": "red",
         "doc": "blue",
+        "fix": "cyan",
+        "idea": "magenta",
+        "key": "white",
+        "todo": "green",
+        "wip": "yellow",
     }
   }
 }
