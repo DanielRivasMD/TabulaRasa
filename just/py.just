@@ -13,7 +13,7 @@ import '.just/py.conf'
 env app=pyapp:
   #!/bin/bash
   echo "Building..."
-  python3 -m venv {{app}}
+  python3 -m venv venv
 
 ####################################################################################################
 
@@ -21,15 +21,6 @@ env app=pyapp:
 link app=pyapp ver=pyver:
   #!/bin/bash
   echo "Linking..."
-  ln -sf $(which bpython) {{app}}/bin/{{ver}}
-
-####################################################################################################
-
-# TODO: relocate on alias
-# activate enviroment
-act app=pyapp:
-  #!/bin/bash
-  echo "Activating..."
-  source {{app}}/bin/activate
+  ln -sf $(which bpython) venv/bin/{{ver}}
 
 ####################################################################################################
