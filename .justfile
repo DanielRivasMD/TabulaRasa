@@ -32,26 +32,28 @@ import '.just/go.conf'
 
 # build for OSX
 osx app=app:
-  @echo "Building..."
+  @echo "\n\033[1;36mBuilding\033[0;37m...\n=================================================="
   go build -v -o excalibur/{{app}}
 
 ####################################################################################################
 
 # build for linux
 linux app=app:
-  @echo "Building..."
+  @echo "\n\033[1;36mBuilding\033[0;37m...\n=================================================="
   env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{app}}
 
 ####################################################################################################
 
 # install locally
 install app=app exe=exe:
-  @echo "Install..."
+  @echo "\n\033[1;36mInstalling\033[0;37m...\n=================================================="
   go install
+  @echo "\n\033[1;36mLinking\033[0;37m...\n=================================================="
   @mv -v "${HOME}/.go/bin/{{app}}" "${HOME}/.go/bin/{{exe}}"
-  @if test -e "${HOME}/{{cobra}}"; then rm -rv "${HOME}/{{cobra}}"; fi && cp -v -R "cobra" "${HOME}/{{cobra}}"
-  @if test -e "${HOME}/{{just}}"; then rm -rv "${HOME}/{{just}}"; fi && cp -v -R "just" "${HOME}/{{just}}"
-  @if test -e "${HOME}/{{todor}}"; then rm -rv "${HOME}/{{todor}}"; fi && cp -v -R "todor" "${HOME}/{{todor}}"
+  @echo "\n\033[1;36mCopying\033[0;37m...\n=================================================="
+  @if test -e "${HOME}/{{cobra}}"; then rm -r "${HOME}/{{cobra}}"; fi && echo "\033[1;33mcobra\033[0;37m" && cp -v -R "cobra" "${HOME}/{{cobra}}"
+  @if test -e "${HOME}/{{just}}"; then rm -r "${HOME}/{{just}}"; fi && echo "\033[1;33mjust\033[0;37m" && cp -v -R "just" "${HOME}/{{just}}"
+  @if test -e "${HOME}/{{todor}}"; then rm -r "${HOME}/{{todor}}"; fi && echo "\033[1;33mtodor\033[0;37m" && cp -v -R "todor" "${HOME}/{{todor}}"
 
 ####################################################################################################
 
