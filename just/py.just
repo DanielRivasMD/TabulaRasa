@@ -24,3 +24,20 @@ link ver=pyver:
   ln -sf $(which bpython) venv/bin/{{ver}}
 
 ####################################################################################################
+
+# build & install locally
+install app=pyapp ver=0.0.0:
+  @echo "Building..."
+  python -m build
+  @echo "Install..."
+  pip install dist/{{pyapp}}-{{ver}}-py3-none-any.whl
+  @echo "Linking..."
+  ln -svf "$(pwd)/venv/bin/{{pyapp}}" "${HOME}/.python/bin"
+
+####################################################################################################
+
+# watch changes
+watch:
+  watchexec --clear --watch {{pyapp}} -- 'just install'
+
+####################################################################################################
