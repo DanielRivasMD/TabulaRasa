@@ -10,7 +10,7 @@ import '.just/py.conf'
 ####################################################################################################
 
 # create enviroment
-env app=pyapp:
+env:
   #!/bin/bash
   echo "Building..."
   python3 -m venv venv
@@ -18,7 +18,7 @@ env app=pyapp:
 ####################################################################################################
 
 # link bpython
-link app=pyapp ver=pyver:
+link ver=pyver:
   #!/bin/bash
   echo "Linking..."
   ln -sf $(which bpython) venv/bin/{{ver}}
