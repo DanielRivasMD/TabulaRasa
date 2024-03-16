@@ -66,6 +66,11 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 			cjust := copyCR(findHome()+justDir+"/"+j+dotconf, path+"/"+dotjust+"/"+j+dotconf)
 			cjust.reps = repsDeployJust() // automatic binding cli flags
 			copyFile(cjust)
+			if j == "py" {
+				instpy := copyCR(findHome()+justDir+"/"+pyinstall, path+"/"+dotjust+"/"+pyinstall)
+				instpy.reps = repsDeployJust() // automatic binding cli flags
+				copyFile(instpy)
+			}
 		}
 	},
 }
