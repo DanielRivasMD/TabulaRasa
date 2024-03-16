@@ -36,10 +36,11 @@ const (
 	justDir   = configDir + "/" + "just"
 	todorDir  = configDir + "/" + "todor"
 
-	dotconf  = ".conf"
-	dotjust  = ".just"
-	justfile = "justfile"
-	todor    = "todor"
+	dotconf   = ".conf"
+	dotjust   = ".just"
+	justfile  = "justfile"
+	todor     = "todor"
+	pyinstall = "pyinstall.sh"
 )
 
 var (
