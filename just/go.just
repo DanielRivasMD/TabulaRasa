@@ -28,7 +28,7 @@ linux app=goapp:
 install app=goapp exe=goexe:
   @echo "\n\033[1;33mInstalling\033[0;37m...\n=================================================="
   go install
-  mv -v "${HOME}/.go/bin/{{app}}" "${HOME}/.go/bin/{{exe}}"
+  mv -v "${HOME}/go/bin/{{app}}" "${HOME}/go/bin/{{exe}}"
 
 ####################################################################################################
 

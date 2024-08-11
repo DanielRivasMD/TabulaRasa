@@ -49,7 +49,7 @@ install app=app exe=exe:
   @echo "\n\033[1;33mInstalling\033[0;37m...\n=================================================="
   go install
   @echo "\n\033[1;33mLinking\033[0;37m...\n=================================================="
-  @mv -v "${HOME}/.go/bin/{{app}}" "${HOME}/.go/bin/{{exe}}"
+  @mv -v "${HOME}/go/bin/{{app}}" "${HOME}/go/bin/{{exe}}"
   @echo "\n\033[1;33mCopying\033[0;37m...\n=================================================="
   @if test -e "${HOME}/{{cobra}}"; then rm -r "${HOME}/{{cobra}}"; fi && echo "\033[1;33mcobra\033[0;37m" && cp -v -R "cobra" "${HOME}/{{cobra}}"
   @if test -e "${HOME}/{{just}}"; then rm -r "${HOME}/{{just}}"; fi && echo "\033[1;33mjust\033[0;37m" && cp -v -R "just" "${HOME}/{{just}}"
