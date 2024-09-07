@@ -11,12 +11,14 @@ import '.just/jl.conf'
 ####################################################################################################
 
 # julia project
+[group('julia')]
 @proj:
   julia --project
 
 ####################################################################################################
 
 # julia development
+[group('julia')]
 @dev:
   julia -i --project --startup no --eval 'include("/Users/drivas/.archive/cerberus/julia/development.jl")'
 
