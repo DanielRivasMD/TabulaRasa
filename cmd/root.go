@@ -32,7 +32,8 @@ import (
 // declarations
 const (
 	configDir = "/" + ".tabularasa"
-	cobraDir  = configDir + "/" + "cobra"
+	cobraDir  = configDir + "/" + "cobraApp"
+	cmdDir = configDir + "/" + "cobraCmd"
 	justDir   = configDir + "/" + "just"
 	todorDir  = configDir + "/" + "todor"
 
