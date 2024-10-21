@@ -56,6 +56,7 @@ install app=app exe=exe:
   @echo "\n\033[1;33mLinking\033[0;37m...\n=================================================="
   @mv -v "${HOME}/go/bin/{{app}}" "${HOME}/go/bin/{{exe}}"
   @echo "\n\033[1;33mCopying\033[0;37m...\n=================================================="
+  @if [ ! -d "${HOME}/.tabularasa" ]; then mkdir "${HOME}/.tabularasa"; fi
   @if test -e "${HOME}/{{cobraApp}}"; then rm -r "${HOME}/{{cobraApp}}"; fi && echo "\033[1;33mcobraApp\033[0;37m" && cp -v -R "cobraApp" "${HOME}/{{cobraApp}}"
   @if test -e "${HOME}/{{cobraCmd}}"; then rm -r "${HOME}/{{cobraCmd}}"; fi && echo "\033[1;33mcobraCmd\033[0;37m" && cp -v -R "cobraCmd" "${HOME}/{{cobraCmd}}"
   @if test -e "${HOME}/{{just}}"; then rm -r "${HOME}/{{just}}"; fi && echo "\033[1;33mjust\033[0;37m" && cp -v -R "just" "${HOME}/{{just}}"
