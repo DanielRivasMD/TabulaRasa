@@ -14,7 +14,7 @@ import (
 
 // TODO: add suffix argument
 // copy file
-func catFiles(params paramsCR) {
+func caterFiles(params paramsCopyReplace) {
 	// clean prior copying
 	if fileExist(params.dest) {
 		os.Remove(params.dest)

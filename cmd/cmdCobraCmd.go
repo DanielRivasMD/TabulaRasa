@@ -50,13 +50,10 @@ Commands include:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
-		// copy templates
-		params := copyCR(findHome()+cmdDir+"cmdTemp.go", path+"/"+"cmd")
-		params.reps = repsCobra() // automatic binding cli flags
-		copyDir(params)
-
-		// TODO: prepare template
-		// TODO: rename template after copying
+		// copy template
+		params := copierCopyReplace(findHome()+cmdDir+"/"+"cmdTemplate.go", path+"/"+"cmd"+"/"+"cmd"+child+".go")
+		params.reps = replacerCobraCmd() // automatic binding cli flags
+		copierFile(params)
 	},
 }
 
@@ -67,9 +64,9 @@ func init() {
 	cobraCmd.AddCommand(cmdCmd)
 
 	// flags
-	cmdCmd.Flags().StringVarP(&childCommand, "child", "d", "", "New command to attach")
+	cmdCmd.Flags().StringVarP(&child, "child", "d", "", "New command to attach. Recommended to capitalize first letter.")
 	cmdCmd.MarkFlagRequired("child")
-	cmdCmd.Flags().StringVarP(&parentCommand, "parent", "u", "rootCmd", "Parent command to attach new command to. If not asigned, attach to")
+	cmdCmd.Flags().StringVarP(&parent, "parent", "u", "root", "Parent command to attach new command to. If not asigned, attach to")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

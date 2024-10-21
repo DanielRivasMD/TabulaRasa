@@ -7,7 +7,7 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // copy & replace
-type paramsCR struct {
+type paramsCopyReplace struct {
 	orig  string
 	dest  string
 	files []string
@@ -16,29 +16,29 @@ type paramsCR struct {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func newCR() paramsCR {
-	params := paramsCR{}
+func creatorCopyReplace() paramsCopyReplace {
+	params := paramsCopyReplace{}
 	params.files = []string{}
 	params.reps = []rep{}
 	return params
 }
 
-func replaceCR(target string, reps []rep) paramsCR {
-	params := paramsCR{}
+func replacerCopyReplace(target string, reps []rep) paramsCopyReplace {
+	params := paramsCopyReplace{}
 	params.orig = target
 	params.reps = reps
 	return params
 }
 
-func copyCR(orig, dest string) paramsCR {
-	params := newCR()
+func copierCopyReplace(orig, dest string) paramsCopyReplace {
+	params := creatorCopyReplace()
 	params.orig = orig
 	params.dest = dest
 	return params
 }
 
-func cloneCR(params paramsCR) paramsCR {
-	out := newCR()
+func clonerCopyReplace(params paramsCopyReplace) paramsCopyReplace {
+	out := creatorCopyReplace()
 	out.orig = params.orig
 	out.dest = params.dest
 	out.files = params.files

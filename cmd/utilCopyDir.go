@@ -12,7 +12,7 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // copy & replace dir
-func copyDir(params paramsCR) {
+func copierDir(params paramsCopyReplace) {
 	// clean prior copying
 	if fileExist(params.dest) {
 		os.Remove(params.dest)
@@ -46,10 +46,10 @@ func copyDir(params paramsCR) {
 
 		if obj.IsDir() {
 			// create dirs recursive
-			copyDir(params)
+			copierDir(params)
 		} else {
 			// copy & replace
-			copyFile(params)
+			copierFile(params)
 		}
 	}
 }

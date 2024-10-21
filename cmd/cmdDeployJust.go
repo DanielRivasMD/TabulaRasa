@@ -52,9 +52,9 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 	Run: func(cmd *cobra.Command, args []string) {
 		// deploy justfile
-		djust := copyCR(findHome()+justDir, path+"/"+"."+justfile)
+		djust := copierCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
 		djust.files = append([]string{header}, lang...)
-		catFiles(djust)
+		caterFiles(djust)
 
 		// create config dir
 		if !dirExist(path + "/" + dotjust) {
@@ -63,13 +63,13 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 		// deploy configs
 		for _, j := range lang {
-			cjust := copyCR(findHome()+justDir+"/"+j+dotconf, path+"/"+dotjust+"/"+j+dotconf)
-			cjust.reps = repsDeployJust() // automatic binding cli flags
-			copyFile(cjust)
+			cjust := copierCopyReplace(findHome()+justDir+"/"+j+dotconf, path+"/"+dotjust+"/"+j+dotconf)
+			cjust.reps = replacerDeployJust() // automatic binding cli flags
+			copierFile(cjust)
 			if j == "py" {
-				instpy := copyCR(findHome()+justDir+"/"+pyinstall, path+"/"+dotjust+"/"+pyinstall)
-				instpy.reps = repsDeployJust() // automatic binding cli flags
-				copyFile(instpy)
+				instpy := copierCopyReplace(findHome()+justDir+"/"+pyinstall, path+"/"+dotjust+"/"+pyinstall)
+				instpy.reps = replacerDeployJust() // automatic binding cli flags
+				copierFile(instpy)
 			}
 		}
 	},

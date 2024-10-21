@@ -13,7 +13,7 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // copy file
-func copyFile(params paramsCR) {
+func copierFile(params paramsCopyReplace) {
 	// clean prior copying
 	if fileExist(params.dest) {
 		os.Remove(params.dest)
