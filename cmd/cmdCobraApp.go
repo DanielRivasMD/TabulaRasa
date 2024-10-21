@@ -29,8 +29,8 @@ var ()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // cobraCmd
-var cobraCmd = &cobra.Command{
-	Use:   "cobra",
+var appCmd = &cobra.Command{
+	Use:   "app",
 	Short: "Construct " + chalk.Yellow.Color("cobra") + " app.",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
@@ -46,13 +46,19 @@ Commands include:
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	Run: func(κ *cobra.Command, args []string) {
+		// copy templates
+		params := copyCR(findHome()+cobraDir, path)
+		params.reps = repsCobra() // automatic binding cli flags
+		copyDir(params)
+	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // execute prior main
 func init() {
-	rootCmd.AddCommand(cobraCmd)
+	cobraCmd.AddCommand(appCmd)
 
 	// flags
 }
