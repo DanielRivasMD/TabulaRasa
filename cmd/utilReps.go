@@ -13,7 +13,7 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // bind cobra replace values
-func replacerCobraApp() []rep {
+func replaceCobraApp() []rep {
 	out := make([]rep, 5)
 	out[0] = rep{old: "YEAR", new: strconv.Itoa(time.Now().Year())}
 	out[1] = rep{old: "REPOSITORY", new: repo}
@@ -26,7 +26,7 @@ func replacerCobraApp() []rep {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // bind cobra replace values
-func replacerCobraCmd() []rep {
+func replaceCobraCmd() []rep {
 	out := make([]rep, 7)
 	out[0] = rep{old: "YEAR", new: strconv.Itoa(time.Now().Year())}
 	out[1] = rep{old: "REPOSITORY", new: repo}
@@ -41,7 +41,7 @@ func replacerCobraCmd() []rep {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // bind deploy just replace values
-func replacerDeployJust() []rep {
+func replaceDeployJust() []rep {
 	out := make([]rep, 3)
 	out[0] = rep{"APP", repo}
 	out[1] = rep{"EXE", strings.ToLower(repo)}

@@ -54,7 +54,7 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 		// deploy justfile
 		djust := copierCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
 		djust.files = append([]string{header}, lang...)
-		caterFiles(djust)
+		catFiles(djust)
 
 		// create config dir
 		if !dirExist(path + "/" + dotjust) {
@@ -64,12 +64,12 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 		// deploy configs
 		for _, j := range lang {
 			cjust := copierCopyReplace(findHome()+justDir+"/"+j+dotconf, path+"/"+dotjust+"/"+j+dotconf)
-			cjust.reps = replacerDeployJust() // automatic binding cli flags
-			copierFile(cjust)
+			cjust.reps = replaceDeployJust() // automatic binding cli flags
+			copyFile(cjust)
 			if j == "py" {
 				instpy := copierCopyReplace(findHome()+justDir+"/"+pyinstall, path+"/"+dotjust+"/"+pyinstall)
-				instpy.reps = replacerDeployJust() // automatic binding cli flags
-				copierFile(instpy)
+				instpy.reps = replaceDeployJust() // automatic binding cli flags
+				copyFile(instpy)
 			}
 		}
 	},

@@ -46,7 +46,7 @@ Including ` + chalk.Red.Color(".todor") + `
 	Run: func(cmd *cobra.Command, args []string) {
 		// deploy todor
 		params := copierCopyReplace(findHome()+todorDir+"/"+todor, path+"/"+"."+todor)
-		copierFile(params)
+		copyFile(params)
 	},
 }
 
