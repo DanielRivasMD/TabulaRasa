@@ -48,7 +48,7 @@ Commands include:
 
 	Run: func(κ *cobra.Command, args []string) {
 		// copy templates
-		params := copierCopyReplace(findHome()+cobraDir, path)
+		params := copyCopyReplace(findHome()+cobraDir, path)
 		params.reps = replaceCobraApp() // automatic binding cli flags
 		copyDir(params)
 	},

@@ -52,7 +52,7 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 	Run: func(cmd *cobra.Command, args []string) {
 		// deploy justfile
-		djust := copierCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
+		djust := copyCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
 		djust.files = append([]string{header}, lang...)
 		catFiles(djust)
 
@@ -63,11 +63,11 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 		// deploy configs
 		for _, į := range lang {
-			cjust := copierCopyReplace(findHome()+justDir+"/"+į+dotconf, path+"/"+dotjust+"/"+į+dotconf)
+			cjust := copyCopyReplace(findHome()+justDir+"/"+į+dotconf, path+"/"+dotjust+"/"+į+dotconf)
 			cjust.reps = replaceDeployJust() // automatic binding cli flags
 			copyFile(cjust)
 			if į == "py" {
-				instpy := copierCopyReplace(findHome()+justDir+"/"+pyinstall, path+"/"+dotjust+"/"+pyinstall)
+				instpy := copyCopyReplace(findHome()+justDir+"/"+pyinstall, path+"/"+dotjust+"/"+pyinstall)
 				instpy.reps = replaceDeployJust() // automatic binding cli flags
 				copyFile(instpy)
 			}

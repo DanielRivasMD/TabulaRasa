@@ -51,7 +51,7 @@ Commands include:
 
 	Run: func(κ *cobra.Command, args []string) {
 		// copy template
-		params := copierCopyReplace(findHome()+cmdDir+"/"+"cmdTemplate.go", path+"/"+"cmd"+"/"+"cmd"+child+".go")
+		params := copyCopyReplace(findHome()+cmdDir+"/"+"cmdTemplate.go", path+"/"+"cmd"+"/"+"cmd"+child+".go")
 		params.reps = replaceCobraCmd() // automatic binding cli flags
 		copyFile(params)
 	},
