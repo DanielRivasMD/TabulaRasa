@@ -17,33 +17,33 @@ type paramsCopyReplace struct {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func creatorCopyReplace() paramsCopyReplace {
-	params := paramsCopyReplace{}
-	params.files = []string{}
-	params.reps = []rep{}
-	return params
+	π := paramsCopyReplace{}
+	π.files = []string{}
+	π.reps = []rep{}
+	return π
 }
 
 func replacerCopyReplace(target string, reps []rep) paramsCopyReplace {
-	params := paramsCopyReplace{}
-	params.orig = target
-	params.reps = reps
-	return params
+	π := paramsCopyReplace{}
+	π.orig = target
+	π.reps = reps
+	return π
 }
 
 func copierCopyReplace(orig, dest string) paramsCopyReplace {
-	params := creatorCopyReplace()
-	params.orig = orig
-	params.dest = dest
-	return params
+	π := creatorCopyReplace()
+	π.orig = orig
+	π.dest = dest
+	return π
 }
 
 func clonerCopyReplace(params paramsCopyReplace) paramsCopyReplace {
-	out := creatorCopyReplace()
-	out.orig = params.orig
-	out.dest = params.dest
-	out.files = params.files
-	out.reps = params.reps
-	return out
+	Ω := creatorCopyReplace()
+	Ω.orig = params.orig
+	Ω.dest = params.dest
+	Ω.files = params.files
+	Ω.reps = params.reps
+	return Ω
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

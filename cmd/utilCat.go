@@ -14,28 +14,28 @@ import (
 
 // TODO: add suffix argument
 // copy file
-func catFiles(params paramsCopyReplace) {
+func catFiles(π paramsCopyReplace) {
 	// clean prior copying
-	if fileExist(params.dest) {
-		os.Remove(params.dest)
+	if fileExist(π.dest) {
+		os.Remove(π.dest)
 	}
 
 	// open writer
-	fwrite, ε := os.OpenFile(params.dest, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
+	fwrite, ε := os.OpenFile(π.dest, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 	if ε != nil {
 		log.Fatal(ε)
 	}
 	defer fwrite.Close()
 
-	for _, file := range params.files {
+	for _, file := range π.files {
 		// open reader
-		fread, ε := os.Open(params.orig + "/" + file + dotjust)
+		fread, ε := os.Open(π.orig + "/" + file + dotjust)
 		if ε != nil {
 			log.Fatal(ε)
 		}
 		defer fread.Close()
 
-		// declare writer
+		// declare ϖ
 		ϖ := bufio.NewWriter(fwrite)
 
 		// read file
@@ -60,8 +60,8 @@ func catFiles(params paramsCopyReplace) {
 		ϖ.Flush()
 	}
 	// replace
-	if len(params.reps) > 0 {
-		replace(params.dest, params.reps)
+	if len(π.reps) > 0 {
+		replace(π.dest, π.reps)
 	}
 }
 

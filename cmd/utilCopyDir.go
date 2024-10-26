@@ -12,44 +12,44 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // copy & replace dir
-func copyDir(params paramsCopyReplace) {
+func copyDir(π paramsCopyReplace) {
 	// clean prior copying
-	if fileExist(params.dest) {
-		os.Remove(params.dest)
+	if fileExist(π.dest) {
+		os.Remove(π.dest)
 	}
 
 	// original properties
-	origInfo, ε := os.Stat(params.orig)
+	origInfo, ε := os.Stat(π.orig)
 	if ε != nil {
 		log.Fatal(ε)
 	}
 
 	// create destiny dir
-	ε = os.MkdirAll(params.dest, origInfo.Mode())
+	ε = os.MkdirAll(π.dest, origInfo.Mode())
 	if ε != nil {
 		log.Fatal(ε)
 	}
 
 	// origin files
-	dir, _ := os.Open(params.orig)
+	dir, _ := os.Open(π.orig)
 	objs, ε := dir.Readdir(-1)
 
-	orig := params.orig
-	dest := params.dest
+	orig := π.orig
+	dest := π.dest
 
 	// iterate origin
 	for _, obj := range objs {
 
 		// pointers
-		params.orig = orig + "/" + obj.Name()
-		params.dest = dest + "/" + obj.Name()
+		π.orig = orig + "/" + obj.Name()
+		π.dest = dest + "/" + obj.Name()
 
 		if obj.IsDir() {
 			// create dirs recursive
-			copyDir(params)
+			copyDir(π)
 		} else {
 			// copy & replace
-			copyFile(params)
+			copyFile(π)
 		}
 	}
 }

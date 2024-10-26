@@ -62,11 +62,11 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 		}
 
 		// deploy configs
-		for _, j := range lang {
-			cjust := copierCopyReplace(findHome()+justDir+"/"+j+dotconf, path+"/"+dotjust+"/"+j+dotconf)
+		for _, į := range lang {
+			cjust := copierCopyReplace(findHome()+justDir+"/"+į+dotconf, path+"/"+dotjust+"/"+į+dotconf)
 			cjust.reps = replaceDeployJust() // automatic binding cli flags
 			copyFile(cjust)
-			if j == "py" {
+			if į == "py" {
 				instpy := copierCopyReplace(findHome()+justDir+"/"+pyinstall, path+"/"+dotjust+"/"+pyinstall)
 				instpy.reps = replaceDeployJust() // automatic binding cli flags
 				copyFile(instpy)

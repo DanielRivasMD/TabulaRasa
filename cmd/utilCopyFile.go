@@ -13,21 +13,21 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // copy file
-func copyFile(params paramsCopyReplace) {
+func copyFile(π paramsCopyReplace) {
 	// clean prior copying
-	if fileExist(params.dest) {
-		os.Remove(params.dest)
+	if fileExist(π.dest) {
+		os.Remove(π.dest)
 	}
 
 	// handle origin
-	origFile, ε := os.Open(params.orig)
+	origFile, ε := os.Open(π.orig)
 	if ε != nil {
 		log.Fatal(ε)
 	}
 	defer origFile.Close()
 
 	// handle destiny
-	destFile, ε := os.Create(params.dest)
+	destFile, ε := os.Create(π.dest)
 	if ε != nil {
 		log.Fatal(ε)
 	}
@@ -36,14 +36,14 @@ func copyFile(params paramsCopyReplace) {
 	// copy file
 	_, ε = io.Copy(destFile, origFile)
 	if ε == nil {
-		origInfo, ε := os.Stat(params.orig)
+		origInfo, ε := os.Stat(π.orig)
 		if ε != nil {
-			ε = os.Chmod(params.dest, origInfo.Mode())
+			ε = os.Chmod(π.dest, origInfo.Mode())
 		}
 	}
 	// replace
-	if len(params.reps) > 0 {
-		replace(params.dest, params.reps)
+	if len(π.reps) > 0 {
+		replace(π.dest, π.reps)
 	}
 }
 

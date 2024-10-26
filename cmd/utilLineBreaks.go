@@ -14,7 +14,7 @@ import (
 
 // print line breaks
 func lineBreaks() {
-	for ι := 0; ι < 100; ι++ {
+	for į := 0; į < 100; į++ {
 		color.Print(color.Grey("=", color.B))
 	}
 
