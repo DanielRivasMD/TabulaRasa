@@ -50,7 +50,16 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// ValidArgs: []string{"go", "jl", "py", "rs"},
+	// Args:      cobra.ExactValidArgs(1),
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	Run: func(cmd *cobra.Command, args []string) {
+
+		// // bind flag
+		// lang := args[0]
+
 		// deploy justfile
 		djust := copyCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
 		djust.files = append([]string{header}, lang...)
