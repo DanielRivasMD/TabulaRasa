@@ -37,12 +37,12 @@ func copyCopyReplace(orig, dest string) paramsCopyReplace {
 	return π
 }
 
-func cloneCopyReplace(params paramsCopyReplace) paramsCopyReplace {
+func cloneCopyReplace(π paramsCopyReplace) paramsCopyReplace {
 	Ω := createCopyReplace()
-	Ω.orig = params.orig
-	Ω.dest = params.dest
-	Ω.files = params.files
-	Ω.reps = params.reps
+	Ω.orig = π.orig
+	Ω.dest = π.dest
+	Ω.files = π.files
+	Ω.reps = π.reps
 	return Ω
 }
 
