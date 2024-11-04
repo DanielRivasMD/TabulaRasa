@@ -34,6 +34,7 @@ const (
 	configDir = "/" + ".tabularasa"
 	cobraDir  = configDir + "/" + "cobraApp"
 	cmdDir = configDir + "/" + "cobraCmd"
+	utilDir = configDir + "/" + "cobraUtil"
 	justDir   = configDir + "/" + "just"
 	todorDir  = configDir + "/" + "todor"
 

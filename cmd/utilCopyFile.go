@@ -23,7 +23,7 @@ func copyFile(π paramsCopyReplace) {
 	checkErr(ε)
 	defer origFile.Close()
 
-	// handle destiny
+	// handle destination
 	destFile, ε := os.Create(π.dest)
 	checkErr(ε)
 	defer destFile.Close()
