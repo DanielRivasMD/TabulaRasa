@@ -25,8 +25,9 @@ import (
 
 // declarations
 var (
-	parent string
-	child  string
+	parent      string
+	child       string
+	root_parent string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,8 +51,13 @@ Commands include:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
+		// define name
+		if parent != "root" {
+			root_parent = parent
+		}
+
 		// copy template
-		params := copyCopyReplace(findHome()+cmdDir+"/"+"cmdTemplate.go", path+"/"+"cmd"+"/"+"cmd"+child+".go")
+		params := copyCopyReplace(findHome()+cmdDir+"/"+"cmdTemplate.go", path+"/"+"cmd"+"/"+"cmd"+root_parent+child+".go")
 		params.reps = replaceCobraCmd() // automatic binding cli flags
 		copyFile(params)
 	},
