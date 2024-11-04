@@ -30,14 +30,13 @@ var ()
 
 // CHILDCmd
 var CHILDCmd = &cobra.Command{
-
 	Use:   "CHILD",
-	Short: "" + chalk.Yellow.Color("cobra") + ".",
+	Short: "" + chalk.Yellow.Color("") + ".",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 `,
 
 	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("CHILD"),
+` + chalk.Cyan.Color("TOOL") + ` help ` + chalk.Yellow.Color("ROOT") + chalk.Yellow.Color("CHILD"),
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
