@@ -27,7 +27,7 @@ func replaceCobraApp() []rep {
 
 // bind cobra replace values
 func replaceCobraCmd() []rep {
-	Ω := make([]rep, 7)
+	Ω := make([]rep, 8)
 	Ω[0] = rep{old: "YEAR", new: strconv.Itoa(time.Now().Year())}
 	Ω[1] = rep{old: "REPOSITORY", new: repo}
 	Ω[2] = rep{old: "TOOL", new: strings.ToLower(repo)}
@@ -35,6 +35,7 @@ func replaceCobraCmd() []rep {
 	Ω[4] = rep{old: "EMAIL", new: email}
 	Ω[5] = rep{old: "CHILD", new: strings.ToLower(child)}
 	Ω[6] = rep{old: "PARENT", new: strings.ToLower(parent)}
+	Ω[7] = rep{old: "ROOT", new: strings.ToLower(root_parent)}
 	return Ω
 }
 
