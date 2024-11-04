@@ -22,17 +22,13 @@ func catFiles(π paramsCopyReplace) {
 
 	// open writer
 	fwrite, ε := os.OpenFile(π.dest, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
-	if ε != nil {
-		log.Fatal(ε)
-	}
+	checkErr(ε)
 	defer fwrite.Close()
 
 	for _, file := range π.files {
 		// open reader
 		fread, ε := os.Open(π.orig + "/" + file + dotjust)
-		if ε != nil {
-			log.Fatal(ε)
-		}
+		checkErr(ε)
 		defer fread.Close()
 
 		// declare ϖ
@@ -52,9 +48,8 @@ func catFiles(π paramsCopyReplace) {
 			}
 		}
 
-		if ε := scanner.Err(); ε != nil {
-			log.Fatal(ε)
-		}
+		ε = scanner.Err()
+		checkErr(ε)
 
 		// flush writer
 		ϖ.Flush()

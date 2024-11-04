@@ -13,9 +13,7 @@ import (
 // check if directory exist
 func dirExist(ƒ string) bool {
 	info, ε := os.Stat(ƒ)
-	if os.IsNotExist(ε) {
-		return false
-	}
+	checkErr(ε)
 	return info.IsDir()
 }
 

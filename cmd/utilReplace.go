@@ -6,7 +6,6 @@ package cmd
 
 import (
 	"bufio"
-	"log"
 	"os"
 	"strings"
 )
@@ -17,16 +16,12 @@ import (
 func replace(target string, reps []rep) {
 	// open reader
 	fread, ε := os.Open(target)
-	if ε != nil {
-		log.Fatal(ε)
-	}
+	checkErr(ε)
 	defer fread.Close()
 
 	// open writer
 	fwrite, ε := os.OpenFile(target, os.O_WRONLY|os.O_CREATE, 0666)
-	if ε != nil {
-		log.Fatal(ε)
-	}
+	checkErr(ε)
 	defer fwrite.Close()
 
 	// declare writer
@@ -51,14 +46,11 @@ func replace(target string, reps []rep) {
 
 		// write
 		_, ε = ϖ.WriteString(toPrint)
-		if ε != nil {
-			log.Fatal(ε)
-		}
+		checkErr(ε)
 	}
 
-	if ε := scanner.Err(); ε != nil {
-		log.Fatal(ε)
-	}
+	ε = scanner.Err()
+	checkErr(ε)
 
 	// flush writer
 	ϖ.Flush()

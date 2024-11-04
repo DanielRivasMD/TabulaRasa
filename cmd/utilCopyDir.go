@@ -5,7 +5,6 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
-	"log"
 	"os"
 )
 
@@ -20,15 +19,11 @@ func copyDir(π paramsCopyReplace) {
 
 	// original properties
 	origInfo, ε := os.Stat(π.orig)
-	if ε != nil {
-		log.Fatal(ε)
-	}
+	checkErr(ε)
 
 	// create destiny dir
 	ε = os.MkdirAll(π.dest, origInfo.Mode())
-	if ε != nil {
-		log.Fatal(ε)
-	}
+	checkErr(ε)
 
 	// origin files
 	dir, _ := os.Open(π.orig)

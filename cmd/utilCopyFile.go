@@ -6,7 +6,6 @@ package cmd
 
 import (
 	"io"
-	"log"
 	"os"
 )
 
@@ -21,16 +20,12 @@ func copyFile(π paramsCopyReplace) {
 
 	// handle origin
 	origFile, ε := os.Open(π.orig)
-	if ε != nil {
-		log.Fatal(ε)
-	}
+	checkErr(ε)
 	defer origFile.Close()
 
 	// handle destiny
 	destFile, ε := os.Create(π.dest)
-	if ε != nil {
-		log.Fatal(ε)
-	}
+	checkErr(ε)
 	defer destFile.Close()
 
 	// copy file
