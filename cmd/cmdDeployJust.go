@@ -94,6 +94,7 @@ func init() {
 	justCmd.Flags().StringVarP(&header, "header", "t", "head", "Header")
 	justCmd.Flags().StringArrayVarP(&lang, "lang", "l", []string{}, "Languages to deploy")
 	justCmd.MarkFlagRequired("lang")
+	// TODO: restrict valid args
 	justCmd.Flags().StringArrayVarP(&justconfig, "conf", "c", []string{}, "Language configurations to deploy")
 	justCmd.Flags().StringVarP(&ver, "ver", "v", "", "Version to deploy")
 }
