@@ -42,7 +42,7 @@ osx app=app:
 
 # build for linux
 [group('go')]
-linux app=app:
+linux app=goapp:
   @echo "\n\033[1;33mBuilding\033[0;37m...\n=================================================="
   env GOOS=linux GOARCH=amd64 go build -v -o excalibur/{{app}}
 
@@ -50,7 +50,7 @@ linux app=app:
 
 # install locally
 [group('go')]
-install app=app exe=exe:
+install app=goapp exe=goexe:
   @echo "\n\033[1;33mInstalling\033[0;37m...\n=================================================="
   go install
   @echo "\n\033[1;33mLinking\033[0;37m...\n=================================================="
