@@ -34,7 +34,7 @@ import '.just/go.conf'
 
 # build for OSX
 [group('go')]
-osx app=app:
+osx app=goapp:
   @echo "\n\033[1;33mBuilding\033[0;37m...\n=================================================="
   go build -v -o excalibur/{{app}}
 
