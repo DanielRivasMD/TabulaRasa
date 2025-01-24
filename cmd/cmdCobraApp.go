@@ -35,14 +35,11 @@ var appCmd = &cobra.Command{
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Construct ` + chalk.Yellow.Color("cobra") + ` app from template.
-
-Commands include:
-	` + chalk.Magenta.Color("completion") + `
-	` + chalk.Magenta.Color("identity") + `
 `,
 
 	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("cobra"),
+` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("cobra") + `
+` + chalk.Cyan.Color("tabularasa") + ` cobra app ` + chalk.Yellow.Color("--path") + ` $(pwd) ` + chalk.Yellow.Color("--repo") + ` Tabularasa`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
