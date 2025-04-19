@@ -36,11 +36,13 @@ const (
 	cmdDir = configDir + "/" + "cobraCmd"
 	utilDir = configDir + "/" + "cobraUtil"
 	justDir   = configDir + "/" + "just"
+	readmeDir = configDir + "/" + "readme"
 	todorDir  = configDir + "/" + "todor"
 
 	dotconf   = ".conf"
 	dotjust   = ".just"
 	justfile  = "justfile"
+	readme = "README.md"
 	todor     = "todor"
 	pyinstall = "pyinstall.sh"
 )
