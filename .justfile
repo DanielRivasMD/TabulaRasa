@@ -61,6 +61,7 @@ install app=goapp exe=goexe:
   @if test -e "${HOME}/{{cobraCmd}}"; then rm -r "${HOME}/{{cobraCmd}}"; fi && echo "\033[1;33mcobraCmd\033[0;37m" && cp -v -R "cobraCmd" "${HOME}/{{cobraCmd}}"
   @if test -e "${HOME}/{{cobraUtil}}"; then rm -r "${HOME}/{{cobraUtil}}"; fi && echo "\033[1;33mcobraUtil\033[0;37m" && cp -v -R "cobraUtil" "${HOME}/{{cobraUtil}}"
   @if test -e "${HOME}/{{just}}"; then rm -r "${HOME}/{{just}}"; fi && echo "\033[1;33mjust\033[0;37m" && cp -v -R "just" "${HOME}/{{just}}"
+  @if test -e "${HOME}/{{readme}}"; then rm -r "${HOME}/{{readme}}"; fi && echo "\033[1;33mreadme\033[0;37m" && cp -v -R "readme" "${HOME}/{{readme}}"
   @if test -e "${HOME}/{{todor}}"; then rm -r "${HOME}/{{todor}}"; fi && echo "\033[1;33mtodor\033[0;37m" && cp -v -R "todor" "${HOME}/{{todor}}"
 
 ####################################################################################################
