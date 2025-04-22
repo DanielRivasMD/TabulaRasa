@@ -50,13 +50,13 @@ linux app=goapp:
 
 # install locally
 [group('go')]
-install app=goapp exe=goexe:
+install app=goapp exe=goexe dir=dir:
   @echo "\n\033[1;33mInstalling\033[0;37m...\n=================================================="
   go install
   @echo "\n\033[1;33mLinking\033[0;37m...\n=================================================="
   @mv -v "${HOME}/go/bin/{{app}}" "${HOME}/go/bin/{{exe}}"
   @echo "\n\033[1;33mCopying\033[0;37m...\n=================================================="
-  @if [ ! -d "${HOME}/.tabularasa" ]; then mkdir "${HOME}/.tabularasa"; fi
+  @if [ ! -d "${HOME}/{{dir}}" ]; then mkdir "${HOME}/{{dir}}"; fi
   @if test -e "${HOME}/{{cobraApp}}"; then rm -r "${HOME}/{{cobraApp}}"; fi && echo "\033[1;33mcobraApp\033[0;37m" && cp -v -R "cobraApp" "${HOME}/{{cobraApp}}"
   @if test -e "${HOME}/{{cobraCmd}}"; then rm -r "${HOME}/{{cobraCmd}}"; fi && echo "\033[1;33mcobraCmd\033[0;37m" && cp -v -R "cobraCmd" "${HOME}/{{cobraCmd}}"
   @if test -e "${HOME}/{{cobraUtil}}"; then rm -r "${HOME}/{{cobraUtil}}"; fi && echo "\033[1;33mcobraUtil\033[0;37m" && cp -v -R "cobraUtil" "${HOME}/{{cobraUtil}}"
