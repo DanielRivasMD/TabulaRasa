@@ -28,7 +28,6 @@ import (
 // declarations
 var (
 	header     string
-	lang       []string
 	justconfig []string
 	ver        string
 )
@@ -50,19 +49,11 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// ValidArgs: []string{"go", "jl", "py", "rs"},
-	// Args:      cobra.ExactValidArgs(1),
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	Run: func(cmd *cobra.Command, args []string) {
-
-		// // bind flag
-		// lang := args[0]
 
 		// deploy justfile
 		djust := copyCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
-		djust.files = append([]string{header}, lang...)
+		djust.files = append([]string{header}, lang.selected...)
 		catFiles(djust)
 
 		// create config dir
@@ -71,7 +62,7 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 		}
 
 		// deploy configs
-		for _, į := range lang {
+		for _, į := range lang.selected {
 			cjust := copyCopyReplace(findHome()+justDir+"/"+į+dotconf, path+"/"+dotjust+"/"+į+dotconf)
 			cjust.reps = replaceDeployJust() // automatic binding cli flags
 			copyFile(cjust)
@@ -92,10 +83,7 @@ func init() {
 
 	// flags
 	justCmd.Flags().StringVarP(&header, "header", "t", "head", "Header")
-	justCmd.Flags().StringArrayVarP(&lang, "lang", "l", []string{}, "Languages to deploy")
 	justCmd.MarkFlagRequired("lang")
-	// TODO: restrict valid args
-	justCmd.Flags().StringArrayVarP(&justconfig, "conf", "c", []string{}, "Language configurations to deploy")
 	justCmd.Flags().StringVarP(&ver, "ver", "v", "", "Version to deploy")
 }
 
