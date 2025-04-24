@@ -59,7 +59,6 @@ func init() {
 	// flags
 	utilCmd.Flags().StringVarP(&util, "util", "t", "", "Utility to import. First letter must be capitalized.")
 	utilCmd.MarkFlagRequired("util")
-	// TODO: restrict valid args
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
