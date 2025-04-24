@@ -5,21 +5,22 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
-	"bytes"
+	"os"
 	"os/exec"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func shellCall(command string) (error, string, string) {
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	cmd := exec.Command("bash", "-c", command)
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-	err := cmd.Run()
-	return err, stdout.String(), stderr.String()
+func shellCall(cmd string) {
+	cmdRun := exec.Command("bash", "-c", cmd)
+
+	// output terminal preserve color codes
+	cmdRun.Stdout = os.Stdout
+	cmdRun.Stderr = os.Stderr
+
+	// run the command
+	ε := cmdRun.Run()
+	checkErr(ε)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
