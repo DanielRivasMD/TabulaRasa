@@ -6,7 +6,6 @@ package cmd
 
 import (
 	"bufio"
-	"log"
 	"os"
 )
 
@@ -43,9 +42,7 @@ func catFiles(π paramsCopyReplace) {
 			toPrint := scanner.Text() + "\n"
 			// write
 			_, ε = ϖ.WriteString(toPrint)
-			if ε != nil {
-				log.Fatal(ε)
-			}
+			checkErr(ε)
 		}
 
 		ε = scanner.Err()
