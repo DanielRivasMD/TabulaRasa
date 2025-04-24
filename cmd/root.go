@@ -45,6 +45,9 @@ const (
 	readme = "README.md"
 	todor     = "todor"
 	pyinstall = "pyinstall.sh"
+	overview = "01overview.md"
+	usage = "03usage.md"
+	faq = "05faq.md"
 )
 
 var (
