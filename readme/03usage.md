@@ -2,7 +2,7 @@
 
 ## Usage
 ```bash
-{{PROJECT_NAME}}
+REPOSITORY
 ```
 
 ## Example
