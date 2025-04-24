@@ -3,8 +3,8 @@
 ### **Language-Specific**
 | Language   | Command                                                                 |
 |------------|-------------------------------------------------------------------------|
-| **Rust**   | `cargo install --git https://github.com/{{USER}}/{{PROJECT_NAME}}`      |
+| **Rust**   | `cargo install --git https://github.com/USER/REPOSITORY`        |
 
 ### **Pre-built Binaries**
-Download from [Releases](https://github.com/{{USER}}/{{PROJECT_NAME}}/releases).
+Download from [Releases](https://github.com/USER/REPOSITORY/releases).
 
