@@ -2,8 +2,8 @@
 
 Build from source
 ```
-git clone https://github.com/{{USER}}/{{PROJECT_NAME}}.git
-cd {{PROJECT_NAME}}
+git clone https://github.com/USER/REPOSITORY
+cd REPOSITORY
 ```
 
 ## Language-Specific Setup
