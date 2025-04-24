@@ -51,6 +51,7 @@ Commands include:
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
+
 		// define name
 		if parent != "root" {
 			root_parent = parent
@@ -61,6 +62,7 @@ Commands include:
 		params.reps = replaceCobraCmd() // automatic binding cli flags
 		copyFile(params)
 	},
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +74,7 @@ func init() {
 	// flags
 	cmdCmd.Flags().StringVarP(&child, "child", "C", "", "New command to attach. Recommended to capitalize first letter.")
 	cmdCmd.Flags().StringVarP(&parent, "parent", "U", "root", "Parent command to attach new command to. If not asigned, attach to")
+
 	cmdCmd.MarkFlagRequired("child")
 }
 

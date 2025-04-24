@@ -76,6 +76,7 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 			}
 		}
 	},
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,6 +88,7 @@ func init() {
 	// flags
 	justCmd.Flags().StringVarP(&header, "header", "t", "head", "Header")
 	justCmd.Flags().StringVarP(&ver, "ver", "v", "", "Version to deploy")
+
 	justCmd.MarkFlagRequired("lang")
 }
 

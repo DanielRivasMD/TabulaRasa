@@ -43,11 +43,13 @@ var utilCmd = &cobra.Command{
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
+
 		// copy template
 		params := copyCopyReplace(findHome()+utilDir+"/"+"util"+util+".go", path+"/"+"cmd"+"/"+"util"+util+".go")
 		params.reps = replaceCobraCmd() // automatic binding cli flags
 		copyFile(params)
 	},
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,6 +60,7 @@ func init() {
 
 	// flags
 	utilCmd.Flags().StringVarP(&util, "util", "t", "", "Utility to import. First letter must be capitalized.")
+
 	utilCmd.MarkFlagRequired("util")
 }
 

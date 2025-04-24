@@ -52,6 +52,7 @@ Deploy ` + chalk.Yellow.Color("readme") + ` config template over target.
 		md.reps = replaceDeployReadme() // automatic bindings cli flags
 		catFiles(md, "")
 	},
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,6 +64,7 @@ func init() {
 	// flags
 	readmeCmd.Flags().StringVarP(&description, "description", "", "", "Description")
 	readmeCmd.Flags().StringVarP(&license, "license", "", "", "License")
+
 	readmeCmd.MarkFlagRequired("lang")
 }
 

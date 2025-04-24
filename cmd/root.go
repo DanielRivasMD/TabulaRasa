@@ -18,8 +18,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
-	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -84,10 +82,7 @@ to facilite software deployment.
 // execute
 func Execute() {
 	ε := rootCmd.Execute()
-	if ε != nil {
-		log.Fatal(ε)
-		os.Exit(1)
-	}
+	checkErr(ε)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

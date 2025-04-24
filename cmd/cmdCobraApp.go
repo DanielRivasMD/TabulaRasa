@@ -44,11 +44,13 @@ Construct ` + chalk.Yellow.Color("cobra") + ` app from template.
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(κ *cobra.Command, args []string) {
+
 		// copy templates
 		params := copyCopyReplace(findHome()+cobraDir, path)
 		params.reps = replaceCobraApp() // automatic binding cli flags
 		copyDir(params)
 	},
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
