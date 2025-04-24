@@ -17,8 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -48,10 +46,8 @@ Deploy ` + chalk.Yellow.Color("readme") + ` config template over target.
 
 		// deploy readme
 		md := copyCopyReplace(findHome() + readmeDir, path + "/" + readme)
-		fmt.Println(md)
 		md.files = append([]string{overview, "02" + lang.selected[0] + "_install.md", usage, "04" + lang.selected[0] + "_dev.md", faq})
-		fmt.Println(md)
-
+		md.reps = replaceDeployReadme() // automatic bindings cli flags
 		catFiles(md, "")
 	},
 }
@@ -63,6 +59,9 @@ func init() {
 	deployCmd.AddCommand(readmeCmd)
 
 	// flags
+	readmeCmd.Flags().StringVarP(&description, "description", "", "", "Description")
+	readmeCmd.Flags().StringVarP(&license, "license", "", "", "License")
+	readmeCmd.MarkFlagRequired("lang")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
