@@ -86,8 +86,8 @@ func init() {
 
 	// flags
 	justCmd.Flags().StringVarP(&header, "header", "t", "head", "Header")
-	justCmd.MarkFlagRequired("lang")
 	justCmd.Flags().StringVarP(&ver, "ver", "v", "", "Version to deploy")
+	justCmd.MarkFlagRequired("lang")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
