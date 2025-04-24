@@ -17,6 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -53,8 +54,10 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 		// deploy justfile
 		djust := copyCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
+		fmt.Println(djust)
 		djust.files = append([]string{header}, lang.selected...)
-		catFiles(djust)
+		fmt.Println(djust)
+		catFiles(djust, dotjust)
 
 		// create config dir
 		if !dirExist(path + "/" + dotjust) {
