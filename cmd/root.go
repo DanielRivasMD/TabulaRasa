@@ -55,6 +55,9 @@ var (
 	author string
 	email  string
 	repo   string
+	description string
+	user string
+	license string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,11 +141,13 @@ func init() {
 
 	// persistent flags
 	rootCmd.PersistentFlags().StringVarP(&path, "path", "p", ".", "Path to deploy")
-	rootCmd.MarkFlagRequired("path")
 	rootCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "Repository name")
-	rootCmd.MarkFlagRequired("repo")
 	rootCmd.PersistentFlags().StringVarP(&author, "author", "a", "Daniel Rivas", "Provide author")
 	rootCmd.PersistentFlags().StringVarP(&email, "email", "e", "<danielrivasmd@gmail.com>", "Provide email")
+	rootCmd.PersistentFlags().StringVarP(&user, "user", "u", "DanielRivasMD", "Provide GitHub username")
+
+	rootCmd.MarkFlagRequired("path")
+	rootCmd.MarkFlagRequired("repo")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
