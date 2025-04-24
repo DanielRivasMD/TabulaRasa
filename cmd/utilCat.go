@@ -13,7 +13,7 @@ import (
 
 // TODO: add suffix argument
 // copy file
-func catFiles(π paramsCopyReplace) {
+func catFiles(π paramsCopyReplace, kind string) {
 	// clean prior copying
 	if fileExist(π.dest) {
 		os.Remove(π.dest)
@@ -26,7 +26,7 @@ func catFiles(π paramsCopyReplace) {
 
 	for _, file := range π.files {
 		// open reader
-		fread, ε := os.Open(π.orig + "/" + file + dotjust)
+		fread, ε := os.Open(π.orig + "/" + file + kind)
 		checkErr(ε)
 		defer fread.Close()
 
