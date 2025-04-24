@@ -49,7 +49,7 @@ Deploy ` + chalk.Yellow.Color("readme") + ` config template over target.
 		// deploy readme
 		md := copyCopyReplace(findHome() + readmeDir, path + "/" + readme)
 		fmt.Println(md)
-		md.files = append([]string{overview, usage, faq})
+		md.files = append([]string{overview, "02" + lang.selected[0] + "_install.md", usage, "04" + lang.selected[0] + "_dev.md", faq})
 		fmt.Println(md)
 
 		catFiles(md, "")
