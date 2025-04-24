@@ -17,6 +17,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -43,9 +45,14 @@ Deploy ` + chalk.Yellow.Color("readme") + ` config template over target.
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
+
 		// deploy readme
-		params := copyCopyReplace(findHome()+readmeDir+"/"+readme, path+"/"+readme)
-		copyFile(params)
+		md := copyCopyReplace(findHome() + readmeDir, path + "/" + readme)
+		fmt.Println(md)
+		md.files = append([]string{overview, usage, faq})
+		fmt.Println(md)
+
+		catFiles(md, "")
 	},
 }
 
