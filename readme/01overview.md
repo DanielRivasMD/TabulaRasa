@@ -1,16 +1,16 @@
-# {{PROJECT_NAME}}
+# PROJECT_NAME
 
-[![License](https://img.shields.io/badge/license-{{LICENSE}}-blue.svg)](LICENSE)
-[![{{LANG}} Version](https://img.shields.io/badge/{{LANG}}-{{VERSION}}-green.svg)]({{LANG_URL}})
+[![License](https://img.shields.io/badge/license-LICENSETYPE-blue.svg)](LICENSE)
+[![LANG Version](https://img.shields.io/badge/LANG-VERSION-green.svg)](LURL)
 
 ## Overview
 
-{{SHORT_DESCRIPTION}}
+OVERVIEW
 
 ---
 
 ## Features
-- **Feature**: {{BRIEF_DETAIL}}
-- **Output Formats**: JSON, CSV, Table (configurable)
+- **Feature**:
+- **Output Formats**:
 
 ---
