@@ -1,13 +1,13 @@
 ---
 
 ## FAQ
-Q: How to resolve {{COMMON_ISSUE}}?
-A: {{SOLUTION}}.
+Q: How to resolve?
+A: 
 
 Q: Cross-platform support?
-A: {{STATUS}} (e.g., "Linux/macOS only due to {{REASON}}").
+A: 
 
 ## License
-{{LICENSE}} [{{YEAR}}] [{{AUTHOR}}]
+LICENSETYPE [YEAR] [AUTHOR]
 
 ---
