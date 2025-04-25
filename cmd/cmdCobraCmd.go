@@ -32,21 +32,19 @@ var (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// cobraCmd
+// cmdCmd
 var cmdCmd = &cobra.Command{
-	Use:   "cmd",
-	Short: "Construct " + chalk.Yellow.Color("cobra") + " cmd.",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+    Use:   "cmd",
+    Aliases: []string{"c"},
+    Short: "Construct cobra commands",
+    Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Construct ` + chalk.Yellow.Color("cobra") + ` app from template.
-
-Commands include:
-	` + chalk.Magenta.Color("completion") + `
-	` + chalk.Magenta.Color("identity") + `
+Construct ` + chalk.Yellow.Color("cobra") + ` commands from predefined templates
 `,
 
-	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("cobra"),
+    Example: `
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("cmd") + ` --` + chalk.Blue.Color("child") + ` ExampleCmd --` + chalk.Blue.Color("parent") + ` RootCmd
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
