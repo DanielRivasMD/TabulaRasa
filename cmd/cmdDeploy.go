@@ -77,20 +77,22 @@ var (
 // deployCmd
 var deployCmd = &cobra.Command{
 	Use:   "deploy",
-	Short: "Deploy config templates.",
+	Aliases: []string{"d"},
+	Short: "Deploy config templates",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Deploy config templates over target.
+` + chalk.Cyan.Color("tab") + ` deploys config templates to target locations
 
-Templates include:
-	` + chalk.Magenta.Color("just") + `
-	` + chalk.Magenta.Color("readme") + `
-	` + chalk.Magenta.Color("todor") + `
-
+Available templates:
+	` + chalk.Green.Color("just") + `   - Build system template
+	` + chalk.Green.Color("readme") + ` - Documentation starter
+	` + chalk.Green.Color("todor") + `  - Task tracking starter
 `,
 
 	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("deploy"),
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` --` + chalk.Blue.Color("lang") + ` go
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` --` + chalk.Blue.Color("lang") + ` py
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
