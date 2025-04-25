@@ -31,18 +31,22 @@ var ()
 // cobraCmd
 var cobraCmd = &cobra.Command{
 	Use:   "cobra",
-	Short: "Construct " + chalk.Yellow.Color("cobra") + " app.",
+	Aliases: []string{"c"},
+	Short:  "Construct cobra apps from templates",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Construct ` + chalk.Yellow.Color("cobra") + ` app from template.
+` + chalk.Green.Color("tab") + ` enables the creation of cobra applications using predefined templates for rapid development
 
-Commands include:
-	` + chalk.Magenta.Color("completion") + `
-	` + chalk.Magenta.Color("identity") + `
+Available commands once deployed:
+	` + chalk.Yellow.Color("completion") + ` - Manage shell completion scripts
+	` + chalk.Yellow.Color("identity") + `   - Configure app identity settings
 `,
 
 	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("cobra"),
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("app") + `
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("cmd") + `
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("util") + `
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
