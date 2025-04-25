@@ -28,18 +28,19 @@ var ()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// cobraCmd
+// appCmd
 var appCmd = &cobra.Command{
-	Use:   "app",
-	Short: "Construct " + chalk.Yellow.Color("cobra") + " app.",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+    Use:   "app",
+    Aliases: []string{"a"},
+    Short: "Construct cobra apps from templates",
+    Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Construct ` + chalk.Yellow.Color("cobra") + ` app from template.
+Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 `,
 
-	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("cobra") + `
-` + chalk.Cyan.Color("tabularasa") + ` cobra app ` + chalk.Yellow.Color("--path") + ` $(pwd) ` + chalk.Yellow.Color("--repo") + ` Tabularasa`,
+    Example: `
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("app") + ` --` + chalk.Blue.Color("path") + ` $(pwd) --` + chalk.Blue.Color("repo") + ` Tabularasa
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
