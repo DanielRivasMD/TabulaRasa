@@ -31,15 +31,17 @@ var ()
 // todorCmd
 var todorCmd = &cobra.Command{
 	Use:   "todor",
-	Short: "Deploy " + chalk.Yellow.Color("todor") + " config template.",
+	Aliases: []string{"t"},
+	Short: "Deploy todor config template",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Deploy ` + chalk.Yellow.Color("todor") + ` config template over target.
+Deploy ` + chalk.Yellow.Color("todor") + ` config template over target
 Including ` + chalk.Red.Color(".todor") + `
 `,
 
 	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("deploy") + ` todor`,
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("todor") + `
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
