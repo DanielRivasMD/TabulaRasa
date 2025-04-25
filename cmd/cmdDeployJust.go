@@ -38,15 +38,18 @@ var (
 // justCmd
 var justCmd = &cobra.Command{
 	Use:   "just",
-	Short: "Deploy " + chalk.Yellow.Color("just") + " config templates.",
+	Aliases: []string{"j"},
+	Short: "Deploy just config templates",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Deploy ` + chalk.Yellow.Color("just") + ` config templates over target.
+Deploy ` + chalk.Yellow.Color("just") + ` config templates over target
 Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.just") + `
 `,
 
 	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("deploy") + ` just`,
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("just") + ` --` + chalk.Blue.Color("lang") + ` go
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("just") + ` --` + chalk.Blue.Color("ver") + ` 1.0
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
