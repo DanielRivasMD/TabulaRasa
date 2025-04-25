@@ -31,8 +31,11 @@ var ()
 // identityCmd
 var identityCmd = &cobra.Command{
 	Use:   "identity",
-	Short: `Reveal ` + chalk.Yellow.Color("identity") + `.`,
-	Long:  `Reveal ` + chalk.Yellow.Color("identity") + `.`,
+	Short: `Reveal identity`,
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+
+Reveal ` + chalk.Yellow.Color("identity") + `
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
