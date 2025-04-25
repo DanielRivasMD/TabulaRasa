@@ -32,13 +32,17 @@ var (
 
 // utilCmd
 var utilCmd = &cobra.Command{
-	Use:   "util",
-	Short: "" + chalk.Yellow.Color("") + ".",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+    Use:   "util",
+    Aliases: []string{"u"},
+    Short: "Import utility templates",
+    Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+
+Deploy utility from predefiened templates
 `,
 
-	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("cobra") + chalk.Yellow.Color("util"),
+    Example: `
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("util") + ` --` + chalk.Blue.Color("util") + ` ExampleUtil
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
