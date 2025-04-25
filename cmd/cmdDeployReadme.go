@@ -33,14 +33,18 @@ var ()
 // readmeCmd
 var readmeCmd = &cobra.Command{
 	Use:   "readme",
-	Short: "Deploy" + chalk.Yellow.Color("readme") + " config template.",
+	Aliases: []string{"r"},
+	Short: "Deploy readme config template",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
-Deploy ` + chalk.Yellow.Color("readme") + ` config template over target.
+
+Deploy ` + chalk.Yellow.Color("readme") + ` config template over target
+Including ` + chalk.Red.Color("README.md") + `
 `,
 
-
 	Example: `
-` + chalk.Cyan.Color("tabularasa") + ` help ` + chalk.Yellow.Color("deploy") + ` readme`, 
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("readme") + `
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("readme") + ` --` + chalk.Blue.Color("description") + ` "Awesome project" --` + chalk.Blue.Color("license") + ` MIT
+`,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
