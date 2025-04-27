@@ -32,15 +32,15 @@ var (
 
 // utilCmd
 var utilCmd = &cobra.Command{
-    Use:   "util",
-    Aliases: []string{"u"},
-    Short: "Import utility templates",
-    Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Use:     "util",
+	Aliases: []string{"u"},
+	Short:   "Import utility templates",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Deploy utility from predefiened templates
 `,
 
-    Example: `
+	Example: `
 ` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("util") + ` --` + chalk.Blue.Color("util") + ` ExampleUtil
 `,
 
@@ -49,11 +49,10 @@ Deploy utility from predefiened templates
 	Run: func(κ *cobra.Command, args []string) {
 
 		// copy template
-		params := copyCopyReplace(findHome()+utilDir+"/"+"util"+util+".go", path+"/"+"cmd"+"/"+"util"+util+".go")
+		params := copyCopyReplace(findHome()+utilDir+"/"+util+".go", path+"/"+"cmd"+"/"+util+".go")
 		params.reps = replaceCobraCmd() // automatic binding cli flags
 		copyFile(params)
 	},
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

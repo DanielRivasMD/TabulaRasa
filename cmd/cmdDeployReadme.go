@@ -32,9 +32,9 @@ var ()
 
 // readmeCmd
 var readmeCmd = &cobra.Command{
-	Use:   "readme",
+	Use:     "readme",
 	Aliases: []string{"r"},
-	Short: "Deploy readme config template",
+	Short:   "Deploy readme config template",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Deploy ` + chalk.Yellow.Color("readme") + ` config template over target
@@ -51,12 +51,11 @@ Including ` + chalk.Red.Color("README.md") + `
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// deploy readme
-		md := copyCopyReplace(findHome() + readmeDir, path + "/" + readme)
+		md := copyCopyReplace(findHome()+readmeDir, path+"/"+readme)
 		md.files = append(md.files, overview, filepath.Join("02"+lang.selected[0]+"_install.md"), usage, filepath.Join("04"+lang.selected[0]+"_dev.md"), faq)
 		md.reps = replaceDeployReadme() // automatic bindings cli flags
 		catFiles(md, "")
 	},
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

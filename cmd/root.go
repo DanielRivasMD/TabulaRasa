@@ -31,8 +31,8 @@ import (
 const (
 	configDir = "/" + ".tabularasa"
 	cobraDir  = configDir + "/" + "cobraApp"
-	cmdDir = configDir + "/" + "cobraCmd"
-	utilDir = configDir + "/" + "cobraUtil"
+	cmdDir    = configDir + "/" + "cobraCmd"
+	utilDir   = configDir + "/" + "cobraUtil"
 	justDir   = configDir + "/" + "just"
 	readmeDir = configDir + "/" + "readme"
 	todorDir  = configDir + "/" + "todor"
@@ -40,22 +40,22 @@ const (
 	dotconf   = ".conf"
 	dotjust   = ".just"
 	justfile  = "justfile"
-	readme = "README.md"
+	readme    = "README.md"
 	todor     = "todor"
 	pyinstall = "pyinstall.sh"
-	overview = "01overview.md"
-	usage = "03usage.md"
-	faq = "05faq.md"
+	overview  = "01overview.md"
+	usage     = "03usage.md"
+	faq       = "05faq.md"
 )
 
 var (
-	path   string
-	author string
-	email  string
-	repo   string
+	path        string
+	author      string
+	email       string
+	repo        string
 	description string
-	user string
-	license string
+	user        string
+	license     string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

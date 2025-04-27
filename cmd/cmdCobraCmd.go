@@ -34,15 +34,15 @@ var (
 
 // cmdCmd
 var cmdCmd = &cobra.Command{
-    Use:   "cmd",
-    Aliases: []string{"c"},
-    Short: "Construct cobra commands",
-    Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Use:     "cmd",
+	Aliases: []string{"c"},
+	Short:   "Construct cobra commands",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Construct ` + chalk.Yellow.Color("cobra") + ` commands from predefined templates
 `,
 
-    Example: `
+	Example: `
 ` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("cmd") + ` --` + chalk.Blue.Color("child") + ` ExampleCmd --` + chalk.Blue.Color("parent") + ` RootCmd
 `,
 
@@ -60,7 +60,6 @@ Construct ` + chalk.Yellow.Color("cobra") + ` commands from predefined templates
 		params.reps = replaceCobraCmd() // automatic binding cli flags
 		copyFile(params)
 	},
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

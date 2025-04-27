@@ -25,18 +25,17 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 // custom type restricting `lang` flag values
 type langType struct {
 	validValues []string
-	selected []string
+	selected    []string
 }
 
 // possible values
 var validOptions = []string{"go", "jl", "py", "rs"}
 
 func (f *langType) String() string {
-	if len(f.selected) > 0{
+	if len(f.selected) > 0 {
 		return f.selected[0]
 	}
 	return ""
@@ -76,9 +75,9 @@ var (
 
 // deployCmd
 var deployCmd = &cobra.Command{
-	Use:   "deploy",
+	Use:     "deploy",
 	Aliases: []string{"d"},
-	Short: "Deploy config templates",
+	Short:   "Deploy config templates",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 ` + chalk.Cyan.Color("tab") + ` deploys config templates to target locations

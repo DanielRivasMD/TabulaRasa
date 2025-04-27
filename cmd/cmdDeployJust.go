@@ -37,9 +37,9 @@ var (
 
 // justCmd
 var justCmd = &cobra.Command{
-	Use:   "just",
+	Use:     "just",
 	Aliases: []string{"j"},
-	Short: "Deploy just config templates",
+	Short:   "Deploy just config templates",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Deploy ` + chalk.Yellow.Color("just") + ` config templates over target
@@ -79,7 +79,6 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 			}
 		}
 	},
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

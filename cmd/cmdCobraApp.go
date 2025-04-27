@@ -30,15 +30,15 @@ var ()
 
 // appCmd
 var appCmd = &cobra.Command{
-    Use:   "app",
-    Aliases: []string{"a"},
-    Short: "Construct cobra apps from templates",
-    Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Use:     "app",
+	Aliases: []string{"a"},
+	Short:   "Construct cobra apps from templates",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 `,
 
-    Example: `
+	Example: `
 ` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("app") + ` --` + chalk.Blue.Color("path") + ` $(pwd) --` + chalk.Blue.Color("repo") + ` Tabularasa
 `,
 
@@ -51,7 +51,6 @@ Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 		params.reps = replaceCobraApp() // automatic binding cli flags
 		copyDir(params)
 	},
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

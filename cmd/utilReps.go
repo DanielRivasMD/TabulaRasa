@@ -55,7 +55,7 @@ func replaceDeployJust() []rep {
 // bind deploy readme replace values
 func replaceDeployReadme() []rep {
 
-	if fileExist(path + "/" + "LICENSE") && license == "" {
+	if fileExist(path+"/"+"LICENSE") && license == "" {
 		license, _ = detectLicense(path + "/" + "LICENSE")
 	}
 

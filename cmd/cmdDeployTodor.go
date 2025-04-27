@@ -30,9 +30,9 @@ var ()
 
 // todorCmd
 var todorCmd = &cobra.Command{
-	Use:   "todor",
+	Use:     "todor",
 	Aliases: []string{"t"},
-	Short: "Deploy todor config template",
+	Short:   "Deploy todor config template",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Deploy ` + chalk.Yellow.Color("todor") + ` config template over target
@@ -51,7 +51,6 @@ Including ` + chalk.Red.Color(".todor") + `
 		params := copyCopyReplace(findHome()+todorDir+"/"+todor, path+"/"+"."+todor)
 		copyFile(params)
 	},
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -30,9 +30,9 @@ var ()
 
 // cobraCmd
 var cobraCmd = &cobra.Command{
-	Use:   "cobra",
+	Use:     "cobra",
 	Aliases: []string{"c"},
-	Short:  "Construct cobra apps from templates",
+	Short:   "Construct cobra apps from templates",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 ` + chalk.Green.Color("tab") + ` enables the creation of cobra applications using predefined templates for rapid development
