@@ -18,9 +18,7 @@ type fileProcessor func(string)
 // walk function accept processor function
 func walk(processor fileProcessor) fs.WalkDirFunc {
 	return func(ς string, ʌ fs.DirEntry, ε error) error {
-		if ε != nil {
-			return ε
-		}
+		checkErr(ε)
 
 		// check directory
 		if !ʌ.IsDir() {
