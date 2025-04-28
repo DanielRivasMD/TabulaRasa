@@ -55,6 +55,11 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 	Run: func(cmd *cobra.Command, args []string) {
 
+		// detect deployment target
+		if repo == "" {
+			repo = currentDir()
+		}
+
 		// deploy justfile
 		djust := copyCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
 		fmt.Println(djust)
