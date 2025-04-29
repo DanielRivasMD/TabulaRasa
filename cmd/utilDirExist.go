@@ -13,7 +13,13 @@ import (
 // check if directory exist
 func dirExist(ƒ string) bool {
 	info, ε := os.Stat(ƒ)
-	checkErr(ε)
+	if ε != nil {
+		// check if error due path not existing
+		if os.IsNotExist(ε) {
+			return false
+		}
+	}
+	// check if path directory
 	return info.IsDir()
 }
 
