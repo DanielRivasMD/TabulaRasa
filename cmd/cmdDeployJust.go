@@ -17,9 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -60,17 +57,13 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 			repo = currentDir()
 		}
 
+		// create config dir
+		createDirIfNotExist(path + "/" + dotjust)
+
 		// deploy justfile
 		djust := copyCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
-		fmt.Println(djust)
 		djust.files = append([]string{header}, lang.selected...)
-		fmt.Println(djust)
 		catFiles(djust, dotjust)
-
-		// create config dir
-		if !dirExist(path + "/" + dotjust) {
-			os.MkdirAll(path+"/"+dotjust, os.ModePerm)
-		}
 
 		// deploy configs
 		for _, į := range lang.selected {
