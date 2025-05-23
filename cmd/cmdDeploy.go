@@ -32,7 +32,7 @@ type langType struct {
 }
 
 // possible values
-var validOptions = []string{"go", "jl", "py", "rs"}
+var validOptions = []string{"go", "golib", "jl", "py", "rs", "rslib"}
 
 func (f *langType) String() string {
 	if len(f.selected) > 0 {
@@ -104,7 +104,7 @@ func init() {
 	rootCmd.AddCommand(deployCmd)
 
 	// flags
-	deployCmd.PersistentFlags().VarP(lang, "lang", "l", "Languages to deploy (allowed: go, jl, py, rs)")
+	deployCmd.PersistentFlags().VarP(lang, "lang", "l", "Languages to deploy (allowed: go, golib, jl, py, rs, rslib)")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
