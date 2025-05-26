@@ -17,6 +17,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -34,9 +36,8 @@ var (
 
 // justCmd
 var justCmd = &cobra.Command{
-	Use:     "just",
-	Aliases: []string{"j"},
-	Short:   "Deploy just config templates",
+	Use:   "just",
+	Short: "Deploy just config templates",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Deploy ` + chalk.Yellow.Color("just") + ` config templates over target
@@ -52,20 +53,23 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// detect deployment target
+		// Detect deployment target.
 		if repo == "" {
 			repo = currentDir()
 		}
 
-		// create config dir
-		createDirIfNotExist(path + "/" + dotjust)
+		// Ensure the directory exists, creating it if not.
+		if err := domovoi.EnsureDirExist(path+"/"+dotjust, true); err != nil {
+			// Handle or log the error.
+			horus.CheckErr(err)
+		}
 
-		// deploy justfile
+		// Deploy justfile.
 		djust := copyCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
 		djust.files = append([]string{header}, lang.selected...)
 		catFiles(djust, dotjust)
 
-		// deploy configs
+		// Deploy configs.
 		for _, į := range lang.selected {
 			cjust := copyCopyReplace(findHome()+justDir+"/"+į+dotconf, path+"/"+dotjust+"/"+į+dotconf)
 			cjust.reps = replaceDeployJust() // automatic binding cli flags
