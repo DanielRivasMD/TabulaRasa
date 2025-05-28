@@ -69,8 +69,8 @@ func init() {
 	cobraCmd.AddCommand(cmdCmd)
 
 	// flags
-	cmdCmd.Flags().StringVarP(&child, "child", "C", "", "New command to attach. Recommended to capitalize first letter.")
-	cmdCmd.Flags().StringVarP(&parent, "parent", "U", "root", "Parent command to attach new command to. If not asigned, attach to")
+	cmdCmd.Flags().StringVarP(&child, "child", "", "", "New command to attach. Recommended to capitalize first letter.")
+	cmdCmd.Flags().StringVarP(&parent, "parent", "", "root", "Parent command to attach new command to. If not asigned, attach to")
 
 	cmdCmd.MarkFlagRequired("child")
 }

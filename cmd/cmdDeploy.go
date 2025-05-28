@@ -104,7 +104,7 @@ func init() {
 	rootCmd.AddCommand(deployCmd)
 
 	// flags
-	deployCmd.PersistentFlags().VarP(lang, "lang", "l", "Languages to deploy (allowed: go, golib, jl, py, rs, rslib)")
+	deployCmd.PersistentFlags().VarP(lang, "lang", "", "Languages to deploy (allowed: go, golib, jl, py, rs, rslib)")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

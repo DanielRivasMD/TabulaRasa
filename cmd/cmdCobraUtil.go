@@ -62,7 +62,7 @@ func init() {
 	cobraCmd.AddCommand(utilCmd)
 
 	// flags
-	utilCmd.Flags().StringVarP(&util, "util", "t", "", "Utility to import. First letter must be capitalized.")
+	utilCmd.Flags().StringVarP(&util, "util", "", "", "Utility to import. First letter must be capitalized.")
 
 	utilCmd.MarkFlagRequired("util")
 }
