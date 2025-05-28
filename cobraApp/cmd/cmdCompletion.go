@@ -25,16 +25,16 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
+// Global declarations
 var ()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// completionCmd
+// completionCmd represents the "completion" command which generates shell completion scripts.
 var completionCmd = &cobra.Command{
 	Use:    "completion [bash|zsh|fish|powershell]",
 	Hidden: true,
-	Short:  "Generate completion script.",
+	Short:  "Generate completion script for various shells.",
 	Long: fmt.Sprintf(`To load completions:
 
 Bash:
@@ -50,7 +50,7 @@ Bash:
 Zsh:
 
   # If shell completion is not already enabled in your environment,
-  # you will need to enable it.  You can execute the following once:
+  # you will need to enable it. You can execute the following once:
 
   $ echo "autoload -U compinit; compinit" >> ~/.zshrc
 
@@ -83,24 +83,24 @@ PowerShell:
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Run: func(κ *cobra.Command, args []string) {
-
+	Run: func(cmd *cobra.Command, args []string) {
+		// Generate the appropriate shell completion script based on the provided argument.
 		switch args[0] {
 		case "bash":
-			κ.Root().GenBashCompletion(os.Stdout)
+			cmd.Root().GenBashCompletion(os.Stdout)
 		case "zsh":
-			κ.Root().GenZshCompletion(os.Stdout)
+			cmd.Root().GenZshCompletion(os.Stdout)
 		case "fish":
-			κ.Root().GenFishCompletion(os.Stdout, true)
+			cmd.Root().GenFishCompletion(os.Stdout, true)
 		case "powershell":
-			κ.Root().GenPowerShellCompletionWithDesc(os.Stdout)
+			cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
 		}
 	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// execute prior main
+// init registers the completion command with the root command.
 func init() {
 	rootCmd.AddCommand(completionCmd)
 }
