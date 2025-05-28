@@ -80,9 +80,6 @@ func initializeConfig(cmd *cobra.Command, configPath string, configName string) 
 	// Bind command flags with configuration values.
 	bindFlags(cmd, vConfig)
 
-	// Optionally, use Domovoi to load or merge additional configuration settings.
-	// Example: domovoi.LoadAdditionalConfig(vConfig)
-
 	return nil
 }
 
