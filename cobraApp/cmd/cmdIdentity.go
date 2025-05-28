@@ -23,7 +23,7 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
+// Global declarations
 var ()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,12 +31,12 @@ var ()
 // identityCmd
 var identityCmd = &cobra.Command{
 	Use:   "identity",
-	Short: `Reveal ` + chalk.Yellow.Color("identity") + `.`,
-	Long:  `Reveal ` + chalk.Yellow.Color("identity") + `.`,
+	Short: `Reveal ` + chalk.Yellow.Color("identity") + ``,
+	Long:  `Reveal ` + chalk.Yellow.Color("identity") + ``,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Run: func(κ *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, args []string) {
 
 	},
 }
