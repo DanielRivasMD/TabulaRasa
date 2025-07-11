@@ -1,0 +1,2 @@
+- use color to give style to help options
+- update readme template
