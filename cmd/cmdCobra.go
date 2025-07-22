@@ -16,6 +16,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
@@ -23,42 +25,33 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
-var ()
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// cobraCmd
-var cobraCmd = &cobra.Command{
-	Use:     "cobra",
-	Aliases: []string{"c"},
-	Short:   "Construct cobra apps from templates",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+var (
+	// cobraCmd represents the top-level `tab cobra` command
+	cobraCmd = &cobra.Command{
+		Use:   "cobra",
+		Short: "Construct cobra apps from templates",
+		Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) +
+			chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 ` + chalk.Green.Color("tab") + ` enables the creation of cobra applications using predefined templates for rapid development
 
-Available commands once deployed:
-	` + chalk.Yellow.Color("completion") + ` - Manage shell completion scripts
-	` + chalk.Yellow.Color("identity") + `   - Configure app identity settings
+Available commands:
+  ` + chalk.Yellow.Color("completion") + ` - Manage shell completion scripts
+  ` + chalk.Yellow.Color("identity") + `   - Configure app identity settings
 `,
-
-	Example: `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("app") + `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("cmd") + `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("util") + `
+		Example: `
+  ` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` app
+  ` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` cmd
+  ` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` util
 `,
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-
-}
+	}
+)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// execute prior main
 func init() {
+	// register the cobra subcommand
 	rootCmd.AddCommand(cobraCmd)
-
-	// flags
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
