@@ -16,64 +16,119 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
 	"path/filepath"
 
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
-var ()
+var (
+	// description for README overview section
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+	// licenseType to inject into README
+)
 
-// readmeCmd
+// readmeCmd deploys a multi‐section README.md into your project.
 var readmeCmd = &cobra.Command{
-	Use:     "readme",
-	Aliases: []string{"r"},
-	Short:   "Deploy readme config template",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Use:   "readme",
+	Short: "Deploy README.md template",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) +
+		chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Deploy ` + chalk.Yellow.Color("readme") + ` config template over target
-Including ` + chalk.Red.Color("README.md") + `
+Deploy ` + chalk.Yellow.Color("readme") + ` config template into your project,
+splicing together overview, install/dev guides, usage and FAQ snippets.
 `,
-
 	Example: `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("readme") + `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("readme") + ` --` + chalk.Blue.Color("description") + ` "Awesome project" --` + chalk.Blue.Color("license") + ` MIT
+  ` + chalk.Cyan.Color("tab") + ` deploy readme
+  ` + chalk.Cyan.Color("tab") + ` deploy readme --description "Awesome project" --license MIT
 `,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-
-		// detect deployment target
-		if repo == "" {
-			repo = currentDir()
+		// fallback to current directory as repo name
+		if repoName == "" {
+			repoName = currentDir()
 		}
 
-		// deploy readme
-		md := copyCopyReplace(findHome()+readmeDir, path+"/"+readme)
-		md.files = append(md.files, overview, filepath.Join("02"+lang.selected[0]+"_install.md"), usage, filepath.Join("04"+lang.selected[0]+"_dev.md"), faq)
-		md.reps = replaceDeployReadme() // automatic bindings cli flags
-		catFiles(md, "")
+		// locate TabulaRasa home
+		home, err := domovoi.FindHome(verbose)
+		if err != nil {
+			horus.CheckErr(horus.NewHerror(
+				"readmeCmd.Run",
+				"unable to find TabulaRasa home",
+				err,
+				nil,
+			))
+		}
+
+		// prepare params: templates live under $HOME/<readmeDir>, output is project/README.md
+		srcDir := filepath.Join(home, readmeDir)
+		destFile := filepath.Join(projectPath, readme)
+
+		params := newCopyParams(srcDir, destFile)
+
+		// assemble the list of template fragments
+		params.Files = []string{
+			overview,
+			filepath.Join("02" + lang.Selected[0] + "_install.md"),
+			usage,
+			filepath.Join("04" + lang.Selected[0] + "_dev.md"),
+			faq,
+		}
+
+		// generate replacements, handling detection & errors
+		reps, repErr := buildReadmeReplacements(
+			lang.Selected[0],
+			description,
+			repoName,
+			userName,
+			authorName,
+			licenseType,
+			projectPath,
+		)
+		if repErr != nil {
+			horus.CheckErr(repErr)
+		}
+		params.Reps = reps
+
+		// concatenate all fragments into README.md
+		if err := concatenateFiles(params, ""); err != nil {
+			horus.CheckErr(err)
+		}
 	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// execute prior main
 func init() {
 	deployCmd.AddCommand(readmeCmd)
 
-	// flags
-	readmeCmd.Flags().StringVarP(&description, "description", "", "", "Description")
-	readmeCmd.Flags().StringVarP(&license, "license", "", "", "License")
+	// per-command flags
+	readmeCmd.Flags().StringVarP(
+		&description,
+		"description",
+		"d",
+		"",
+		"Project overview text",
+	)
+	readmeCmd.Flags().StringVarP(
+		&licenseType,
+		"license",
+		"l",
+		"",
+		"License to appear in README",
+	)
 
-	readmeCmd.MarkFlagRequired("lang")
+	// ensure user requested at least one language
+	horus.CheckErr(readmeCmd.MarkFlagRequired("lang"))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
