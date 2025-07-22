@@ -16,7 +16,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
+	"path/filepath"
+
 	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
@@ -25,59 +29,80 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
 var (
-	header     string
-	justconfig []string
-	ver        string
+	headerLine string
 )
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// justCmd
 var justCmd = &cobra.Command{
 	Use:   "just",
 	Short: "Deploy just config templates",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) +
+		chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Deploy ` + chalk.Yellow.Color("just") + ` config templates over target
-Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.just") + `
+Deploy ` + chalk.Yellow.Color("just") + ` config templates over target,
+including ` + chalk.Red.Color(".justfile") + ` and language‐specific configs.
 `,
-
 	Example: `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("just") + ` --` + chalk.Blue.Color("lang") + ` go
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("just") + ` --` + chalk.Blue.Color("ver") + ` 1.0
+  ` + chalk.Cyan.Color("tab") + ` deploy just --lang go
+  ` + chalk.Cyan.Color("tab") + ` deploy just --ver 1.0
 `,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-
-		// Detect deployment target.
-		if repo == "" {
-			repo = currentDir()
+		// fallback repoName to current dir if not provided
+		if repoName == "" {
+			repoName = currentDir()
 		}
 
-		// Ensure the directory exists, creating it if not.
-		if err := domovoi.EnsureDirExist(path+"/"+dotjust, true); err != nil {
-			// Handle or log the error.
+		// locate TabulaRasa home
+		home, err := domovoi.FindHome(verbose)
+		if err != nil {
+			horus.CheckErr(horus.NewHerror(
+				"justCmd.Run",
+				"failed to find TabulaRasa home",
+				err,
+				nil,
+			))
+		}
+
+		// ensure `.just` directory exists
+		justDirPath := filepath.Join(projectPath, dotjust)
+		if err := domovoi.EnsureDirExist(justDirPath, true); err != nil {
 			horus.CheckErr(err)
 		}
 
-		// Deploy justfile.
-		djust := copyCopyReplace(findHome()+justDir, path+"/"+"."+justfile)
-		djust.files = append([]string{header}, lang.selected...)
-		catFiles(djust, dotjust)
+		// deploy combined .justfile
+		justfileDest := filepath.Join(projectPath, "."+justfile)
+		jfParams := newCopyParams(
+			filepath.Join(home, justDir),
+			justfileDest,
+		)
+		jfParams.Files = append([]string{headerLine}, lang.Selected...)
+		jfParams.Reps = buildDeployReplacements(repoName, version)
+		if err := concatenateFiles(jfParams, dotjust); err != nil {
+			horus.CheckErr(err)
+		}
 
-		// Deploy configs.
-		for _, į := range lang.selected {
-			cjust := copyCopyReplace(findHome()+justDir+"/"+į+dotconf, path+"/"+dotjust+"/"+į+dotconf)
-			cjust.reps = replaceDeployJust() // automatic binding cli flags
-			copyFile(cjust)
-			if į == "py" {
-				instpy := copyCopyReplace(findHome()+justDir+"/"+pyinstall, path+"/"+dotjust+"/"+pyinstall)
-				instpy.reps = replaceDeployJust() // automatic binding cli flags
-				copyFile(instpy)
+		// deploy each language's config
+		for _, langOpt := range lang.Selected {
+			srcConf := filepath.Join(home, justDir, langOpt+dotconf)
+			dstConf := filepath.Join(justDirPath, langOpt+dotconf)
+			confParams := newCopyParams(srcConf, dstConf)
+			confParams.Reps = buildDeployReplacements(repoName, version)
+			if err := copyFile(confParams); err != nil {
+				horus.CheckErr(err)
+			}
+
+			// include Python installer if deploying Python
+			if langOpt == "py" {
+				srcInst := filepath.Join(home, justDir, pyinstall)
+				dstInst := filepath.Join(justDirPath, pyinstall)
+				instParams := newCopyParams(srcInst, dstInst)
+				instParams.Reps = buildDeployReplacements(repoName, version)
+				if err := copyFile(instParams); err != nil {
+					horus.CheckErr(err)
+				}
 			}
 		}
 	},
@@ -85,15 +110,25 @@ Including ` + chalk.Red.Color(".justfile") + ` & ` + chalk.Red.Color(".config.ju
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// execute prior main
 func init() {
 	deployCmd.AddCommand(justCmd)
 
-	// flags
-	justCmd.Flags().StringVarP(&header, "header", "", "head", "Header")
-	justCmd.Flags().StringVarP(&ver, "ver", "v", "", "Version to deploy")
+	justCmd.Flags().StringVar(
+		&headerLine,
+		"header",
+		"",
+		"Line to prepend as header in .justfile",
+	)
 
-	justCmd.MarkFlagRequired("lang")
+	justCmd.Flags().StringVarP(
+		&version,
+		"ver",
+		"v",
+		"",
+		"Version string to embed in templates",
+	)
+
+	horus.CheckErr(justCmd.MarkFlagRequired("lang"))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
