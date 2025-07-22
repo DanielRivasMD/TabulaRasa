@@ -4,46 +4,42 @@ package cmd
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// copy & replace
-type paramsCopyReplace struct {
-	orig  string
-	dest  string
-	files []string
-	reps  []rep
+// CopyParams holds information needed to copy a template tree and apply string replacements.
+type CopyParams struct {
+	Orig  string   // source template directory
+	Dest  string   // destination directory
+	Files []string // specific files to copy (nil = all)
+	Reps  []rep    // replacement rules
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func createCopyReplace() paramsCopyReplace {
-	π := paramsCopyReplace{}
-	π.files = []string{}
-	π.reps = []rep{}
-	return π
+// newCopyParams creates a fresh CopyParams struct.
+func newCopyParams(orig, dest string) CopyParams {
+	return CopyParams{
+		Orig:  orig,
+		Dest:  dest,
+		Files: []string{},
+		Reps:  []rep{},
+	}
 }
 
-func replaceCopyReplace(target string, reps []rep) paramsCopyReplace {
-	π := paramsCopyReplace{}
-	π.orig = target
-	π.reps = reps
-	return π
+// withReplacements initializes a CopyParams with a set of replacements.
+func withReplacements(orig string, reps []rep) CopyParams {
+	return CopyParams{
+		Orig: orig,
+		Reps: reps,
+	}
 }
 
-func copyCopyReplace(orig, dest string) paramsCopyReplace {
-	π := createCopyReplace()
-	π.orig = orig
-	π.dest = dest
-	return π
-}
-
-func cloneCopyReplace(π paramsCopyReplace) paramsCopyReplace {
-	Ω := createCopyReplace()
-	Ω.orig = π.orig
-	Ω.dest = π.dest
-	Ω.files = π.files
-	Ω.reps = π.reps
-	return Ω
+// cloneCopyParams makes a shallow copy of an existing CopyParams.
+func cloneCopyParams(src CopyParams) CopyParams {
+	return CopyParams{
+		Orig:  src.Orig,
+		Dest:  src.Dest,
+		Files: src.Files,
+		Reps:  src.Reps,
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
