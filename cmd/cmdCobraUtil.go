@@ -16,55 +16,89 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
+	"path/filepath"
+
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
 var (
+	// util is the name of the utility template to import (capitalized).
 	util string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// utilCmd
 var utilCmd = &cobra.Command{
-	Use:     "util",
-	Aliases: []string{"u"},
-	Short:   "Import utility templates",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Use:   "util",
+	Short: "Import utility templates",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) +
+		chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Deploy utility from predefiened templates
+Deploy a utility from predefined templates
 `,
-
 	Example: `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("util") + ` --` + chalk.Blue.Color("util") + ` ExampleUtil
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("util") +
+		` --util ExampleUtil
 `,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Run: func(κ *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, args []string) {
+		home, err := domovoi.FindHome(verbose)
+		if err != nil {
+			horus.CheckErr(horus.NewHerror(
+				"cmdCobraUtil.Run",
+				"failed to find TabulaRasa home",
+				err,
+				nil,
+			))
+		}
 
-		// copy template
-		params := copyCopyReplace(findHome()+utilDir+"/"+util+".go", path+"/"+"cmd"+"/"+util+".go")
-		params.reps = replaceCobraCmd() // automatic binding cli flags
+		// source: $TABULARASA_HOME/utilDir/<util>.go
+		src := filepath.Join(home, utilDir, util+".go")
+
+		// destination: <projectPath>/cmd/<util>.go
+		dest := filepath.Join(projectPath, "cmd", util+".go")
+
+		params := newCopyParams(src, dest)
+
+		// re-use your cmd replacements to fill REPOSITORY, AUTHOR, etc.
+		params.Reps = buildCmdReplacements(
+			repoName, authorName, authorEmail,
+			util, "", "",
+		)
+
 		copyFile(params)
 	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// execute prior main
 func init() {
 	cobraCmd.AddCommand(utilCmd)
 
-	// flags
-	utilCmd.Flags().StringVarP(&util, "util", "", "", "Utility to import. First letter must be capitalized.")
+	// allow overriding project root
+	utilCmd.Flags().StringVar(
+		&projectPath, "path", ".", "Base path of your Go project",
+	)
 
-	utilCmd.MarkFlagRequired("util")
+	// select which util to import
+	utilCmd.Flags().StringVarP(
+		&util, "util", "u", "", "Utility template name (capitalize)",
+	)
+
+	// require --util
+	if err := utilCmd.MarkFlagRequired("util"); err != nil {
+		horus.CheckErr(err)
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
