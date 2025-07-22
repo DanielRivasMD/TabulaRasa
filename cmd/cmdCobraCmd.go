@@ -16,7 +16,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
+	"fmt"
+	"path/filepath"
+
+	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
@@ -25,38 +31,63 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var (
-	parent      string
-	child       string
-	root_parent string
+	// parent is the cobra command under which the new cmd is attached.
+	parent string
+
+	// child is the new sub-command’s name (capitalized).
+	child string
+
+	// rootParent holds the actual parent when it’s not the literal "root".
+	rootParent string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var cmdCmd = &cobra.Command{
-	Use:     "cmd",
-	Short:   "Construct cobra commands",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Use:   "cmd",
+	Short: "Construct cobra commands from templates",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) +
+		chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Construct ` + chalk.Yellow.Color("cobra") + ` commands from predefined templates
 `,
-
 	Example: `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("cmd") + ` --` + chalk.Blue.Color("child") + ` ExampleCmd --` + chalk.Blue.Color("parent") + ` RootCmd
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("cmd") +
+		` --child ExampleCmd --parent RootCmd
 `,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Run: func(κ *cobra.Command, args []string) {
-
-		// define name
+	Run: func(cmd *cobra.Command, args []string) {
+		// if parent isn’t literally "root", use it as the real parent
 		if parent != "root" {
-			root_parent = parent
+			rootParent = parent
 		}
 
-		// copy template
-		params := copyCopyReplace(findHome()+cmdDir+"/"+"cmdTemplate.go", path+"/"+"cmd"+"/"+"cmd"+root_parent+child+".go")
-		params.reps = replaceCobraCmd() // automatic binding cli flags
-		copyFile(params)
+		// discover your tabularasa home dir (verbose),
+		// bail out on error
+		home, err := domovoi.FindHome(verbose)
+		if err != nil {
+			horus.CheckErr(horus.NewHerror(
+				"cmdCobraCmd.Run",
+				"failed to find TabulaRasa home",
+				err,
+				map[string]any{"verbose": verbose},
+			))
+		}
+
+		// build src & dest paths
+		src := filepath.Join(home, cmdDir, "cmdTemplate.go")
+		fileName := fmt.Sprintf("cmd%s%s.go", rootParent, child)
+		dest := filepath.Join(projectPath, "cmd", fileName)
+
+		// copy + apply replacements
+		copyParams := newCopyParams(src, dest)
+		copyParams.Reps = buildCmdReplacements(
+			repoName, authorName, authorEmail,
+			child, parent, rootParent,
+		)
+		copyFile(copyParams)
 	},
 }
 
@@ -65,11 +96,25 @@ Construct ` + chalk.Yellow.Color("cobra") + ` commands from predefined templates
 func init() {
 	cobraCmd.AddCommand(cmdCmd)
 
-	cmdCmd.Flags().StringVarP(&child, "child", "", "", "New command to attach. Recommended to capitalize first letter.")
-	cmdCmd.Flags().StringVarP(&parent, "parent", "", "root", "Parent command to attach new command to. If not asigned, attach to")
+	// allow overriding where your project lives
+	cmdCmd.Flags().StringVar(
+		&projectPath, "path", ".", "Base path of your Go project",
+	)
 
-	err := cmdCmd.MarkFlagRequired("child")
-	horus.CheckErr(err)
+	// new-sub-command name
+	cmdCmd.Flags().StringVarP(
+		&child, "child", "c", "", "Name of the new cobra sub-command (capitalized)",
+	)
+
+	// attach under this parent (defaults to root)
+	cmdCmd.Flags().StringVarP(
+		&parent, "parent", "p", "root", "Parent command (use \"root\" for top-level)",
+	)
+
+	// child is mandatory
+	if err := cmdCmd.MarkFlagRequired("child"); err != nil {
+		horus.CheckErr(err)
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
