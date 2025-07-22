@@ -67,12 +67,9 @@ var rootCmd = &cobra.Command{
 	Short: "Provide a canvas to write on",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-` + chalk.Cyan.Color("tab") + ` provides a set of templates to facilite software deployment
+` + chalk.Blue.Color("tab") + `, provide a set of templates to facilite software deployment
 `,
-
-	Example: `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Magenta.Color("help") + `
-`,
+	Example: chalk.White.Color("tab") + ` ` + chalk.Bold.TextStyle(chalk.White.Color("help")),
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
