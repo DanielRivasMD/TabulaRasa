@@ -16,50 +16,62 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
+	"path/filepath"
+
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// declarations
-var ()
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// todorCmd
 var todorCmd = &cobra.Command{
-	Use:     "todor",
-	Aliases: []string{"t"},
-	Short:   "Deploy todor config template",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Use:   "todor",
+	Short: "Deploy todor config template",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) +
+		chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
-Deploy ` + chalk.Yellow.Color("todor") + ` config template over target
-Including ` + chalk.Red.Color(".todor") + `
+Deploy ` + chalk.Yellow.Color("todor") + ` config template into your project.
+Includes the top-level ` + chalk.Red.Color(".todor") + ` file.
 `,
-
 	Example: `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("deploy") + ` ` + chalk.Green.Color("todor") + `
+  ` + chalk.Cyan.Color("tab") + ` deploy todor
 `,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
+		// locate TabulaRasa home directory
+		home, err := domovoi.FindHome(verbose)
+		if err != nil {
+			horus.CheckErr(horus.NewHerror(
+				"todorCmd.Run",
+				"failed to find TabulaRasa home",
+				err,
+				nil,
+			))
+		}
 
-		// deploy todor
-		params := copyCopyReplace(findHome()+todorDir+"/"+todor, path+"/"+"."+todor)
-		copyFile(params)
+		// source: $TABULARASA_HOME/todorDir/todor
+		src := filepath.Join(home, todorDir, todor)
+
+		// destination: <projectPath>/.todor
+		dest := filepath.Join(projectPath, "."+todor)
+
+		// copy template to project
+		params := newCopyParams(src, dest)
+		if err := copyFile(params); err != nil {
+			horus.CheckErr(err)
+		}
 	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// execute prior main
 func init() {
 	deployCmd.AddCommand(todorCmd)
-
-	// flags
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
