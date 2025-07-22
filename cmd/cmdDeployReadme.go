@@ -30,10 +30,12 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var (
-	// description for README overview section
+// description for README overview section
 
-	// licenseType to inject into README
+// licenseType to inject into README
 )
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // readmeCmd deploys a multi‐section README.md into your project.
 var readmeCmd = &cobra.Command{
@@ -54,8 +56,10 @@ splicing together overview, install/dev guides, usage and FAQ snippets.
 
 	Run: func(cmd *cobra.Command, args []string) {
 		// fallback to current directory as repo name
+		var err error
 		if repoName == "" {
-			repoName = currentDir()
+			repoName, err = domovoi.CurrentDir()
+			horus.CheckErr(err)
 		}
 
 		// locate TabulaRasa home
