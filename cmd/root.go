@@ -28,7 +28,6 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
 const (
 	configDir = "/" + ".tabularasa"
 	cobraDir  = configDir + "/" + "cobraApp"
@@ -50,6 +49,7 @@ const (
 )
 
 var (
+	verbose     bool
 	path        string
 	author      string
 	email       string
@@ -129,10 +129,15 @@ func bindFlags(cmd *cobra.Command, vConfig *viper.Viper) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Execute prior main.
-// init registers persistent flags and performs additional initialization tasks.
 func init() {
-	// Set up persistent flags.
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose diagnostic output")
+
+	// appCmd.Flags().StringVar(&projectPath, "path", "", "Target directory for your new app")
+	// appCmd.Flags().StringVar(&repoName, "repo", "", "Name of the repository (and Go module)")
+	// appCmd.Flags().StringVar(&authorName, "author", "", "Author’s full name")
+	// appCmd.Flags().StringVar(&authorEmail, "email", "", "Author’s email address")
+	// appCmd.Flags().StringVar(&userName, "username", "", "GitHub username")
+
 	rootCmd.PersistentFlags().StringVarP(&path, "path", "p", ".", "Path to deploy")
 	rootCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "Repository name")
 	rootCmd.PersistentFlags().StringVarP(&author, "author", "a", "Daniel Rivas", "Provide author")
@@ -141,6 +146,7 @@ func init() {
 
 	rootCmd.MarkFlagRequired("path")
 	rootCmd.MarkFlagRequired("repo")
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
