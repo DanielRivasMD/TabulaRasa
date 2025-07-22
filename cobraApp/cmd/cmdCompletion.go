@@ -20,19 +20,19 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
+	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Global declarations
 var ()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// completionCmd represents the "completion" command which generates shell completion scripts.
 var completionCmd = &cobra.Command{
-	Use:    "completion [bash|zsh|fish|powershell]",
+	Use:    "completion " + chalk.Dim.TextStyle(chalk.Italic.TextStyle("[bash|zsh|fish|powershell]")),
 	Hidden: true,
 	Short:  "Generate completion script for various shells.",
 	Long: fmt.Sprintf(`To load completions:
@@ -87,20 +87,23 @@ PowerShell:
 		// Generate the appropriate shell completion script based on the provided argument.
 		switch args[0] {
 		case "bash":
-			cmd.Root().GenBashCompletion(os.Stdout)
+			err := cmd.Root().GenBashCompletion(os.Stdout)
+			horus.CheckErr(err)
 		case "zsh":
-			cmd.Root().GenZshCompletion(os.Stdout)
+			err := cmd.Root().GenZshCompletion(os.Stdout)
+			horus.CheckErr(err)
 		case "fish":
-			cmd.Root().GenFishCompletion(os.Stdout, true)
+			err := cmd.Root().GenFishCompletion(os.Stdout, true)
+			horus.CheckErr(err)
 		case "powershell":
-			cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
+			err := cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
+			horus.CheckErr(err)
 		}
 	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// init registers the completion command with the root command.
 func init() {
 	rootCmd.AddCommand(completionCmd)
 }
