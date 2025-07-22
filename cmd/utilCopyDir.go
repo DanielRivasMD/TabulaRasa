@@ -6,47 +6,104 @@ package cmd
 
 import (
 	"os"
+	"path/filepath"
+
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// copy & replace dir
-func copyDir(π paramsCopyReplace) {
-	// clean prior copying
-	if fileExist(π.dest) {
-		os.Remove(π.dest)
+// copyDir recursively copies a directory tree from params.Orig to params.Dest,
+// preserving permissions and applying replacements. It returns an error on failure.
+func copyDir(params CopyParams) error {
+	// if destination exists, remove it
+	exists, err := domovoi.FileExist(params.Dest, nil, true)
+	if err != nil {
+		return horus.NewHerror(
+			"copyDir",
+			"failed to check destination existence",
+			err,
+			map[string]any{"dest": params.Dest},
+		)
 	}
-
-	// original properties
-	origInfo, ε := os.Stat(π.orig)
-	checkErr(ε)
-
-	// create destiny dir
-	ε = os.MkdirAll(π.dest, origInfo.Mode())
-	checkErr(ε)
-
-	// origin files
-	dir, _ := os.Open(π.orig)
-	objs, ε := dir.Readdir(-1)
-
-	orig := π.orig
-	dest := π.dest
-
-	// iterate origin
-	for _, obj := range objs {
-
-		// pointers
-		π.orig = orig + "/" + obj.Name()
-		π.dest = dest + "/" + obj.Name()
-
-		if obj.IsDir() {
-			// create dirs recursive
-			copyDir(π)
-		} else {
-			// copy & replace
-			copyFile(π)
+	if exists {
+		if rmErr := os.RemoveAll(params.Dest); rmErr != nil {
+			return horus.NewHerror(
+				"copyDir",
+				"failed to remove existing destination",
+				rmErr,
+				map[string]any{"dest": params.Dest},
+			)
 		}
 	}
+
+	// stat source to get mode
+	info, err := os.Stat(params.Orig)
+	if err != nil {
+		return horus.NewHerror(
+			"copyDir",
+			"failed to stat source directory",
+			err,
+			map[string]any{"src": params.Orig},
+		)
+	}
+
+	// create destination directory
+	if mkErr := os.MkdirAll(params.Dest, info.Mode()); mkErr != nil {
+		return horus.NewHerror(
+			"copyDir",
+			"failed to create destination directory",
+			mkErr,
+			map[string]any{"dest": params.Dest},
+		)
+	}
+
+	// read directory entries
+	dirHandle, err := os.Open(params.Orig)
+	if err != nil {
+		return horus.NewHerror(
+			"copyDir",
+			"failed to open source directory",
+			err,
+			map[string]any{"src": params.Orig},
+		)
+	}
+	entries, err := dirHandle.Readdir(-1)
+	dirHandle.Close()
+	if err != nil {
+		return horus.NewHerror(
+			"copyDir",
+			"failed to read source directory entries",
+			err,
+			map[string]any{"src": params.Orig},
+		)
+	}
+
+	// recurse into subentries
+	for _, entry := range entries {
+		srcPath := filepath.Join(params.Orig, entry.Name())
+		dstPath := filepath.Join(params.Dest, entry.Name())
+
+		childParams := CopyParams{
+			Orig:  srcPath,
+			Dest:  dstPath,
+			Files: params.Files,
+			Reps:  params.Reps,
+		}
+
+		if entry.IsDir() {
+			if err := copyDir(childParams); err != nil {
+				return err
+			}
+		} else {
+			if err := copyFile(childParams); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
