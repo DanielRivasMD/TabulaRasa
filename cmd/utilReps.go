@@ -5,69 +5,99 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"fmt"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// bind cobra replace values
-func replaceCobraApp() []rep {
-	Ω := make([]rep, 5)
-	Ω[0] = rep{old: "YEAR", new: strconv.Itoa(time.Now().Year())}
-	Ω[1] = rep{old: "REPOSITORY", new: repo}
-	Ω[2] = rep{old: "TOOL", new: strings.ToLower(repo)}
-	Ω[3] = rep{old: "AUTHOR", new: author}
-	Ω[4] = rep{old: "EMAIL", new: email}
-	return Ω
+// buildAppReplacements returns the list of token replacements for a new cobra app.
+func buildAppReplacements(repo, author, email, user string) []rep {
+	year := strconv.Itoa(time.Now().Year())
+	return []rep{
+		{old: "YEAR", new: year},
+		{old: "REPOSITORY", new: repo},
+		{old: "TOOL", new: strings.ToLower(repo)},
+		{old: "AUTHOR", new: author},
+		{old: "EMAIL", new: email},
+		{old: "USER", new: user},
+	}
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// bind cobra replace values
-func replaceCobraCmd() []rep {
-	Ω := make([]rep, 8)
-	Ω[0] = rep{old: "YEAR", new: strconv.Itoa(time.Now().Year())}
-	Ω[1] = rep{old: "REPOSITORY", new: repo}
-	Ω[2] = rep{old: "TOOL", new: strings.ToLower(repo)}
-	Ω[3] = rep{old: "AUTHOR", new: author}
-	Ω[4] = rep{old: "EMAIL", new: email}
-	Ω[5] = rep{old: "CHILD", new: strings.ToLower(child)}
-	Ω[6] = rep{old: "PARENT", new: strings.ToLower(parent)}
-	Ω[7] = rep{old: "ROOT", new: strings.ToLower(root_parent)}
-	return Ω
+// buildCmdReplacements returns token replacements for generating a new sub-command.
+func buildCmdReplacements(repo, author, email, child, parent, root string) []rep {
+	year := strconv.Itoa(time.Now().Year())
+	return []rep{
+		{old: "YEAR", new: year},
+		{old: "REPOSITORY", new: repo},
+		{old: "TOOL", new: strings.ToLower(repo)},
+		{old: "AUTHOR", new: author},
+		{old: "EMAIL", new: email},
+		{old: "CHILD", new: strings.ToLower(child)},
+		{old: "PARENT", new: strings.ToLower(parent)},
+		{old: "ROOT", new: strings.ToLower(root)},
+	}
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// bind deploy just replace values
-func replaceDeployJust() []rep {
-	Ω := make([]rep, 3)
-	Ω[0] = rep{"APP", repo}
-	Ω[1] = rep{"EXE", strings.ToLower(repo)}
-	Ω[2] = rep{"VER", ver}
-	return Ω
+// buildDeployReplacements returns tokens for a bare “deploy” template.
+func buildDeployReplacements(repo, version string) []rep {
+	return []rep{
+		{old: "APP", new: repo},
+		{old: "EXE", new: strings.ToLower(repo)},
+		{old: "VER", new: version},
+	}
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// buildReadmeReplacements returns tokens for README.md generation on deploy.
+// It checks for a LICENSE file (verbose) and auto-detects license type when none was provided.
+func buildReadmeReplacements(
+	langTag, desc, repo, user, author, licenseType, targetPath string,
+) ([]rep, error) {
+	licensePath := filepath.Join(targetPath, "LICENSE")
 
-// bind deploy readme replace values
-func replaceDeployReadme() []rep {
-
-	if fileExist(path+"/"+"LICENSE") && license == "" {
-		license, _ = detectLicense(path + "/" + "LICENSE")
+	// check existence of LICENSE (verbose=true)
+	exists, err := domovoi.FileExist(licensePath, nil, true)
+	if err != nil {
+		return nil, horus.NewHerror(
+			"buildReadmeReplacements",
+			fmt.Sprintf("failed to stat %s", licensePath),
+			err,
+			map[string]any{"path": licensePath},
+		)
 	}
 
-	Ω := make([]rep, 7)
-	Ω[0] = rep{old: "LANG", new: lang.selected[0]}
-	Ω[1] = rep{old: "OVERVIEW", new: description}
-	Ω[2] = rep{old: "REPOSITORY", new: repo}
-	Ω[3] = rep{old: "USER", new: user}
-	Ω[4] = rep{old: "AUTHOR", new: author}
-	Ω[5] = rep{old: "YEAR", new: strconv.Itoa(time.Now().Year())}
-	Ω[6] = rep{old: "LICENSETYPE", new: license}
-	return Ω
+	// if LICENSE exists but no licenseType was set, try to detect it
+	if exists && licenseType == "" {
+		detected, detErr := detectLicense(licensePath)
+		if detErr != nil {
+			return nil, horus.NewHerror(
+				"buildReadmeReplacements",
+				"license detection failed",
+				detErr,
+				map[string]any{"path": licensePath},
+			)
+		}
+		licenseType = detected
+	}
+
+	year := strconv.Itoa(time.Now().Year())
+	reps := []rep{
+		{old: "LANG", new: langTag},
+		{old: "OVERVIEW", new: desc},
+		{old: "REPOSITORY", new: repo},
+		{old: "USER", new: user},
+		{old: "AUTHOR", new: author},
+		{old: "YEAR", new: year},
+		{old: "LICENSETYPE", new: licenseType},
+	}
+
+	return reps, nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
