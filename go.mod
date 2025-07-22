@@ -3,7 +3,7 @@ module github.com/DanielRivasMD/TabulaRasa
 go 1.23.4
 
 require (
-	github.com/DanielRivasMD/domovoi v0.0.0-20250526095321-270b5a485a92
+	github.com/DanielRivasMD/domovoi v0.0.0-20250720121658-f6b0523f2806
 	github.com/atrox/homedir v1.0.0
 	github.com/labstack/gommon v0.4.2
 	github.com/spf13/cobra v1.8.0
@@ -13,7 +13,7 @@ require (
 )
 
 require (
-	github.com/DanielRivasMD/horus v0.0.0-20250525113757-e56656ee516a // indirect
+	github.com/DanielRivasMD/horus v0.0.0-20250709022859-36093683a815 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
