@@ -16,50 +16,58 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
+	"github.com/DanielRivasMD/domovoi"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
-var ()
+var (
+	projectPath string
+	repoName    string
+	authorName  string
+	authorEmail string
+	userName    string
+)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// appCmd
 var appCmd = &cobra.Command{
-	Use:     "app",
-	Aliases: []string{"a"},
-	Short:   "Construct cobra apps from templates",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
+	Use:   "app",
+	Short: "Construct cobra apps from templates",
+	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) +
+		chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
 Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 `,
-
 	Example: `
-` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("app") + ` --` + chalk.Blue.Color("path") + ` $(pwd) --` + chalk.Blue.Color("repo") + ` Tabularasa
+` + chalk.Cyan.Color("tab") + ` ` + chalk.Yellow.Color("cobra") + ` ` + chalk.Green.Color("app") +
+		` --` + chalk.Blue.Color("path") + ` $(pwd) --` + chalk.Blue.Color("repo") + ` Tabularasa
 `,
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Run: func(κ *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, args []string) {
+		// Copy template files into the target directory
+		home, _ := domovoi.FindHome(verbose)
+		copyParams := newCopyParams(home+cobraDir, projectPath)
+		copyParams.Reps = buildAppReplacements(repoName, authorName, authorEmail, userName)
+		copyDir(copyParams)
 
-		// copy templates
-		params := copyCopyReplace(findHome()+cobraDir, path)
-		params.reps = replaceCobraApp() // automatic binding cli flags
-		copyDir(params)
+		// Initialize Go module and tidy dependencies
+		domovoi.ExecCmd("go", "mod", "init", repoName)
+		domovoi.ExecCmd("go", "mod", "tidy")
 	},
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// execute prior main
 func init() {
 	cobraCmd.AddCommand(appCmd)
-
-	// flags
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
