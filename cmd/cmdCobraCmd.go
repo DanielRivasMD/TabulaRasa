@@ -17,13 +17,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// declarations
 var (
 	parent      string
 	child       string
@@ -32,10 +32,8 @@ var (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// cmdCmd
 var cmdCmd = &cobra.Command{
 	Use:     "cmd",
-	Aliases: []string{"c"},
 	Short:   "Construct cobra commands",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
 
@@ -64,15 +62,14 @@ Construct ` + chalk.Yellow.Color("cobra") + ` commands from predefined templates
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// execute prior main
 func init() {
 	cobraCmd.AddCommand(cmdCmd)
 
-	// flags
 	cmdCmd.Flags().StringVarP(&child, "child", "", "", "New command to attach. Recommended to capitalize first letter.")
 	cmdCmd.Flags().StringVarP(&parent, "parent", "", "root", "Parent command to attach new command to. If not asigned, attach to")
 
-	cmdCmd.MarkFlagRequired("child")
+	err := cmdCmd.MarkFlagRequired("child")
+	horus.CheckErr(err)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
