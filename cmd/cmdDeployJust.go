@@ -51,8 +51,10 @@ including ` + chalk.Red.Color(".justfile") + ` and language‐specific configs.
 
 	Run: func(cmd *cobra.Command, args []string) {
 		// fallback repoName to current dir if not provided
+		var err error
 		if repoName == "" {
-			repoName = currentDir()
+			repoName, err = domovoi.CurrentDir()
+			horus.CheckErr(err)
 		}
 
 		// locate TabulaRasa home
