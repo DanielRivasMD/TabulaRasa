@@ -1,60 +1,113 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 package cmd
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
 	"bufio"
 	"os"
+	"path/filepath"
+
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
 )
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// TODO: add suffix argument
-// copy file
-func catFiles(π paramsCopyReplace, kind string) {
-	// clean prior copying
-	if fileExist(π.dest) {
-		os.Remove(π.dest)
+// concatenateFiles merges multiple source files (with a given suffix) into one destination.
+// If the destination exists, it’s removed first. After merging, any replacements are applied.
+func concatenateFiles(params CopyParams, suffix string) error {
+	// check if destination exists (verbose logging)
+	exists, err := domovoi.FileExist(params.Dest, nil, true)
+	if err != nil {
+		return horus.NewHerror(
+			"concatenateFiles",
+			"failed to check destination existence",
+			err,
+			map[string]any{"dest": params.Dest},
+		)
 	}
 
-	// open writer
-	fwrite, ε := os.OpenFile(π.dest, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
-	checkErr(ε)
-	defer fwrite.Close()
+	// remove existing destination
+	if exists {
+		if rmErr := os.Remove(params.Dest); rmErr != nil {
+			return horus.NewHerror(
+				"concatenateFiles",
+				"failed to remove existing destination",
+				rmErr,
+				map[string]any{"dest": params.Dest},
+			)
+		}
+	}
 
-	for _, file := range π.files {
-		// open reader
-		fread, ε := os.Open(π.orig + "/" + file + kind)
-		checkErr(ε)
-		defer fread.Close()
+	// open destination for appending
+	destFile, err := os.OpenFile(params.Dest, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o666)
+	if err != nil {
+		return horus.NewHerror(
+			"concatenateFiles",
+			"failed to open destination file",
+			err,
+			map[string]any{"dest": params.Dest},
+		)
+	}
+	defer destFile.Close()
 
-		// declare ϖ
-		ϖ := bufio.NewWriter(fwrite)
+	writer := bufio.NewWriter(destFile)
 
-		// read file
-		scanner := bufio.NewScanner(fread)
-
-		// scan file
-		for scanner.Scan() {
-			// preallocate
-			toPrint := scanner.Text() + "\n"
-			// write
-			_, ε = ϖ.WriteString(toPrint)
-			checkErr(ε)
+	// iterate and append each source
+	for _, name := range params.Files {
+		srcPath := filepath.Join(params.Orig, name+suffix)
+		srcFile, err := os.Open(srcPath)
+		if err != nil {
+			return horus.NewHerror(
+				"concatenateFiles",
+				"failed to open source file",
+				err,
+				map[string]any{"src": srcPath},
+			)
 		}
 
-		ε = scanner.Err()
-		checkErr(ε)
+		scanner := bufio.NewScanner(srcFile)
+		for scanner.Scan() {
+			line := scanner.Text() + "\n"
+			if _, wErr := writer.WriteString(line); wErr != nil {
+				srcFile.Close()
+				return horus.NewHerror(
+					"concatenateFiles",
+					"failed to write to destination",
+					wErr,
+					map[string]any{"dest": params.Dest},
+				)
+			}
+		}
+		if scanErr := scanner.Err(); scanErr != nil {
+			srcFile.Close()
+			return horus.NewHerror(
+				"concatenateFiles",
+				"error scanning source file",
+				scanErr,
+				map[string]any{"src": srcPath},
+			)
+		}
+		srcFile.Close()
+	}
 
-		// flush writer
-		ϖ.Flush()
+	// flush buffer
+	if err := writer.Flush(); err != nil {
+		return horus.NewHerror(
+			"concatenateFiles",
+			"failed to flush writer",
+			err,
+			nil,
+		)
 	}
-	// replace
-	if len(π.reps) > 0 {
-		replace(π.dest, π.reps)
+
+	// apply replacements if provided
+	if len(params.Reps) > 0 {
+		if repErr := replace(params.Dest, params.Reps); repErr != nil {
+			return horus.NewHerror(
+				"concatenateFiles",
+				"failed to apply replacements",
+				repErr,
+				map[string]any{"file": params.Dest},
+			)
+		}
 	}
+
+	return nil
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
