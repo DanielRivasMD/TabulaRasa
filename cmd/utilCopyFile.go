@@ -9,7 +9,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
 )
 
@@ -20,32 +19,13 @@ import (
 //
 // It returns an error if any step fails.
 func copyFile(params CopyParams) error {
-	// remove existing destination if present
-	exists, err := domovoi.FileExist(params.Dest, nil, true)
-	if err != nil {
-		return horus.NewHerror(
-			"copyFile",
-			"failed to check destination existence",
-			err,
-			map[string]any{"dest": params.Dest},
-		)
-	}
-	if exists {
-		if rmErr := os.Remove(params.Dest); rmErr != nil {
-			return horus.NewHerror(
-				"copyFile",
-				"failed to remove existing file",
-				rmErr,
-				map[string]any{"dest": params.Dest},
-			)
-		}
-	}
+	op := "copyFile"
 
 	// open source
 	srcFile, err := os.Open(params.Orig)
 	if err != nil {
 		return horus.NewHerror(
-			"copyFile",
+			op,
 			"failed to open source file",
 			err,
 			map[string]any{"src": params.Orig},
@@ -57,7 +37,7 @@ func copyFile(params CopyParams) error {
 	if dir := filepath.Dir(params.Dest); dir != "" {
 		if mkErr := os.MkdirAll(dir, 0o755); mkErr != nil {
 			return horus.NewHerror(
-				"copyFile",
+				op,
 				"failed to create destination directory",
 				mkErr,
 				map[string]any{"dir": dir},
@@ -69,7 +49,7 @@ func copyFile(params CopyParams) error {
 	destFile, err := os.Create(params.Dest)
 	if err != nil {
 		return horus.NewHerror(
-			"copyFile",
+			op,
 			"failed to create destination file",
 			err,
 			map[string]any{"dest": params.Dest},
@@ -80,7 +60,7 @@ func copyFile(params CopyParams) error {
 	// perform copy
 	if _, err = io.Copy(destFile, srcFile); err != nil {
 		return horus.NewHerror(
-			"copyFile",
+			op,
 			"failed during copy operation",
 			err,
 			map[string]any{"src": params.Orig, "dest": params.Dest},
@@ -96,7 +76,7 @@ func copyFile(params CopyParams) error {
 	if len(params.Reps) > 0 {
 		if repErr := replace(params.Dest, params.Reps); repErr != nil {
 			return horus.NewHerror(
-				"copyFile",
+				op,
 				"failed to apply replacements",
 				repErr,
 				map[string]any{"file": params.Dest},
