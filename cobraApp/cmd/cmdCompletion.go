@@ -87,17 +87,13 @@ PowerShell:
 		// Generate the appropriate shell completion script based on the provided argument.
 		switch args[0] {
 		case "bash":
-			err := cmd.Root().GenBashCompletion(os.Stdout)
-			horus.CheckErr(err)
+			horus.CheckErr(cmd.Root().GenBashCompletion(os.Stdout))
 		case "zsh":
-			err := cmd.Root().GenZshCompletion(os.Stdout)
-			horus.CheckErr(err)
+			horus.CheckErr(cmd.Root().GenZshCompletion(os.Stdout))
 		case "fish":
-			err := cmd.Root().GenFishCompletion(os.Stdout, true)
-			horus.CheckErr(err)
+			horus.CheckErr(cmd.Root().GenFishCompletion(os.Stdout, true))
 		case "powershell":
-			err := cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
-			horus.CheckErr(err)
+			horus.CheckErr(cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout))
 		}
 	},
 }
