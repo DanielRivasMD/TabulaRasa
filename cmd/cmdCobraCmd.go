@@ -31,13 +31,8 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var (
-	// parent is the cobra command under which the new cmd is attached.
-	parent string
-
-	// child is the new sub-command’s name (capitalized).
-	child string
-
-	// rootParent holds the actual parent when it’s not the literal "root".
+	parent     string
+	child      string
 	rootParent string
 )
 
@@ -59,35 +54,34 @@ Construct ` + chalk.Yellow.Color("cobra") + ` commands from predefined templates
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-		// if parent isn’t literally "root", use it as the real parent
 		if parent != "root" {
 			rootParent = parent
 		}
 
-		// discover your tabularasa home dir (verbose),
-		// bail out on error
 		home, err := domovoi.FindHome(verbose)
 		if err != nil {
 			horus.CheckErr(horus.NewHerror(
 				"cmdCobraCmd.Run",
 				"failed to find TabulaRasa home",
 				err,
-				map[string]any{"verbose": verbose},
+				nil,
 			))
 		}
 
 		// build src & dest paths
 		src := filepath.Join(home, cmdDir, "cmdTemplate.go")
 		fileName := fmt.Sprintf("cmd%s%s.go", rootParent, child)
-		dest := filepath.Join(projectPath, "cmd", fileName)
+		dest := filepath.Join(path, "cmd", fileName)
 
 		// copy + apply replacements
-		copyParams := newCopyParams(src, dest)
-		copyParams.Reps = buildCmdReplacements(
-			repoName, authorName, authorEmail,
+		params := newCopyParams(src, dest)
+
+		// re-use cmd replacements
+		params.Reps = buildCmdReplacements(
+			repo, author, email,
 			child, parent, rootParent,
 		)
-		copyFile(copyParams)
+		horus.CheckErr(copyFile(params))
 	},
 }
 
@@ -96,25 +90,10 @@ Construct ` + chalk.Yellow.Color("cobra") + ` commands from predefined templates
 func init() {
 	cobraCmd.AddCommand(cmdCmd)
 
-	// allow overriding where your project lives
-	cmdCmd.Flags().StringVar(
-		&projectPath, "path", ".", "Base path of your Go project",
-	)
+	cmdCmd.Flags().StringVarP(&child, "child", "c", "", "Name of the new cobra sub-command (capitalized)")
+	cmdCmd.Flags().StringVarP(&parent, "parent", "P", "root", "Parent command (use \"root\" for top-level)")
 
-	// new-sub-command name
-	cmdCmd.Flags().StringVarP(
-		&child, "child", "c", "", "Name of the new cobra sub-command (capitalized)",
-	)
-
-	// attach under this parent (defaults to root)
-	cmdCmd.Flags().StringVarP(
-		&parent, "parent", "p", "root", "Parent command (use \"root\" for top-level)",
-	)
-
-	// child is mandatory
-	if err := cmdCmd.MarkFlagRequired("child"); err != nil {
-		horus.CheckErr(err)
-	}
+	horus.CheckErr(cmdCmd.MarkFlagRequired("child"))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
