@@ -46,18 +46,17 @@ func buildCmdReplacements(repo, author, email, child, parent, root string) []rep
 }
 
 // buildDeployReplacements returns tokens for a bare “deploy” template.
-func buildDeployReplacements(repo, version string) []rep {
+func buildDeployReplacements(repo string) []rep {
 	return []rep{
 		{old: "APP", new: repo},
 		{old: "EXE", new: strings.ToLower(repo)},
-		{old: "VER", new: version},
 	}
 }
 
 // buildReadmeReplacements returns tokens for README.md generation on deploy.
 // It checks for a LICENSE file (verbose) and auto-detects license type when none was provided.
 func buildReadmeReplacements(
-	langTag, desc, repo, user, author, licenseType, targetPath string,
+	langTag, desc, repo, user, author, license, targetPath string,
 ) ([]rep, error) {
 	licensePath := filepath.Join(targetPath, "LICENSE")
 
@@ -72,8 +71,8 @@ func buildReadmeReplacements(
 		)
 	}
 
-	// if LICENSE exists but no licenseType was set, try to detect it
-	if exists && licenseType == "" {
+	// if LICENSE exists but no license was set, try to detect it
+	if exists && license == "" {
 		detected, detErr := detectLicense(licensePath)
 		if detErr != nil {
 			return nil, horus.NewHerror(
@@ -83,7 +82,7 @@ func buildReadmeReplacements(
 				map[string]any{"path": licensePath},
 			)
 		}
-		licenseType = detected
+		license = detected
 	}
 
 	year := strconv.Itoa(time.Now().Year())
@@ -94,7 +93,7 @@ func buildReadmeReplacements(
 		{old: "USER", new: user},
 		{old: "AUTHOR", new: author},
 		{old: "YEAR", new: year},
-		{old: "LICENSETYPE", new: licenseType},
+		{old: "LICENSETYPE", new: license},
 	}
 
 	return reps, nil
