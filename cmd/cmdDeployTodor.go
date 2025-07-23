@@ -27,6 +27,8 @@ import (
 	"github.com/ttacon/chalk"
 )
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 var todorCmd = &cobra.Command{
 	Use:   "todor",
 	Short: "Deploy todor config template",
@@ -58,7 +60,7 @@ Includes the top-level ` + chalk.Red.Color(".todor") + ` file.
 		src := filepath.Join(home, todorDir, todor)
 
 		// destination: <projectPath>/.todor
-		dest := filepath.Join(projectPath, "."+todor)
+		dest := filepath.Join(path, "."+todor)
 
 		// copy template to project
 		params := newCopyParams(src, dest)
