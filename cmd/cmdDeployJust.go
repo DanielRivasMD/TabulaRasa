@@ -29,9 +29,9 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var (
-	headerLine string
-)
+const HEADER = "head"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var justCmd = &cobra.Command{
 	Use:   "just",
@@ -50,10 +50,10 @@ including ` + chalk.Red.Color(".justfile") + ` and language‐specific configs.
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-		// fallback repoName to current dir if not provided
+		// fallback repo to current dir if not provided
 		var err error
-		if repoName == "" {
-			repoName, err = domovoi.CurrentDir()
+		if repo == "" {
+			repo, err = domovoi.CurrentDir()
 			horus.CheckErr(err)
 		}
 
@@ -69,42 +69,35 @@ including ` + chalk.Red.Color(".justfile") + ` and language‐specific configs.
 		}
 
 		// ensure `.just` directory exists
-		justDirPath := filepath.Join(projectPath, dotjust)
-		if err := domovoi.EnsureDirExist(justDirPath, true); err != nil {
-			horus.CheckErr(err)
-		}
+		// TODO: double check
+		justDirPath := filepath.Join(path, dotjust)
+		horus.CheckErr(domovoi.EnsureDirExist(justDirPath, verbose))
 
 		// deploy combined .justfile
-		justfileDest := filepath.Join(projectPath, "."+justfile)
+		justfileDest := filepath.Join(path, "."+justfile)
 		jfParams := newCopyParams(
 			filepath.Join(home, justDir),
 			justfileDest,
 		)
-		jfParams.Files = append([]string{headerLine}, lang.Selected...)
-		jfParams.Reps = buildDeployReplacements(repoName, version)
-		if err := concatenateFiles(jfParams, dotjust); err != nil {
-			horus.CheckErr(err)
-		}
+		jfParams.Files = append([]string{HEADER}, lang.Selected...)
+		jfParams.Reps = buildDeployReplacements(repo)
+		horus.CheckErr(concatenateFiles(jfParams, dotjust))
 
 		// deploy each language's config
 		for _, langOpt := range lang.Selected {
 			srcConf := filepath.Join(home, justDir, langOpt+dotconf)
 			dstConf := filepath.Join(justDirPath, langOpt+dotconf)
 			confParams := newCopyParams(srcConf, dstConf)
-			confParams.Reps = buildDeployReplacements(repoName, version)
-			if err := copyFile(confParams); err != nil {
-				horus.CheckErr(err)
-			}
+			confParams.Reps = buildDeployReplacements(repo)
+			horus.CheckErr(copyFile(confParams))
 
 			// include Python installer if deploying Python
 			if langOpt == "py" {
 				srcInst := filepath.Join(home, justDir, pyinstall)
 				dstInst := filepath.Join(justDirPath, pyinstall)
 				instParams := newCopyParams(srcInst, dstInst)
-				instParams.Reps = buildDeployReplacements(repoName, version)
-				if err := copyFile(instParams); err != nil {
-					horus.CheckErr(err)
-				}
+				instParams.Reps = buildDeployReplacements(repo)
+				horus.CheckErr(copyFile(instParams))
 			}
 		}
 	},
@@ -115,22 +108,7 @@ including ` + chalk.Red.Color(".justfile") + ` and language‐specific configs.
 func init() {
 	deployCmd.AddCommand(justCmd)
 
-	justCmd.Flags().StringVar(
-		&headerLine,
-		"header",
-		"",
-		"Line to prepend as header in .justfile",
-	)
-
-	justCmd.Flags().StringVarP(
-		&version,
-		"ver",
-		"v",
-		"",
-		"Version string to embed in templates",
-	)
-
-	horus.CheckErr(justCmd.MarkFlagRequired("lang"))
+	_ = justCmd.MarkFlagRequired("lang")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
