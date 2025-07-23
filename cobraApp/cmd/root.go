@@ -30,7 +30,7 @@ var ()
 
 var rootCmd = &cobra.Command{
 	Use:   "TOOL",
-	Short: "A brief description of your tool", // Customize with your actual tool description.
+	Short: "Customize with your actual tool description",
 	Long: chalk.Green.Color(chalk.Bold.TextStyle("AUTHOR ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("EMAIL")) + `
 
 ` + chalk.Blue.Color("TOOL") + `
@@ -41,8 +41,7 @@ var rootCmd = &cobra.Command{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func Execute() {
-	err := rootCmd.Execute()
-	horus.CheckErr(err)
+	horus.CheckErr(rootCmd.Execute())
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
