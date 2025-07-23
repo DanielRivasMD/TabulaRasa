@@ -8,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
 )
 
@@ -17,32 +16,13 @@ import (
 // copyDir recursively copies a directory tree from params.Orig to params.Dest,
 // preserving permissions and applying replacements. It returns an error on failure.
 func copyDir(params CopyParams) error {
-	// if destination exists, remove it
-	exists, err := domovoi.FileExist(params.Dest, nil, true)
-	if err != nil {
-		return horus.NewHerror(
-			"copyDir",
-			"failed to check destination existence",
-			err,
-			map[string]any{"dest": params.Dest},
-		)
-	}
-	if exists {
-		if rmErr := os.RemoveAll(params.Dest); rmErr != nil {
-			return horus.NewHerror(
-				"copyDir",
-				"failed to remove existing destination",
-				rmErr,
-				map[string]any{"dest": params.Dest},
-			)
-		}
-	}
+	op := "copyDir"
 
-	// stat source to get mode
+	// // stat source to get mode
 	info, err := os.Stat(params.Orig)
 	if err != nil {
 		return horus.NewHerror(
-			"copyDir",
+			op,
 			"failed to stat source directory",
 			err,
 			map[string]any{"src": params.Orig},
@@ -52,7 +32,7 @@ func copyDir(params CopyParams) error {
 	// create destination directory
 	if mkErr := os.MkdirAll(params.Dest, info.Mode()); mkErr != nil {
 		return horus.NewHerror(
-			"copyDir",
+			op,
 			"failed to create destination directory",
 			mkErr,
 			map[string]any{"dest": params.Dest},
@@ -63,7 +43,7 @@ func copyDir(params CopyParams) error {
 	dirHandle, err := os.Open(params.Orig)
 	if err != nil {
 		return horus.NewHerror(
-			"copyDir",
+			op,
 			"failed to open source directory",
 			err,
 			map[string]any{"src": params.Orig},
@@ -73,7 +53,7 @@ func copyDir(params CopyParams) error {
 	dirHandle.Close()
 	if err != nil {
 		return horus.NewHerror(
-			"copyDir",
+			op,
 			"failed to read source directory entries",
 			err,
 			map[string]any{"src": params.Orig},
