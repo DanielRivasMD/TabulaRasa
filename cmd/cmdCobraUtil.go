@@ -30,7 +30,6 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var (
-	// util is the name of the utility template to import (capitalized).
 	util string
 )
 
@@ -62,21 +61,19 @@ Deploy a utility from predefined templates
 			))
 		}
 
-		// source: $TABULARASA_HOME/utilDir/<util>.go
+		// build src & dest paths
 		src := filepath.Join(home, utilDir, util+".go")
+		dest := filepath.Join(path, "cmd", util+".go")
 
-		// destination: <projectPath>/cmd/<util>.go
-		dest := filepath.Join(projectPath, "cmd", util+".go")
-
+		// copy + apply replacements
 		params := newCopyParams(src, dest)
 
-		// re-use your cmd replacements to fill REPOSITORY, AUTHOR, etc.
+		// re-use cmd replacements
 		params.Reps = buildCmdReplacements(
-			repoName, authorName, authorEmail,
+			repo, author, email,
 			util, "", "",
 		)
-
-		copyFile(params)
+		horus.CheckErr(copyFile(params))
 	},
 }
 
@@ -85,20 +82,9 @@ Deploy a utility from predefined templates
 func init() {
 	cobraCmd.AddCommand(utilCmd)
 
-	// allow overriding project root
-	utilCmd.Flags().StringVar(
-		&projectPath, "path", ".", "Base path of your Go project",
-	)
+	utilCmd.Flags().StringVarP(&util, "util", "u", "", "Utility template name (capitalize)")
 
-	// select which util to import
-	utilCmd.Flags().StringVarP(
-		&util, "util", "u", "", "Utility template name (capitalize)",
-	)
-
-	// require --util
-	if err := utilCmd.MarkFlagRequired("util"); err != nil {
-		horus.CheckErr(err)
-	}
+	horus.CheckErr(utilCmd.MarkFlagRequired("util"))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
