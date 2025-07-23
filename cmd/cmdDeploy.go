@@ -33,7 +33,6 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// LangType restricts deploy flag values to a predefined set.
 type LangType struct {
 	validValues []string
 	Selected    []string
@@ -68,16 +67,12 @@ func joinValues(values []string) string {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// deploy flags
 var (
 	lang        = &LangType{validValues: validOptions}
-	licenseType string
-	version     string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// deployCmd deploys configuration templates into your project.
 var deployCmd = &cobra.Command{
 	Use:   "deploy",
 	Short: "Deploy config templates",
@@ -124,9 +119,9 @@ Deploy selected config templates into your project. Valid values:
 			switch tmpl {
 			case "just":
 				src := filepath.Join(home, justDir)
-				dest := projectPath
+				dest := path
 				params := newCopyParams(src, dest)
-				params.Reps = buildDeployReplacements(repoName, version)
+				params.Reps = buildDeployReplacements(repo)
 				if err := copyDir(params); err != nil {
 					horus.CheckErr(err)
 				}
@@ -134,15 +129,15 @@ Deploy selected config templates into your project. Valid values:
 			case "readme":
 				// single-file deploy
 				srcFile := filepath.Join(home, readmeDir, "README.md")
-				destFile := filepath.Join(projectPath, "README.md")
+				destFile := filepath.Join(path, "README.md")
 				reps, err := buildReadmeReplacements(
 					tmpl,        // langTag — unused here but required
 					description, // overview text
-					repoName,
-					userName,
-					authorName,
-					licenseType,
-					projectPath,
+					repo,
+					user,
+					author,
+					license,
+					path,
 				)
 				if err != nil {
 					horus.CheckErr(err)
@@ -155,7 +150,7 @@ Deploy selected config templates into your project. Valid values:
 
 			case "todor":
 				src := filepath.Join(home, todorDir)
-				dest := projectPath
+				dest := path
 				params := newCopyParams(src, dest)
 				// if you need replacements for todor, add them here
 				if err := copyDir(params); err != nil {
@@ -179,31 +174,7 @@ Deploy selected config templates into your project. Valid values:
 func init() {
 	rootCmd.AddCommand(deployCmd)
 
-	// project root
-	deployCmd.PersistentFlags().StringVar(
-		&projectPath, "path", ".", "Base path of your Go project",
-	)
-
-	// select templates
-	deployCmd.PersistentFlags().VarP(
-		lang, "lang", "l", "Templates to deploy (allowed: "+joinValues(validOptions)+")",
-	)
-
-	// module/repo name (for replacement in "just")
-	deployCmd.PersistentFlags().StringVar(
-		&repoName, "repo", "", "Name of your repository (go module path)",
-	)
-	horus.CheckErr(deployCmd.MarkPersistentFlagRequired("repo"))
-
-	// version tag for build system ("just")
-	deployCmd.PersistentFlags().StringVar(
-		&version, "version", "v0.1.0", "Version to embed in build files",
-	)
-
-	// license override for README
-	deployCmd.PersistentFlags().StringVar(
-		&licenseType, "license", "", "License type to use in README",
-	)
+	deployCmd.PersistentFlags().VarP(lang, "lang", "l", "Templates to deploy (allowed: "+joinValues(validOptions)+")")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
