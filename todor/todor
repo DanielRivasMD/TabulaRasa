@@ -3,22 +3,22 @@
   "tags": [
     "bug",
     "doc",
-    "fix",
-    "idea",
-    "key",
+    "feat",
+    "rfac",
     "todo",
     "wip",
+    "fix",
   ],
 
   "styles": {
     "tags": {
         "bug": "red",
         "doc": "blue",
-        "fix": "cyan",
-        "idea": "magenta",
-        "key": "white",
+        "feat": "magenta",
+        "rfac": "white",
         "todo": "green",
         "wip": "yellow",
+        "fix": "cyan",
     }
   }
 }
