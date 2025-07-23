@@ -26,7 +26,6 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var (
-	// cobraCmd represents the top-level `tab cobra` command
 	cobraCmd = &cobra.Command{
 		Use:   "cobra",
 		Short: "Construct cobra apps from templates",
@@ -50,7 +49,6 @@ Available commands:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func init() {
-	// register the cobra subcommand
 	rootCmd.AddCommand(cobraCmd)
 }
 
