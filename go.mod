@@ -3,7 +3,7 @@ module github.com/DanielRivasMD/TabulaRasa
 go 1.23.4
 
 require (
-	github.com/DanielRivasMD/domovoi v0.0.0-20250720121658-f6b0523f2806
+	github.com/DanielRivasMD/domovoi v0.0.0-20250722183845-36175cc1001f
 	github.com/atrox/homedir v1.0.0
 	github.com/labstack/gommon v0.4.2
 	github.com/spf13/cobra v1.8.0
