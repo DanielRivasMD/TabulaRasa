@@ -29,15 +29,10 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var (
-// description for README overview section
-
-// licenseType to inject into README
-)
+var ()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// readmeCmd deploys a multi‐section README.md into your project.
 var readmeCmd = &cobra.Command{
 	Use:   "readme",
 	Short: "Deploy README.md template",
@@ -57,8 +52,8 @@ splicing together overview, install/dev guides, usage and FAQ snippets.
 	Run: func(cmd *cobra.Command, args []string) {
 		// fallback to current directory as repo name
 		var err error
-		if repoName == "" {
-			repoName, err = domovoi.CurrentDir()
+		if repo == "" {
+			repo, err = domovoi.CurrentDir()
 			horus.CheckErr(err)
 		}
 
@@ -75,7 +70,7 @@ splicing together overview, install/dev guides, usage and FAQ snippets.
 
 		// prepare params: templates live under $HOME/<readmeDir>, output is project/README.md
 		srcDir := filepath.Join(home, readmeDir)
-		destFile := filepath.Join(projectPath, readme)
+		destFile := filepath.Join(path, readme)
 
 		params := newCopyParams(srcDir, destFile)
 
@@ -92,11 +87,11 @@ splicing together overview, install/dev guides, usage and FAQ snippets.
 		reps, repErr := buildReadmeReplacements(
 			lang.Selected[0],
 			description,
-			repoName,
-			userName,
-			authorName,
-			licenseType,
-			projectPath,
+			repo,
+			user,
+			author,
+			license,
+			path,
 		)
 		if repErr != nil {
 			horus.CheckErr(repErr)
@@ -115,24 +110,10 @@ splicing together overview, install/dev guides, usage and FAQ snippets.
 func init() {
 	deployCmd.AddCommand(readmeCmd)
 
-	// per-command flags
-	readmeCmd.Flags().StringVarP(
-		&description,
-		"description",
-		"d",
-		"",
-		"Project overview text",
-	)
-	readmeCmd.Flags().StringVarP(
-		&licenseType,
-		"license",
-		"l",
-		"",
-		"License to appear in README",
-	)
+	readmeCmd.Flags().StringVarP(&description, "description", "d", "", "Project overview text")
+	readmeCmd.Flags().StringVarP(&license, "license", "l", "", "License to appear in README")
 
-	// ensure user requested at least one language
-	horus.CheckErr(readmeCmd.MarkFlagRequired("lang"))
+	_ = readmeCmd.MarkFlagRequired("lang")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
