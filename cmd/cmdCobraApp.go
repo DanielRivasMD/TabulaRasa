@@ -20,18 +20,9 @@ package cmd
 
 import (
 	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
-)
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-var (
-	projectPath string
-	repoName    string
-	authorName  string
-	authorEmail string
-	userName    string
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,15 +43,24 @@ Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
+		home, err := domovoi.FindHome(verbose)
+		if err != nil {
+			horus.CheckErr(horus.NewHerror(
+				"cmdCobraApp.Run",
+				"failed to find TabulaRasa home",
+				err,
+				nil,
+			))
+		}
+
 		// Copy template files into the target directory
-		home, _ := domovoi.FindHome(verbose)
-		copyParams := newCopyParams(home+cobraDir, projectPath)
-		copyParams.Reps = buildAppReplacements(repoName, authorName, authorEmail, userName)
-		copyDir(copyParams)
+		copyParams := newCopyParams(home+cobraDir, path)
+		copyParams.Reps = buildAppReplacements(repo, author, email, user)
+		horus.CheckErr(copyDir(copyParams))
 
 		// Initialize Go module and tidy dependencies
-		domovoi.ExecCmd("go", "mod", "init", repoName)
-		domovoi.ExecCmd("go", "mod", "tidy")
+		horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+user+"/"+repo))
+		horus.CheckErr(domovoi.ExecCmd("go", "mod", "tidy"))
 	},
 }
 
