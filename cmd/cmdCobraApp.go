@@ -59,6 +59,7 @@ Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 		horus.CheckErr(copyDir(copyParams))
 
 		// Initialize Go module and tidy dependencies
+		// TODO: add file check & file remove
 		horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+user+"/"+repo))
 		horus.CheckErr(domovoi.ExecCmd("go", "mod", "tidy"))
 	},

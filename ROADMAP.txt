@@ -1,2 +1,10 @@
 - use color to give style to help options
 - update readme template
+- if `repo` is not defined in `cobra app`, take directory name as value
+
+==================================================
+cmd/cmdCobraApp.go
+  line 62     TODO   add file check & file remove
+cmd/cmdDeployJust.go
+  line 72     TODO   double check
+==================================================
