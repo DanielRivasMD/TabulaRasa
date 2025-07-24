@@ -19,7 +19,7 @@ import (
 // If the destination exists, it’s removed first. After merging, any replacements are applied.
 func concatenateFiles(params CopyParams, suffix string) error {
 	// check if destination exists (verbose logging)
-	exists, err := domovoi.FileExist(params.Dest, nil, true)
+	exists, err := domovoi.FileExist(params.Dest, nil, verbose)
 	if err != nil {
 		return horus.NewHerror(
 			"concatenateFiles",

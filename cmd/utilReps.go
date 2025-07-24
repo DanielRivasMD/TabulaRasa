@@ -61,7 +61,7 @@ func buildReadmeReplacements(
 	licensePath := filepath.Join(targetPath, "LICENSE")
 
 	// check existence of LICENSE (verbose=true)
-	exists, err := domovoi.FileExist(licensePath, nil, true)
+	exists, err := domovoi.FileExist(licensePath, nil, verbose)
 	if err != nil {
 		return nil, horus.NewHerror(
 			"buildReadmeReplacements",
