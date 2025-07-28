@@ -19,10 +19,8 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
-	"path/filepath"
-
-	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -50,56 +48,9 @@ splicing together overview, install/dev guides, usage and FAQ snippets.
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Run: func(cmd *cobra.Command, args []string) {
-		// fallback to current directory as repo name
-		var err error
-		if repo == "" {
-			repo, err = domovoi.CurrentDir()
-			horus.CheckErr(err)
-		}
 
-		// locate TabulaRasa home
-		home, err := domovoi.FindHome(verbose)
-		if err != nil {
-			horus.CheckErr(horus.NewHerror(
-				"readmeCmd.Run",
-				"unable to find TabulaRasa home",
-				err,
-				nil,
-			))
-		}
-
-		// prepare params: templates live under $HOME/<readmeDir>, output is project/README.md
-		srcDir := filepath.Join(home, readmeDir)
-		destFile := filepath.Join(path, readme)
-
-		params := newCopyParams(srcDir, destFile)
-
-		// assemble the list of template fragments
-		params.Files = []string{
-			overview,
-			filepath.Join("02" + lang.Selected[0] + "_install.md"),
-			usage,
-			filepath.Join("04" + lang.Selected[0] + "_dev.md"),
-			faq,
-		}
-
-		// generate replacements, handling detection & errors
-		reps, repErr := buildReadmeReplacements(
-			lang.Selected[0],
-			description,
-			repo,
-			user,
-			author,
-			license,
-			path,
-		)
-		if repErr != nil {
-			horus.CheckErr(repErr)
-		}
-		params.Reps = reps
-
-		// concatenate all fragments into README.md
-		if err := concatenateFiles(params, ""); err != nil {
+		p := tea.NewProgram(initialModel())
+		if err := p.Start(); err != nil {
 			horus.CheckErr(err)
 		}
 	},
@@ -110,10 +61,10 @@ splicing together overview, install/dev guides, usage and FAQ snippets.
 func init() {
 	deployCmd.AddCommand(readmeCmd)
 
-	readmeCmd.Flags().StringVarP(&description, "description", "d", "", "Project overview text")
-	readmeCmd.Flags().StringVarP(&license, "license", "l", "", "License to appear in README")
+	readmeCmd.Flags().StringVarP(&description, "description", "D", "", "Project overview text")
+	readmeCmd.Flags().StringVarP(&license, "license", "L", "", "License to appear in README")
 
-	_ = readmeCmd.MarkFlagRequired("lang")
+	_ = justCmd.MarkFlagRequired("lang")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
