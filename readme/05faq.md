@@ -1,13 +1,5 @@
----
-
-## FAQ
-Q: How to resolve?
-A: 
-
-Q: Cross-platform support?
-A: 
-
 ## License
-LICENSETYPE [YEAR] [AUTHOR]
+Copyright (c) YEAR
 
----
+See the [LICENSE](LICENSE) file for license details.
+

@@ -1,8 +1,6 @@
----
-
 ## Usage
-```bash
-REPOSITORY
+
+```
 ```
 
 ## Example
@@ -11,4 +9,3 @@ REPOSITORY
 
 ## Configuration
 
----
