@@ -41,7 +41,7 @@ const (
 	pyinstall = "pyinstall.sh"
 	overview  = "01overview.md"
 	usage     = "03usage.md"
-	faq       = "05faq.md"
+	faq       = "05license.md"
 )
 
 var (
@@ -96,8 +96,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&email, "email", "e", "<danielrivasmd@gmail.com>", "Author email")
 	rootCmd.PersistentFlags().StringVarP(&user, "user", "u", "DanielRivasMD", "GitHub username")
 
-	rootCmd.MarkFlagRequired("path")
-	rootCmd.MarkFlagRequired("repo")
+	_ = rootCmd.MarkFlagRequired("path")
+	_ = rootCmd.MarkFlagRequired("repo")
 
 }
 
