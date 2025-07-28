@@ -1,18 +1,18 @@
 # PROJECT_NAME
 
-[![License](https://img.shields.io/badge/license-GPL-blue.svg)](LICENSE)
-[![go Version](https://img.shields.io/badge/go-VERSION-green.svg)](LURL)
+[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
 ## Overview
 
-
+`tabularasa`, what is forged in the void, echoes in eternity
 
 
 ## Features
-- **Feature**:
-- **Output Formats**:
 
----
+## Quickstart
+```
+```
+
 ## Installation
 
 ### **Language-Specific**
@@ -23,11 +23,9 @@
 ### **Pre-built Binaries**
 Download from [Releases](https://github.com/DanielRivasMD/TabulaRasa/releases).
 
----
-
 ## Usage
-```bash
-TabulaRasa
+
+```
 ```
 
 ## Example
@@ -36,7 +34,6 @@ TabulaRasa
 
 ## Configuration
 
----
 ## Development
 
 Build from source
@@ -51,16 +48,8 @@ cd TabulaRasa
 |----------|------------------|----------------------|
 | Go       | `go >= 1.21`     | `air` (live reload)  |
 
----
-
-## FAQ
-Q: How to resolve?
-A: 
-
-Q: Cross-platform support?
-A: 
-
 ## License
-GPL [2025] [Daniel Rivas]
+Copyright (c) 2025
 
----
+See the [LICENSE](LICENSE) file for license details.
+
