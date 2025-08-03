@@ -1,4 +1,4 @@
-# PROJECT_NAME
+# REPOSITORY
 
 [![License](https://img.shields.io/badge/license-LICENSETYPE-blue.svg)](LICENSE)
 
