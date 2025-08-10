@@ -16,37 +16,39 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
-	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var ()
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 var rootCmd = &cobra.Command{
-	Use:   "TOOL",
-	Short: "Customize with your actual tool description",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("AUTHOR ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("EMAIL")) + `
-
-` + chalk.Blue.Color("TOOL") + `
-`,
-	Example: chalk.White.Color("TOOL") + ` ` + chalk.Bold.TextStyle(chalk.White.Color("help")),
+	Use:     "TOOL",
+	Long:    helpRoot,
+	Example: exampleRoot,
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func Execute() {
-	horus.CheckErr(rootCmd.Execute())
-}
+var (
+	verbose bool
+)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func init() {
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose diagnostics")
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var helpRoot = chalk.Bold.TextStyle(chalk.Green.Color("AUTHOR ")) +
+	chalk.Dim.TextStyle(chalk.Italic.TextStyle("EMAIL")) +
+	chalk.Dim.TextStyle(chalk.Cyan.Color("\n\n"))
+
+var exampleRoot = chalk.White.Color("TOOL") + ` ` + chalk.Bold.TextStyle(chalk.White.Color("help"))
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
