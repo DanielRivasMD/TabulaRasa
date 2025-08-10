@@ -49,6 +49,6 @@ var helpRoot = chalk.Bold.TextStyle(chalk.Green.Color("AUTHOR ")) +
 	chalk.Dim.TextStyle(chalk.Italic.TextStyle("EMAIL")) +
 	chalk.Dim.TextStyle(chalk.Cyan.Color("\n\n"))
 
-var exampleRoot = chalk.White.Color("TOOL") + ` ` + chalk.Bold.TextStyle(chalk.White.Color("help"))
+var exampleRoot = chalk.White.Color("TOOL") + " " + chalk.Bold.TextStyle(chalk.White.Color("help"))
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
