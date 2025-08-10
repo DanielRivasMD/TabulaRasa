@@ -1,6 +1,6 @@
 - use color to give style to help options
-- update readme template
 - if `repo` is not defined in `cobra app`, take directory name as value
+- add options for license
 
 ==================================================
 cmd/cmdCobraApp.go
