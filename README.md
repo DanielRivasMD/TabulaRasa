@@ -1,9 +1,8 @@
-# PROJECT_NAME
+# TabulaRasa
 
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
 ## Overview
-
 `tabularasa`, what is forged in the void, echoes in eternity
 
 
