@@ -16,6 +16,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package cmd
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import (
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
@@ -23,30 +25,39 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var CHILDCmd = &cobra.Command{
+	Use:     "CHILD",
+	Short:   "",
+	Long:    helpCHILD,
+	Example: exampleCHILD,
+
+	// Run: runCHILD,
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 var ()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var CHILDCmd = &cobra.Command{
-	Use:   "CHILD",
-	Short: "" + chalk.Yellow.Color("") + ".",
-	Long: chalk.Green.Color(chalk.Bold.TextStyle("Daniel Rivas ")) + chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) + `
-`,
-
-	Example: `
-` + chalk.Cyan.Color("TOOL") + ` help ` + chalk.Yellow.Color("ROOT") + chalk.Yellow.Color("CHILD"),
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Run: func(cmd *cobra.Command, args []string) {
-
-	// },
+func init() {
+	// PARENTCmd.AddCommand(CHILDCmd)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func init() {
-	PARENTCmd.AddCommand(CHILDCmd)
-}
+var helpCHILD = chalk.Bold.TextStyle(chalk.Green.Color("Daniel Rivas ")) +
+	chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) +
+	chalk.Dim.TextStyle(chalk.Cyan.Color("\n\n"))
+
+var exampleCHILD = chalk.White.Color("") + " " +
+	chalk.Bold.TextStyle(chalk.White.Color("CHILD")) + " "
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// func runCHILD(cmd *cobra.Command, args []string) {
+
+// }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
