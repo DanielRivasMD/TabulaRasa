@@ -39,6 +39,7 @@ func buildCmdReplacements(repo, author, email, child, parent, root string) []rep
 		{old: "TOOL", new: strings.ToLower(repo)},
 		{old: "AUTHOR", new: author},
 		{old: "EMAIL", new: email},
+		{old: "COMMAND", new: child},
 		{old: "CHILD", new: strings.ToLower(child)},
 		{old: "PARENT", new: strings.ToLower(parent)},
 		{old: "ROOT", new: strings.ToLower(root)},
