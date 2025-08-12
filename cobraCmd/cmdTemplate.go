@@ -28,10 +28,10 @@ import (
 var CHILDCmd = &cobra.Command{
 	Use:     "CHILD",
 	Short:   "",
-	Long:    helpCHILD,
-	Example: exampleCHILD,
+	Long:    helpCOMMAND,
+	Example: exampleCOMMAND,
 
-	// Run: runCHILD,
+	// Run: runCOMMAND,
 
 }
 
@@ -47,16 +47,16 @@ func init() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var helpCHILD = chalk.Bold.TextStyle(chalk.Green.Color("Daniel Rivas ")) +
+var helpCOMMAND = chalk.Bold.TextStyle(chalk.Green.Color("Daniel Rivas ")) +
 	chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) +
 	chalk.Dim.TextStyle(chalk.Cyan.Color("\n\n"))
 
-var exampleCHILD = chalk.White.Color("") + " " +
+var exampleCOMMAND = chalk.White.Color("") + " " +
 	chalk.Bold.TextStyle(chalk.White.Color("CHILD")) + " "
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// func runCHILD(cmd *cobra.Command, args []string) {
+// func runCOMMAND(cmd *cobra.Command, args []string) {
 
 // }
 
