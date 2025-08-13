@@ -19,6 +19,9 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
@@ -53,6 +56,12 @@ Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 			))
 		}
 
+		if repo == "" {
+			// TODO: add error handling & potentially domovoi implementation
+			dir, _ := os.Getwd()
+			repo = filepath.Base(dir)
+		}
+
 		// Copy template files into the target directory
 		copyParams := newCopyParams(home+cobraDir, path)
 		copyParams.Reps = buildAppReplacements(repo, author, email, user)
@@ -60,6 +69,21 @@ Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 
 		// Initialize Go module and tidy dependencies
 		// TODO: add file check & file remove
+		if force {
+			domovoi.RemoveFile("go.mod", verbose)
+			domovoi.RemoveFile("go.sum", verbose)
+
+			// TODO: finish force feature
+			// horus.CheckErr(
+			// 	func() error {
+			// 		_, err := domovoi.RemoveFile(metaFile, verbose)(metaFile)
+			// 		return err
+			// 	}(),
+			// 	horus.WithOp(op),
+			// 	horus.WithMessage("removing metadata file"),
+			// )
+
+		}
 		horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+user+"/"+repo))
 		horus.CheckErr(domovoi.ExecCmd("go", "mod", "tidy"))
 	},
@@ -67,8 +91,16 @@ Construct ` + chalk.Yellow.Color("cobra") + ` apps from predefined templates
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var (
+	force bool
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 func init() {
 	cobraCmd.AddCommand(appCmd)
+
+	appCmd.Flags().BoolVar(&force, "force", false, "Force install go dependencies")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
