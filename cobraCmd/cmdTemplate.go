@@ -20,7 +20,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,8 +27,8 @@ import (
 var CHILDCmd = &cobra.Command{
 	Use:     "CHILD",
 	Short:   "",
-	Long:    helpCOMMAND,
-	Example: exampleCOMMAND,
+	// Long:    helpCOMMAND,
+	// Example: exampleCOMMAND,
 
 	// Run: runCOMMAND,
 
@@ -47,12 +46,16 @@ func init() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var helpCOMMAND = chalk.Bold.TextStyle(chalk.Green.Color("Daniel Rivas ")) +
-	chalk.Dim.TextStyle(chalk.Italic.TextStyle("<danielrivasmd@gmail.com>")) +
-	chalk.Dim.TextStyle(chalk.Cyan.Color("\n\n"))
+// var helpCOMMAND = formatHelp(
+// 	"AUTHOR",
+// 	"EMAIL",
+// 	"",
+// )
 
-var exampleCOMMAND = chalk.White.Color("") + " " +
-	chalk.Bold.TextStyle(chalk.White.Color("CHILD")) + " "
+// var exampleCOMMAND = formatExample(
+// 	"TOOL",
+// 	[]string{"CHILD"},
+// )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
