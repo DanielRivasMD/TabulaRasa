@@ -60,4 +60,28 @@ var helpCobraUtil = formatHelp(
 	"Deploy a utility from predefined templates",
 )
 
+var helpDeploy = formatHelp(
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Deploy selected config templates into your project",
+)
+
+var helpDeployJust = formatHelp(
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Deploy justfile & language‐specific configs",
+)
+
+var helpDeployReadme = formatHelp(
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Deploy readme template with sections: overview, install/dev guides, usage & FAQ snippets",
+)
+
+var helpDeployTodor = formatHelp(
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Deploy top-level todor config",
+)
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
