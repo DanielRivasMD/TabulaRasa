@@ -19,8 +19,6 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var validLangs = []string{"go", "py", "rs", "jl"}
-
 // langItem wraps a string so it satisfies list.Item (FilterValue)
 type langItem string
 
