@@ -31,9 +31,16 @@ func formatHelp(author, email, desc string) string {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var helpRoot = formatHelp(
-	"AUTHOR",
-	"EMAIL",
-	"",
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Provide a set of templates to facilite software deployment",
+)
+
+var helpCobra = formatHelp(
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Enables the creation of cobra applications using predefined templates for rapid development",
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
