@@ -63,4 +63,21 @@ var exampleCobra = formatExample(
 	[]string{"util"},
 )
 
+var exampleCobraApp = formatExample(
+	"tab",
+	[]string{"cobra", "app"},
+	[]string{"cobra", "app", "--path", "$(pwd)", "--repo", "<repo>"},
+)
+
+var exampleCobraCmd = formatExample(
+	"tab",
+	[]string{"cobra", "cmd", "--child", "ExampleCmd"},
+	[]string{"cobra", "cmd", "--child", "ExampleCmd", "--parent", "RootCmd"},
+)
+
+var exampleCobraUtil = formatExample(
+	"tab",
+	[]string{"cobra", "util", "--util", "ExampleUtil"},
+)
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
