@@ -42,5 +42,22 @@ var helpCobra = formatHelp(
 	"Enables the creation of cobra applications using predefined templates for rapid development",
 )
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+var helpCobraApp = formatHelp(
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Construct "+chalk.Italic.TextStyle("cobra") + " apps from predefined templates",
+)
 
+var helpCobraCmd = formatHelp(
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Construct "+chalk.Italic.TextStyle("cobra") + " apps from predefined templates",
+)
+
+var helpCobraUtil = formatHelp(
+	"Daniel Rivas",
+	"danielrivasmd@gmail.com",
+	"Deploy a utility from predefined templates",
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
