@@ -58,9 +58,7 @@ var exampleRoot = formatExample(
 
 var exampleCobra = formatExample(
 	"tab",
-	[]string{"app"},
-	[]string{"cmd"},
-	[]string{"util"},
+	[]string{"cobra"},
 )
 
 var exampleCobraApp = formatExample(
@@ -78,6 +76,28 @@ var exampleCobraCmd = formatExample(
 var exampleCobraUtil = formatExample(
 	"tab",
 	[]string{"cobra", "util", "--util", "ExampleUtil"},
+)
+
+var exampleDeploy = formatExample(
+	"tab",
+	[]string{"deploy"},
+)
+
+var exampleDeployJust = formatExample(
+	"tab",
+	[]string{"deploy", "just", "--lang", "go"},
+	[]string{"deploy", "just", "--ver", "1.0"},
+)
+
+var exampleDeployReadme = formatExample(
+	"tab",
+	[]string{"deploy", "readme"},
+	[]string{"deploy", "readme", "--description", "Awesome project", "--license", "MIT"},
+)
+
+var exampleDeployTodor = formatExample(
+	"tab",
+	[]string{"deploy", "todor"},
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
