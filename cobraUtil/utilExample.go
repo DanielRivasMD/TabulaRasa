@@ -52,55 +52,8 @@ func formatExample(app string, usages ...[]string) string {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var exampleRoot = formatExample(
-	"lilith",
+	"TOOL",
 	[]string{"help"},
-)
-
-var exampleInvoke = formatExample(
-	"lilith",
-	[]string{"invoke", "--config", "helix"},
-	[]string{
-		"invoke", "--name", "helix",
-		"--watch", "~/src/helix",
-		"--script", "helix.sh",
-		"--log", "helix",
-	},
-)
-
-var exampleSlay = formatExample(
-	"lilith",
-	[]string{"slay", "helix"},
-	[]string{"slay", "--group", "<forge>"},
-	[]string{"slay", "--all"},
-)
-
-var exampleTally = formatExample(
-	"lilith",
-	[]string{"tally"},
-)
-
-var exampleFreeze = formatExample(
-	"lilith",
-	[]string{"freeze", "helix"},
-	[]string{"freeze", "--group", "<forge>"},
-	[]string{"freeze", "--all"},
-)
-
-var exampleSummon = formatExample(
-	"lilith",
-	[]string{"summon", "helix", "--follow"},
-)
-
-var exampleInstall = formatExample(
-	"lilith",
-	[]string{"install"},
-)
-
-var exampleRekindle = formatExample(
-	"lilith",
-	[]string{"rekindle", "helix"},
-	[]string{"rekindle", "--group", "<forge>"},
-	[]string{"rekindle", "--all"},
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
