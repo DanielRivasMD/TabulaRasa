@@ -1,12 +1,11 @@
-- use color to give style to help options
-- if `repo` is not defined in `cobra app`, take directory name as value
 - add options for license
 
 ==================================================
 cmd/cmdCobra.go
   line 115    TODO   add error handling & potentially domovoi implementation
-  line 126    TODO   add file check & file remove
-  line 131    TODO   finish force feature
+  line 120    TODO   copy help & example util
+  line 127    TODO   add file check & file remove
+  line 132    TODO   finish force feature
 cmd/cmdDeploy.go
   line 149    TODO   double check
 ==================================================
