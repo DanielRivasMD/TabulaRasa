@@ -117,6 +117,7 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 		repo = filepath.Base(dir)
 	}
 
+	// TODO: copy help & example util
 	// Copy template files into the target directory
 	copyParams := newCopyParams(home+cobraDir, path)
 	copyParams.Reps = buildAppReplacements(repo, author, email, user)

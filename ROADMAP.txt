@@ -1,4 +1,6 @@
 - add options for license
+- use `mbombo` external to concatenate & replace
+- add an option for full deployment (just, todor, readme) => `tab deploy --full --lang go`
 
 ==================================================
 cmd/cmdCobra.go
