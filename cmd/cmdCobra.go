@@ -118,6 +118,7 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	}
 
 	// TODO: copy help & example util
+	// TODO: begin here
 	// Copy template files into the target directory
 	copyParams := newCopyParams(home+cobraDir, path)
 	copyParams.Reps = buildAppReplacements(repo, author, email, user)
@@ -161,6 +162,7 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 		))
 	}
 
+	// TODO: refactor rootParent
 	// build src & dest paths
 	src := filepath.Join(home, cmdDir, "cmdTemplate.go")
 	fileName := fmt.Sprintf("cmd%s%s.go", rootParent, child)

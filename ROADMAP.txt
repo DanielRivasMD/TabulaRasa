@@ -1,6 +1,8 @@
 - add options for license
 - use `mbombo` external to concatenate & replace
 - add an option for full deployment (just, todor, readme) => `tab deploy --full --lang go`
+- use `domovoi` for help & example
+- refactor templates as strings, hard-coded or soft-coded
 
 ==================================================
 cmd/cmdCobra.go
@@ -8,6 +10,7 @@ cmd/cmdCobra.go
   line 120    TODO   copy help & example util
   line 127    TODO   add file check & file remove
   line 132    TODO   finish force feature
+  line 164    TODO   refactor rootParent
 cmd/cmdDeploy.go
   line 149    TODO   double check
 ==================================================
