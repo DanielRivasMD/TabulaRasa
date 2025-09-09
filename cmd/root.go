@@ -19,6 +19,8 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"unicode"
+
 	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 )
@@ -39,6 +41,8 @@ func Execute() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// WIP: refactor as custom struct
+// WIP: add cobra.OnInitialize to declare paths
 const (
 	configDir = "/" + ".tabularasa"
 	cobraDir  = configDir + "/" + "cobraApp"
@@ -136,6 +140,30 @@ func cloneCopyParams(src CopyParams) CopyParams {
 		Files: src.Files,
 		Reps:  src.Reps,
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// lowerFirst returns s with its first Unicode letter lower-cased.
+// If s is empty, it returns s unchanged.
+func lowerFirst(s string) string {
+	if s == "" {
+		return s
+	}
+	runes := []rune(s)
+	runes[0] = unicode.ToLower(runes[0])
+	return string(runes)
+}
+
+// upperFirst returns s with its first Unicode letter upper-cased.
+// If s is empty, it returns s unchanged.
+func upperFirst(s string) string {
+	if s == "" {
+		return s
+	}
+	runes := []rune(s)
+	runes[0] = unicode.ToUpper(runes[0])
+	return string(runes)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
