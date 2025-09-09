@@ -61,7 +61,13 @@ install app=goapp exe=goexe dir=dir:
   @mv -v "${HOME}/go/bin/{{app}}" "${HOME}/go/bin/{{exe}}"
   @echo "\n\033[1;33mCopying\033[0;37m...\n=================================================="
   @if [ ! -d "${HOME}/{{dir}}" ]; then mkdir "${HOME}/{{dir}}"; fi
-  cp -v -R "template/cmd.txt" "${HOME}/{{dir}}"
+  cp -v -R "skeleton/cobra" "${HOME}/{{dir}}"
+  cp -v -R "skeleton/config" "${HOME}/{{dir}}"
+  cp -v -R "skeleton/julia" "${HOME}/{{dir}}"
+  cp -v -R "skeleton/just" "${HOME}/{{dir}}"
+  cp -v -R "skeleton/readme" "${HOME}/{{dir}}"
+  cp -v -R "skeleton/todor" "${HOME}/{{dir}}"
+
 
 ####################################################################################################
 
