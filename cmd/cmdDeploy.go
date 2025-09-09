@@ -20,7 +20,6 @@ package cmd
 
 import (
 	"fmt"
-	"path/filepath"
 	"strings"
 
 	"github.com/DanielRivasMD/domovoi"
@@ -120,8 +119,8 @@ func init() {
 	_ = deployJustCmd.MarkFlagRequired("lang")
 
 	// deploy readme
-	deployReadmeCmd.Flags().StringVarP(&description, "description", "D", "", "Project overview text")
-	deployReadmeCmd.Flags().StringVarP(&license, "license", "L", "", "License to appear in README")
+	deployReadmeCmd.Flags().StringVarP(&flags.description, "description", "D", "", "Project overview text")
+	deployReadmeCmd.Flags().StringVarP(&flags.license, "license", "L", "", "License to appear in README")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,54 +128,43 @@ func init() {
 func runDeployJust(cmd *cobra.Command, args []string) {
 	// fallback repo to current dir if not provided
 	var err error
-	if repo == "" {
-		repo, err = domovoi.CurrentDir()
+	if flags.repo == "" {
+		flags.repo, err = domovoi.CurrentDir()
 		horus.CheckErr(err)
 	}
 
-	// locate TabulaRasa home
-	home, err := domovoi.FindHome(verbose)
-	if err != nil {
-		horus.CheckErr(horus.NewHerror(
-			"justCmd.Run",
-			"failed to find TabulaRasa home",
-			err,
-			nil,
-		))
-	}
+	// // ensure `.just` directory exists
+	// // TODO: double check
+	// justDirPath := filepath.Join(path, dotjust)
+	// horus.CheckErr(domovoi.EnsureDirExist(justDirPath, verbose))
 
-	// ensure `.just` directory exists
-	// TODO: double check
-	justDirPath := filepath.Join(path, dotjust)
-	horus.CheckErr(domovoi.EnsureDirExist(justDirPath, verbose))
+	// // deploy combined .justfile
+	// justfileDest := filepath.Join(path, "."+justfile)
+	// jfParams := newCopyParams(
+	// 	filepath.Join(home, justDir),
+	// 	justfileDest,
+	// )
+	// jfParams.Files = append([]string{HEADER}, lang.Selected...)
+	// jfParams.Reps = buildDeployReplacements(repo)
+	// horus.CheckErr(concatenateFiles(jfParams, dotjust))
 
-	// deploy combined .justfile
-	justfileDest := filepath.Join(path, "."+justfile)
-	jfParams := newCopyParams(
-		filepath.Join(home, justDir),
-		justfileDest,
-	)
-	jfParams.Files = append([]string{HEADER}, lang.Selected...)
-	jfParams.Reps = buildDeployReplacements(repo)
-	horus.CheckErr(concatenateFiles(jfParams, dotjust))
+	// // deploy each language's config
+	// for _, langOpt := range lang.Selected {
+	// 	srcConf := filepath.Join(home, justDir, langOpt+dotconf)
+	// 	dstConf := filepath.Join(justDirPath, langOpt+dotconf)
+	// 	confParams := newCopyParams(srcConf, dstConf)
+	// 	confParams.Reps = buildDeployReplacements(repo)
+	// 	horus.CheckErr(copyFile(confParams))
 
-	// deploy each language's config
-	for _, langOpt := range lang.Selected {
-		srcConf := filepath.Join(home, justDir, langOpt+dotconf)
-		dstConf := filepath.Join(justDirPath, langOpt+dotconf)
-		confParams := newCopyParams(srcConf, dstConf)
-		confParams.Reps = buildDeployReplacements(repo)
-		horus.CheckErr(copyFile(confParams))
-
-		// include Python installer if deploying Python
-		if langOpt == "py" {
-			srcInst := filepath.Join(home, justDir, pyinstall)
-			dstInst := filepath.Join(justDirPath, pyinstall)
-			instParams := newCopyParams(srcInst, dstInst)
-			instParams.Reps = buildDeployReplacements(repo)
-			horus.CheckErr(copyFile(instParams))
-		}
-	}
+	// 	// include Python installer if deploying Python
+	// 	if langOpt == "py" {
+	// 		srcInst := filepath.Join(home, justDir, pyinstall)
+	// 		dstInst := filepath.Join(justDirPath, pyinstall)
+	// 		instParams := newCopyParams(srcInst, dstInst)
+	// 		instParams.Reps = buildDeployReplacements(repo)
+	// 		horus.CheckErr(copyFile(instParams))
+	// 	}
+	// }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,28 +180,13 @@ func runDeployReadme(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployTodor(cmd *cobra.Command, args []string) {
-	// locate TabulaRasa home directory
-	home, err := domovoi.FindHome(verbose)
-	if err != nil {
-		horus.CheckErr(horus.NewHerror(
-			"todorCmd.Run",
-			"failed to find TabulaRasa home",
-			err,
-			nil,
-		))
-	}
 
-	// source: $TABULARASA_HOME/todorDir/todor
-	src := filepath.Join(home, todorDir, todor)
+	// // source: $TABULARASA_HOME/todorDir/todor
+	// src := filepath.Join(dirs.home, dirs.todor, todor)
 
-	// destination: <projectPath>/.todor
-	dest := filepath.Join(path, "."+todor)
+	// // destination: <projectPath>/.todor
+	// dest := filepath.Join(flags.path, "."+todor)
 
-	// copy template to project
-	params := newCopyParams(src, dest)
-	if err := copyFile(params); err != nil {
-		horus.CheckErr(err)
-	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
