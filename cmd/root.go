@@ -19,8 +19,10 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"path/filepath"
 	"unicode"
 
+	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
 	"github.com/spf13/cobra"
 )
@@ -41,30 +43,21 @@ func Execute() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// WIP: refactor as custom struct
-// WIP: add cobra.OnInitialize to declare paths
-const (
-	configDir = "/" + ".tabularasa"
-	cobraDir  = configDir + "/" + "cobraApp"
-	cmdDir    = configDir + "/" + "cobraCmd"
-	utilDir   = configDir + "/" + "cobraUtil"
-	justDir   = configDir + "/" + "just"
-	readmeDir = configDir + "/" + "readme"
-	todorDir  = configDir + "/" + "todor"
-
-	dotconf   = ".conf"
-	dotjust   = ".just"
-	justfile  = "justfile"
-	readme    = "README.md"
-	todor     = "todor"
-	pyinstall = "pyinstall.sh"
-	overview  = "01overview.md"
-	usage     = "03usage.md"
-	faq       = "05license.md"
+var (
+	dirs  configDirs
+	flags rootFlags
 )
 
-var (
-	verbose     bool
+type configDirs struct {
+	home       string
+	tabularasa string
+	cobra      string
+	just       string
+	readme     string
+	todor      string
+}
+
+type rootFlags struct {
 	path        string
 	author      string
 	email       string
@@ -72,74 +65,38 @@ var (
 	description string
 	user        string
 	license     string
-)
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var verbose bool
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose diagnostic output")
 
-	// appCmd.Flags().StringVar(&projectPath, "path", "", "")
-	// appCmd.Flags().StringVar(&repoName, "repo", "", "Name of the repository (and Go module)")
-	// appCmd.Flags().StringVar(&authorName, "author", "", "Author’s full name")
-	// appCmd.Flags().StringVar(&authorEmail, "email", "", "Author’s email address")
-	// appCmd.Flags().StringVar(&userName, "username", "", "GitHub username")
-
-	rootCmd.PersistentFlags().StringVarP(&path, "path", "p", ".", "Target directory for new app")
-	rootCmd.PersistentFlags().StringVarP(&repo, "repo", "r", "", "Repository name")
-	rootCmd.PersistentFlags().StringVarP(&author, "author", "a", "Daniel Rivas", "Author name")
-	rootCmd.PersistentFlags().StringVarP(&email, "email", "e", "<danielrivasmd@gmail.com>", "Author email")
-	rootCmd.PersistentFlags().StringVarP(&user, "user", "u", "DanielRivasMD", "GitHub username")
+	rootCmd.PersistentFlags().StringVarP(&flags.path, "path", "p", ".", "Target directory for new app")
+	rootCmd.PersistentFlags().StringVarP(&flags.repo, "repo", "r", "", "Repository name")
+	rootCmd.PersistentFlags().StringVarP(&flags.author, "author", "a", "Daniel Rivas", "Author name")
+	rootCmd.PersistentFlags().StringVarP(&flags.email, "email", "e", "<danielrivasmd@gmail.com>", "Author email")
+	rootCmd.PersistentFlags().StringVarP(&flags.user, "user", "u", "DanielRivasMD", "GitHub username")
 
 	_ = rootCmd.MarkFlagRequired("path")
 	_ = rootCmd.MarkFlagRequired("repo")
 
+	cobra.OnInitialize(initConfigDirs)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// replace values
-type rep struct {
-	old string
-	new string
-}
-
-// CopyParams holds information needed to copy a template tree and apply string replacements.
-type CopyParams struct {
-	Orig  string   // source template directory
-	Dest  string   // destination directory
-	Files []string // specific files to copy (nil = all)
-	Reps  []rep    // replacement rules
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// newCopyParams creates a fresh CopyParams struct.
-func newCopyParams(orig, dest string) CopyParams {
-	return CopyParams{
-		Orig:  orig,
-		Dest:  dest,
-		Files: []string{},
-		Reps:  []rep{},
-	}
-}
-
-// withReplacements initializes a CopyParams with a set of replacements.
-func withReplacements(orig string, reps []rep) CopyParams {
-	return CopyParams{
-		Orig: orig,
-		Reps: reps,
-	}
-}
-
-// cloneCopyParams makes a shallow copy of an existing CopyParams.
-func cloneCopyParams(src CopyParams) CopyParams {
-	return CopyParams{
-		Orig:  src.Orig,
-		Dest:  src.Dest,
-		Files: src.Files,
-		Reps:  src.Reps,
-	}
+func initConfigDirs() {
+	var err error
+	dirs.home, err = domovoi.FindHome(verbose)
+	horus.CheckErr(err, horus.WithCategory("init_error"), horus.WithMessage("getting home directory"))
+	dirs.tabularasa = filepath.Join(dirs.home, ".tabularasa")
+	dirs.cobra = filepath.Join(dirs.tabularasa, "cobra")
+	dirs.just = filepath.Join(dirs.tabularasa, "just")
+	dirs.readme = filepath.Join(dirs.tabularasa, "readme")
+	dirs.todor = filepath.Join(dirs.tabularasa, "todor")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
