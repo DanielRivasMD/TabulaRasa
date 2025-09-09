@@ -102,70 +102,45 @@ func init() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraApp(cmd *cobra.Command, args []string) {
-	home, err := domovoi.FindHome(verbose)
-	if err != nil {
-		horus.CheckErr(horus.NewHerror(
-			"cmdCobraApp.Run",
-			"failed to find TabulaRasa home",
-			err,
-			nil,
-		))
-	}
+	gomod := "go.mod"
+	gosum := "go.sum"
 
-	if repo == "" {
+	if flags.repo == "" {
 		// TODO: add error handling & potentially domovoi implementation
 		dir, _ := os.Getwd()
-		repo = filepath.Base(dir)
+		flags.repo = filepath.Base(dir)
 	}
 
-	// TODO: copy help & example util
-	// TODO: begin here
-	// Copy template files into the target directory
-	copyParams := newCopyParams(home+cobraDir, path)
-	copyParams.Reps = buildAppReplacements(repo, author, email, user)
-	horus.CheckErr(copyDir(copyParams))
+	// TODO: set up copy & replace for these files:
+	// "main.txt"
+	// "root.txt"
+	// "completion.txt"
+	// "root.txt"
+	// "utilHelp.txt"
+	// "utilExample.txt"
+
+	// TODO: set up copy & replace for LICENSE, as well as tab completion on the suffix pattern
 
 	// Initialize Go module and tidy dependencies
-	// TODO: add file check & file remove
 	if force {
-		domovoi.RemoveFile("go.mod", verbose)
-		domovoi.RemoveFile("go.sum", verbose)
-
-		// TODO: finish force feature
-		// horus.CheckErr(
-		// 	func() error {
-		// 		_, err := domovoi.RemoveFile(metaFile, verbose)(metaFile)
-		// 		return err
-		// 	}(),
-		// 	horus.WithOp(op),
-		// 	horus.WithMessage("removing metadata file"),
-		// )
-
+		domovoi.RemoveFile(gomod, verbose)
+		domovoi.RemoveFile(gosum, verbose)
 	}
-	horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+user+"/"+repo))
+	horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+flags.user+"/"+flags.repo))
 	horus.CheckErr(domovoi.ExecCmd("go", "mod", "tidy"))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
+
+	// format args
 	cmdLower := lowerFirst(command)
 	cmdUpper := upperFirst(command)
 
-	outfile := "cmd" + "/" + "cmd" + cmdUpper + ".go"
-	cmdTemplate := "cmd.txt"
-
-	home, err := domovoi.FindHome(verbose)
-	if err != nil {
-		horus.CheckErr(horus.NewHerror(
-			"cmdCobraCmd.Run",
-			"failed to find TabulaRasa home",
-			err,
-			nil,
-		))
-	}
-
-	templatesDir := filepath.Join(home, ".tabularasa")
+	// TODO: finish function to abbreviate `mbombo` call
+	outCobraCmd := "cmd" + "/" + "cmd" + cmdUpper + ".go"
+	execSkeletonCobraCmd := "cmd.txt"
 
 	cmdCobraCmd := fmt.Sprintf(`
 		mbombo forge \
@@ -177,8 +152,8 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 		--replace AUTHOR="%s" \
 		--replace EMAIL="%s" \
 		--replace YEAR="%s"
-	`, templatesDir, outfile, cmdTemplate,
-		cmdLower, cmdUpper, author, email, strconv.Itoa(time.Now().Year()))
+	`, dirs.cobra, outCobraCmd, execSkeletonCobraCmd,
+		cmdLower, cmdUpper, flags.author, flags.email, strconv.Itoa(time.Now().Year()))
 
 	horus.CheckErr(domovoi.ExecSh(cmdCobraCmd))
 }
@@ -186,29 +161,11 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraUtil(cmd *cobra.Command, args []string) {
-	home, err := domovoi.FindHome(verbose)
-	if err != nil {
-		horus.CheckErr(horus.NewHerror(
-			"cmdCobraUtil.Run",
-			"failed to find TabulaRasa home",
-			err,
-			nil,
-		))
-	}
 
 	// build src & dest paths
-	src := filepath.Join(home, utilDir, util+".go")
-	dest := filepath.Join(path, "cmd", util+".go")
+	// src := filepath.Join(home, utilDir, util+".go")
+	// dest := filepath.Join(path, "cmd", util+".go")
 
-	// copy + apply replacements
-	params := newCopyParams(src, dest)
-
-	// re-use cmd replacements
-	params.Reps = buildCmdReplacements(
-		repo, author, email,
-		util, "", "",
-	)
-	horus.CheckErr(copyFile(params))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
