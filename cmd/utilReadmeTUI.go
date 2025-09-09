@@ -7,14 +7,10 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"path/filepath"
 
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-
-	"github.com/DanielRivasMD/domovoi"
-	"github.com/DanielRivasMD/horus"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,41 +178,37 @@ func (m model) View() string {
 
 // deploy() calls your existing Cobra logic using the collected values.
 func (m model) deploy() {
-	// 1) fallback to current dir
-	repo, err := domovoi.CurrentDir()
-	horus.CheckErr(err)
+	// fallback to current dir
+	// repo, err := domovoi.CurrentDir()
+	// horus.CheckErr(err)
 
-	// 2) find TabulaRasa home
-	home, err := domovoi.FindHome(false)
-	horus.CheckErr(err)
+	// // build copy params
+	// srcDir := filepath.Join(dirs.home, dirs.readme)
+	// destFile := filepath.Join(flags.path, dirs.readme)
 
-	// 3) build copy params
-	srcDir := filepath.Join(home, readmeDir)
-	destFile := filepath.Join(path, readme)
+	// params := newCopyParams(srcDir, destFile)
+	// params.Files = []string{
+	// 	overview,
+	// 	filepath.Join("02" + m.selectedLang + "_install.md"),
+	// 	usage,
+	// 	filepath.Join("04" + m.selectedLang + "_dev.md"),
+	// 	faq,
+	// }
 
-	params := newCopyParams(srcDir, destFile)
-	params.Files = []string{
-		overview,
-		filepath.Join("02" + m.selectedLang + "_install.md"),
-		usage,
-		filepath.Join("04" + m.selectedLang + "_dev.md"),
-		faq,
-	}
+	// // replacements + concat
+	// reps, repErr := buildReadmeReplacements(
+	// 	m.selectedLang,
+	// 	m.description,
+	// 	repo,
+	// 	user,
+	// 	author,
+	// 	m.license,
+	// 	path,
+	// )
+	// horus.CheckErr(repErr)
 
-	// 4) replacements + concat
-	reps, repErr := buildReadmeReplacements(
-		m.selectedLang,
-		m.description,
-		repo,
-		user,
-		author,
-		m.license,
-		path,
-	)
-	horus.CheckErr(repErr)
-
-	params.Reps = reps
-	horus.CheckErr(concatenateFiles(params, ""))
+	// params.Reps = reps
+	// horus.CheckErr(concatenateFiles(params, ""))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
