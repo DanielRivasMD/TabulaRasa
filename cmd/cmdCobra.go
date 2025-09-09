@@ -22,6 +22,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
+	"time"
 
 	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
@@ -71,9 +73,8 @@ var (
 	force bool
 
 	// cobra cmd
-	parent     string
-	child      string
-	rootParent string
+	command string
+	tool    string
 
 	// cobra util
 	util string
@@ -89,9 +90,9 @@ func init() {
 	cobraAppCmd.Flags().BoolVarP(&force, "force", "", false, "Force install go dependencies")
 
 	// cobra cmd
-	cobraCmdCmd.Flags().StringVarP(&child, "child", "", "", "Name of the new cobra sub-command (capitalized)")
-	cobraCmdCmd.Flags().StringVarP(&parent, "parent", "", "root", "Parent command (use \"root\" for top-level)")
-	horus.CheckErr(cobraCmdCmd.MarkFlagRequired("child"))
+	cobraCmdCmd.Flags().StringVarP(&command, "cmd", "", "", "Name of the new cobra sub-command")
+	cobraCmdCmd.Flags().StringVarP(&tool, "tool", "", "", "Parent command (use \"root\" for top-level)")
+	horus.CheckErr(cobraCmdCmd.MarkFlagRequired("cmd"))
 
 	// cobra util
 	cobraUtilCmd.Flags().StringVarP(&util, "util", "", "", "Utility template name (capitalize)")
@@ -148,9 +149,11 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
-	if parent != "root" {
-		rootParent = parent
-	}
+	cmdLower := lowerFirst(command)
+	cmdUpper := upperFirst(command)
+
+	outfile := "cmd" + "/" + "cmd" + cmdUpper + ".go"
+	cmdTemplate := "cmd.txt"
 
 	home, err := domovoi.FindHome(verbose)
 	if err != nil {
@@ -162,21 +165,22 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 		))
 	}
 
-	// TODO: refactor rootParent
-	// build src & dest paths
-	src := filepath.Join(home, cmdDir, "cmdTemplate.go")
-	fileName := fmt.Sprintf("cmd%s%s.go", rootParent, child)
-	dest := filepath.Join(path, "cmd", fileName)
+	templatesDir := filepath.Join(home, ".tabularasa")
 
-	// copy + apply replacements
-	params := newCopyParams(src, dest)
+	cmdCobraCmd := fmt.Sprintf(`
+		mbombo forge \
+		--in %s \
+		--out %s \
+		--files %s \
+		--replace COMMAND_LOWERCASE="%s" \
+		--replace COMMAND_UPPERCASE="%s" \
+		--replace AUTHOR="%s" \
+		--replace EMAIL="%s" \
+		--replace YEAR="%s"
+	`, templatesDir, outfile, cmdTemplate,
+		cmdLower, cmdUpper, author, email, strconv.Itoa(time.Now().Year()))
 
-	// re-use cmd replacements
-	params.Reps = buildCmdReplacements(
-		repo, author, email,
-		child, parent, rootParent,
-	)
-	horus.CheckErr(copyFile(params))
+	horus.CheckErr(domovoi.ExecSh(cmdCobraCmd))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
