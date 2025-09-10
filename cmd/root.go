@@ -44,8 +44,9 @@ func Execute() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var (
-	dirs  configDirs
-	flags cobraFlags
+	dirs   configDirs
+	flags  cobraFlags
+	params cobraParams
 )
 
 type configDirs struct {
@@ -69,11 +70,11 @@ type cobraFlags struct {
 
 	// cobra.app
 	force bool
+}
 
+type cobraParams struct {
 	// cobra.cmd
 	cmd string
-	cmdLower string
-	cmdUpper string
 
 	// cobra.util
 	util string
