@@ -54,7 +54,7 @@ var helpCOMMAND_UPPERCASE = formatHelp(
 
 var exampleCOMMAND_UPPERCASE = formatExample(
 	"COMMAND_LOWERCASE",
-	[]string{"COMMAND_LOWERCASE"},
+	[]string{"help"},
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -53,7 +53,7 @@ func formatExample(app string, usages ...[]string) string {
 
 var exampleCOMMAND_UPPERCASE = formatExample(
 	"COMMAND_LOWERCASE",
-	[]string{"COMMAND_LOWERCASE"},
+	[]string{"help"},
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
