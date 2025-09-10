@@ -181,6 +181,7 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 		replaces...,
 	)
 
+	// TODO: relocate help & example to util files
 	// TODO: better error check
 	horus.CheckErr(domovoi.ExecSh(mf.Cmd()))
 }
