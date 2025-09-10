@@ -184,8 +184,8 @@ func runCobraUtil(cmd *cobra.Command, args []string) {
 	flags.util = args[0]
 
 	replaces := []mbomboReplace{
-		Replace("COMMAND_LOWERCASE", lowerFirst(flags.cmd)),
-		Replace("COMMAND_UPPERCASE", upperFirst(flags.cmd)),
+		Replace("COMMAND_LOWERCASE", lowerFirst(flags.util)),
+		Replace("COMMAND_UPPERCASE", upperFirst(flags.util)),
 		Replace("AUTHOR", flags.author),
 		Replace("EMAIL", flags.email),
 	}
