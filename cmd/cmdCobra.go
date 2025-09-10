@@ -37,6 +37,8 @@ var cobraCmd = &cobra.Command{
 	Short:   "Construct cobra apps from templates",
 	Long:    helpCobra,
 	Example: exampleCobra,
+
+	PreRun: replacePreRun,
 }
 
 var cobraAppCmd = &cobra.Command{
@@ -104,6 +106,13 @@ func init() {
 func runCobraApp(cmd *cobra.Command, args []string) {
 	gomod := "go.mod"
 	gosum := "go.sum"
+func replacePreRun(cmd *cobra.Command, args []string) {
+	// format args
+	flags.cmdLower = lowerFirst(flags.cmd)
+	flags.cmdUpper = upperFirst(flags.cmd)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	if flags.repo == "" {
 		// TODO: add error handling & potentially domovoi implementation
