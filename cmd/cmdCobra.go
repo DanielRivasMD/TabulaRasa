@@ -103,6 +103,8 @@ func init() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraApp(cmd *cobra.Command, args []string) {
+	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose))
+
 	if flags.repo == "" {
 		// TODO: add error handling & potentially domovoi implementation
 		dir, _ := os.Getwd()
@@ -142,8 +144,9 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 
 	// Initialize Go module and tidy dependencies
 	if flags.force {
-		domovoi.RemoveFile("go.sum", flags.verbose)
-		domovoi.RemoveFile("go.mod", flags.verbose)
+		// BUG: domovoi.RemoveFile not working properly
+		os.Remove("go.mod")
+		os.Remove("go.sum")
 	}
 
 	// TODO: better error check
@@ -157,6 +160,7 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
+	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose))
 	flags.cmd = args[0]
 
 	replaces := []mbomboReplace{
@@ -169,7 +173,7 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 
 	mf := NewMbomboForge(
 		dirs.cobra,
-		filepath.Join("cmd", "cmd"+flags.cmdUpper+".go"),
+		filepath.Join("cmd", "cmd"+upperFirst(flags.cmd)+".go"),
 		"cmd.txt",
 		replaces...,
 	)
@@ -181,6 +185,7 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraUtil(cmd *cobra.Command, args []string) {
+	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose))
 	flags.util = args[0]
 
 	replaces := []mbomboReplace{
