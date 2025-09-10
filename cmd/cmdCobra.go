@@ -124,6 +124,7 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 		{"main.txt", "main.go"},
 		{"root.txt", filepath.Join("cmd", "root.go")},
 		{"completion.txt", filepath.Join("cmd", "cmdCompletion.go")},
+		{"identity.txt", filepath.Join("cmd", "cmdIdentity.go")},
 		{"utilHelp.txt", filepath.Join("cmd", "utilHelp.go")},
 		{"utilExample.txt", filepath.Join("cmd", "utilExample.go")},
 	}
@@ -145,6 +146,8 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	// Initialize Go module and tidy dependencies
 	if flags.force {
 		// BUG: domovoi.RemoveFile not working properly
+		// domovoi.RemoveFile("go.mod", flags.verbose)
+		// domovoi.RemoveFile("go.sum", flags.verbose)
 		os.Remove("go.mod")
 		os.Remove("go.sum")
 	}
@@ -161,11 +164,11 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
 	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose))
-	flags.cmd = args[0]
+	params.cmd = args[0]
 
 	replaces := []mbomboReplace{
-		Replace("COMMAND_LOWERCASE", lowerFirst(flags.cmd)),
-		Replace("COMMAND_UPPERCASE", upperFirst(flags.cmd)),
+		Replace("COMMAND_LOWERCASE", lowerFirst(params.cmd)),
+		Replace("COMMAND_UPPERCASE", upperFirst(params.cmd)),
 		Replace("AUTHOR", flags.author),
 		Replace("EMAIL", flags.email),
 		Replace("YEAR", strconv.Itoa(time.Now().Year())),
@@ -173,7 +176,7 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 
 	mf := NewMbomboForge(
 		dirs.cobra,
-		filepath.Join("cmd", "cmd"+upperFirst(flags.cmd)+".go"),
+		filepath.Join("cmd", "cmd"+upperFirst(params.cmd)+".go"),
 		"cmd.txt",
 		replaces...,
 	)
@@ -186,17 +189,17 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 
 func runCobraUtil(cmd *cobra.Command, args []string) {
 	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose))
-	flags.util = args[0]
+	params.util = args[0]
 
 	replaces := []mbomboReplace{
-		Replace("COMMAND_LOWERCASE", lowerFirst(flags.util)),
-		Replace("COMMAND_UPPERCASE", upperFirst(flags.util)),
+		Replace("COMMAND_LOWERCASE", lowerFirst(params.util)),
+		Replace("COMMAND_UPPERCASE", upperFirst(params.util)),
 		Replace("AUTHOR", flags.author),
 		Replace("EMAIL", flags.email),
 	}
 
 	var pair filePair
-	switch flags.util {
+	switch params.util {
 	case "help":
 		pair = filePair{"utilHelp.txt", filepath.Join("cmd", "utilHelp.go")}
 	case "example":
