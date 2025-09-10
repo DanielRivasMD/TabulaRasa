@@ -3,8 +3,8 @@ module github.com/DanielRivasMD/TabulaRasa
 go 1.23.4
 
 require (
-	github.com/DanielRivasMD/domovoi v0.0.0-20250722183845-36175cc1001f
-	github.com/DanielRivasMD/horus v0.0.0-20250709022859-36093683a815
+	github.com/DanielRivasMD/domovoi v0.0.0-20250825080353-15318bea6df6
+	github.com/DanielRivasMD/horus v1.0.0
 	github.com/charmbracelet/bubbles v0.21.0
 	github.com/charmbracelet/bubbletea v1.3.6
 	github.com/spf13/cobra v1.8.0
