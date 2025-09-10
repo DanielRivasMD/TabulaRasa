@@ -38,8 +38,6 @@ var cobraCmd = &cobra.Command{
 	Short:   "Construct cobra apps from templates",
 	Long:    helpCobra,
 	Example: exampleCobra,
-
-	PreRun: replacePreRun,
 }
 
 var cobraAppCmd = &cobra.Command{
@@ -100,22 +98,6 @@ func init() {
 
 	// cobra app
 	cobraAppCmd.Flags().BoolVarP(&flags.force, "force", "f", false, "Force install go dependencies")
-
-	// cobra cmd
-	cobraCmdCmd.Flags().StringVarP(&flags.cmd, "cmd", "", "", "Name of the new cobra sub-command")
-	horus.CheckErr(cobraCmdCmd.MarkFlagRequired("cmd"))
-
-	// cobra util
-	cobraUtilCmd.Flags().StringVarP(&flags.util, "util", "", "", "Utility template name (capitalize)")
-	horus.CheckErr(cobraUtilCmd.MarkFlagRequired("util"))
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-func replacePreRun(cmd *cobra.Command, args []string) {
-	// format args
-	flags.cmdLower = lowerFirst(flags.cmd)
-	flags.cmdUpper = upperFirst(flags.cmd)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,10 +157,11 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
+	flags.cmd = args[0]
 
 	replaces := []mbomboReplace{
-		Replace("COMMAND_LOWERCASE", flags.cmdLower),
-		Replace("COMMAND_UPPERCASE", flags.cmdUpper),
+		Replace("COMMAND_LOWERCASE", lowerFirst(flags.cmd)),
+		Replace("COMMAND_UPPERCASE", upperFirst(flags.cmd)),
 		Replace("AUTHOR", flags.author),
 		Replace("EMAIL", flags.email),
 		Replace("YEAR", strconv.Itoa(time.Now().Year())),
@@ -198,15 +181,15 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraUtil(cmd *cobra.Command, args []string) {
+	flags.util = args[0]
 
 	replaces := []mbomboReplace{
-		Replace("COMMAND_LOWERCASE", flags.cmdLower),
-		Replace("COMMAND_UPPERCASE", flags.cmdUpper),
+		Replace("COMMAND_LOWERCASE", lowerFirst(flags.cmd)),
+		Replace("COMMAND_UPPERCASE", upperFirst(flags.cmd)),
 		Replace("AUTHOR", flags.author),
 		Replace("EMAIL", flags.email),
 	}
 
-	flags.util = args[0]
 	var pair filePair
 	switch flags.util {
 	case "help":
