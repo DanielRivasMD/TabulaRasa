@@ -172,28 +172,23 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
 
-	// format args
-	cmdLower := lowerFirst(command)
-	cmdUpper := upperFirst(command)
+	replaces := []mbomboReplace{
+		Replace("COMMAND_LOWERCASE", flags.cmdLower),
+		Replace("COMMAND_UPPERCASE", flags.cmdUpper),
+		Replace("AUTHOR", flags.author),
+		Replace("EMAIL", flags.email),
+		Replace("YEAR", strconv.Itoa(time.Now().Year())),
+	}
 
-	// TODO: finish function to abbreviate `mbombo` call
-	outCobraCmd := "cmd" + "/" + "cmd" + cmdUpper + ".go"
-	execSkeletonCobraCmd := "cmd.txt"
+	mf := NewMbomboForge(
+		dirs.cobra,
+		filepath.Join("cmd", "cmd"+flags.cmdUpper+".go"),
+		"cmd.txt",
+		replaces...,
+	)
 
-	cmdCobraCmd := fmt.Sprintf(`
-		mbombo forge \
-		--in %s \
-		--out %s \
-		--files %s \
-		--replace COMMAND_LOWERCASE="%s" \
-		--replace COMMAND_UPPERCASE="%s" \
-		--replace AUTHOR="%s" \
-		--replace EMAIL="%s" \
-		--replace YEAR="%s"
-	`, dirs.cobra, outCobraCmd, execSkeletonCobraCmd,
-		cmdLower, cmdUpper, flags.author, flags.email, strconv.Itoa(time.Now().Year()))
-
-	horus.CheckErr(domovoi.ExecSh(cmdCobraCmd))
+	// TODO: better error check
+	horus.CheckErr(domovoi.ExecSh(mf.Cmd()))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
