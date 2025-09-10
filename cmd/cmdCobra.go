@@ -23,6 +23,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/DanielRivasMD/domovoi"
@@ -65,6 +66,8 @@ var cobraUtilCmd = &cobra.Command{
 	Long:    helpCobraUtil,
 	Example: exampleCobraUtil,
 
+	Args:      cobra.MaximumNArgs(1),
+	ValidArgs: []string{"help", "example"},
 	Run: runCobraUtil,
 }
 
@@ -195,10 +198,32 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 
 func runCobraUtil(cmd *cobra.Command, args []string) {
 
-	// build src & dest paths
-	// src := filepath.Join(home, utilDir, util+".go")
-	// dest := filepath.Join(path, "cmd", util+".go")
+	replaces := []mbomboReplace{
+		Replace("COMMAND_LOWERCASE", flags.cmdLower),
+		Replace("COMMAND_UPPERCASE", flags.cmdUpper),
+		Replace("AUTHOR", flags.author),
+		Replace("EMAIL", flags.email),
+	}
 
+	flags.util = args[0]
+	var pair filePair
+	switch flags.util {
+	case "help":
+		pair = filePair{"utilHelp.txt", filepath.Join("cmd", "utilHelp.go")}
+	case "example":
+		pair = filePair{"utilExample.txt", filepath.Join("cmd", "utilExample.go")}
+	}
+
+	mf := NewMbomboForge(
+		dirs.cobra,
+		pair.out,
+		pair.file,
+		replaces...,
+	)
+
+	// TODO: better error check
+	horus.CheckErr(domovoi.ExecSh(mf.Cmd()))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
