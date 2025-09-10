@@ -68,6 +68,7 @@ var cobraUtilCmd = &cobra.Command{
 
 	Args:      cobra.MaximumNArgs(1),
 	ValidArgs: []string{"help", "example"},
+
 	Run: runCobraUtil,
 }
 
@@ -227,3 +228,43 @@ func runCobraUtil(cmd *cobra.Command, args []string) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+func NewMbomboForge(
+	inDir, outFile, tplFile string,
+	replaces ...mbomboReplace,
+) mbomboForge {
+	return mbomboForge{
+		in:      inDir,
+		out:     outFile,
+		file:    tplFile,
+		replace: replaces,
+	}
+}
+
+func Replace(key, val string) mbomboReplace {
+	return mbomboReplace{old: key, new: val}
+}
+
+func (m mbomboForge) Cmd() string {
+	// build each --replace line
+	var lines []string
+	for _, r := range m.replace {
+		lines = append(lines,
+			fmt.Sprintf(`--replace %s="%s"`, r.old, r.new),
+		)
+	}
+	replBlock := strings.Join(lines, " \\\n")
+
+	return fmt.Sprintf(
+		`mbombo forge \
+--in %s \
+--out %s \
+--files %s \
+%s`,
+		m.in,
+		m.out,
+		m.file,
+		replBlock,
+	)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
