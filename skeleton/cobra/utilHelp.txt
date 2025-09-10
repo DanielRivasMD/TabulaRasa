@@ -30,9 +30,9 @@ func formatHelp(author, email, desc string) string {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var helpRoot = formatHelp(
-	"Daniel Rivas",
-	"danielrivasmd@gmail.com",
+var helpCOMMAND_UPPERCASE = formatHelp(
+	"AUTHOR",
+	"EMAIL",
 	"",
 )
 
