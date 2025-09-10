@@ -70,17 +70,23 @@ var cobraUtilCmd = &cobra.Command{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var (
-	// cobra app
-	force bool
+type mbomboReplace struct {
+	old string
+	new string
+}
 
-	// cobra cmd
-	command string
-	tool    string
+type mbomboForge struct {
+	in      string
+	out     string
+	file    string
+	replace []mbomboReplace
+}
 
-	// cobra util
-	util string
-)
+// pair up template and output in one slice
+type filePair struct {
+	file string
+	out  string
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -89,15 +95,14 @@ func init() {
 	cobraCmd.AddCommand(cobraAppCmd, cobraCmdCmd, cobraUtilCmd)
 
 	// cobra app
-	cobraAppCmd.Flags().BoolVarP(&force, "force", "", false, "Force install go dependencies")
+	cobraAppCmd.Flags().BoolVarP(&flags.force, "force", "f", false, "Force install go dependencies")
 
 	// cobra cmd
-	cobraCmdCmd.Flags().StringVarP(&command, "cmd", "", "", "Name of the new cobra sub-command")
-	cobraCmdCmd.Flags().StringVarP(&tool, "tool", "", "", "Parent command (use \"root\" for top-level)")
+	cobraCmdCmd.Flags().StringVarP(&flags.cmd, "cmd", "", "", "Name of the new cobra sub-command")
 	horus.CheckErr(cobraCmdCmd.MarkFlagRequired("cmd"))
 
 	// cobra util
-	cobraUtilCmd.Flags().StringVarP(&util, "util", "", "", "Utility template name (capitalize)")
+	cobraUtilCmd.Flags().StringVarP(&flags.util, "util", "", "", "Utility template name (capitalize)")
 	horus.CheckErr(cobraUtilCmd.MarkFlagRequired("util"))
 }
 
