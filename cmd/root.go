@@ -45,7 +45,7 @@ func Execute() {
 
 var (
 	dirs  configDirs
-	flags rootFlags
+	flags cobraFlags
 )
 
 type configDirs struct {
@@ -57,28 +57,37 @@ type configDirs struct {
 	todor      string
 }
 
-type rootFlags struct {
-	path        string
+type cobraFlags struct {
+	// root
+	verbose     bool
 	author      string
 	email       string
 	repo        string
-	description string
 	user        string
+	description string
 	license     string
+
+	// cobra.app
+	force bool
+
+	// cobra.cmd
+	cmd string
+	cmdLower string
+	cmdUpper string
+
+	// cobra.util
+	util string
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var verbose bool
-
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose diagnostic output")
+	rootCmd.PersistentFlags().BoolVarP(&flags.verbose, "verbose", "v", false, "Enable verbose diagnostic output")
 
-	rootCmd.PersistentFlags().StringVarP(&flags.path, "path", "p", ".", "Target directory for new app")
-	rootCmd.PersistentFlags().StringVarP(&flags.repo, "repo", "r", "", "Repository name")
-	rootCmd.PersistentFlags().StringVarP(&flags.author, "author", "a", "Daniel Rivas", "Author name")
-	rootCmd.PersistentFlags().StringVarP(&flags.email, "email", "e", "<danielrivasmd@gmail.com>", "Author email")
-	rootCmd.PersistentFlags().StringVarP(&flags.user, "user", "u", "DanielRivasMD", "GitHub username")
+	rootCmd.PersistentFlags().StringVarP(&flags.repo, "repo", "", "", "Repository name")
+	rootCmd.PersistentFlags().StringVarP(&flags.user, "user", "", "DanielRivasMD", "GitHub username")
+	rootCmd.PersistentFlags().StringVarP(&flags.author, "author", "", "Daniel Rivas", "Author name")
+	rootCmd.PersistentFlags().StringVarP(&flags.email, "email", "", "<danielrivasmd@gmail.com>", "Author email")
 
 	_ = rootCmd.MarkFlagRequired("path")
 	_ = rootCmd.MarkFlagRequired("repo")
@@ -90,7 +99,7 @@ func init() {
 
 func initConfigDirs() {
 	var err error
-	dirs.home, err = domovoi.FindHome(verbose)
+	dirs.home, err = domovoi.FindHome(flags.verbose)
 	horus.CheckErr(err, horus.WithCategory("init_error"), horus.WithMessage("getting home directory"))
 	dirs.tabularasa = filepath.Join(dirs.home, ".tabularasa")
 	dirs.cobra = filepath.Join(dirs.tabularasa, "cobra")
