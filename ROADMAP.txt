@@ -12,4 +12,8 @@ cmd/cmdCobra.go
   line 184    TODO   relocate help & example to util files
   line 185    TODO   better error check
   line 217    TODO   better error check
+cmd/cmdIdentity.go
+  line 47     TODO   complete identity
+cmd/root.go
+  line 93     TODO   update flag requirements
 ==================================================

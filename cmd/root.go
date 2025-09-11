@@ -90,6 +90,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&flags.author, "author", "", "Daniel Rivas", "Author name")
 	rootCmd.PersistentFlags().StringVarP(&flags.email, "email", "", "<danielrivasmd@gmail.com>", "Author email")
 
+	// TODO: update flag requirements
 	_ = rootCmd.MarkFlagRequired("path")
 	_ = rootCmd.MarkFlagRequired("repo")
 
