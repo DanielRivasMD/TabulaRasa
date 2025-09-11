@@ -10,7 +10,7 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var exampleCOMMAND_UPPERCASE = formatExample(
+var exampleCOMMAND_UPPERCASE = domovoi.FormatExample(
 	"COMMAND_LOWERCASE",
 	[]string{"help"},
 )

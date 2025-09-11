@@ -6,12 +6,11 @@ package cmd
 
 import (
 	"github.com/DanielRivasMD/domovoi"
-	"github.com/ttacon/chalk"
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var helpCOMMAND_UPPERCASE = formatHelp(
+var helpCOMMAND_UPPERCASE = domovoi.FormatHelp(
 	"AUTHOR",
 	"EMAIL",
 	"",
