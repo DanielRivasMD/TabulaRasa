@@ -103,7 +103,8 @@ func init() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraApp(cmd *cobra.Command, args []string) {
-	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose))
+	op := "tabularasa.cobra.app"
+	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
 
 	if flags.repo == "" {
 		// TODO: add error handling & potentially domovoi implementation
@@ -138,8 +139,15 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 			replaces...,
 		)
 
-		// TODO: better error check
-		horus.CheckErr(domovoi.ExecSh(mf.Cmd()))
+		horus.CheckErr(
+			domovoi.ExecSh(mf.Cmd()),
+			horus.WithOp(op),
+			horus.WithCategory("shell_command"),
+			horus.WithMessage("Failed to execute mbombo forge command"),
+			horus.WithDetails(map[string]any{
+				"command": mf.Cmd(),
+			}),
+		)
 
 	}
 
@@ -163,7 +171,8 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
-	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose))
+	op := "tabularasa.cobra.cmd"
+	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
 	params.cmd = args[0]
 
 	replaces := []mbomboReplace{
@@ -182,14 +191,22 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	)
 
 	// TODO: relocate help & example to util files
-	// TODO: better error check
-	horus.CheckErr(domovoi.ExecSh(mf.Cmd()))
+	horus.CheckErr(
+		domovoi.ExecSh(mf.Cmd()),
+		horus.WithOp(op),
+		horus.WithCategory("shell_command"),
+		horus.WithMessage("Failed to execute mbombo forge command"),
+		horus.WithDetails(map[string]any{
+			"command": mf.Cmd(),
+		}),
+	)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraUtil(cmd *cobra.Command, args []string) {
-	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose))
+	op := "tabularasa.cobra.util"
+	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
 	params.util = args[0]
 
 	replaces := []mbomboReplace{
@@ -214,8 +231,15 @@ func runCobraUtil(cmd *cobra.Command, args []string) {
 		replaces...,
 	)
 
-	// TODO: better error check
-	horus.CheckErr(domovoi.ExecSh(mf.Cmd()))
+	horus.CheckErr(
+		domovoi.ExecSh(mf.Cmd()),
+		horus.WithOp(op),
+		horus.WithCategory("shell_command"),
+		horus.WithMessage("Failed to execute mbombo forge command"),
+		horus.WithDetails(map[string]any{
+			"command": mf.Cmd(),
+		}),
+	)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
