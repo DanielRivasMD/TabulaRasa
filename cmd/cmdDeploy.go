@@ -20,6 +20,7 @@ package cmd
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/DanielRivasMD/domovoi"
@@ -66,7 +67,7 @@ var deployTodorCmd = &cobra.Command{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const HEADER = "head"
+const HEADER = "head.just"
 
 type LangType struct {
 	validValues []string
@@ -83,11 +84,9 @@ func (f *LangType) String() string {
 }
 
 func (f *LangType) Set(value string) error {
-	for _, v := range f.validValues {
-		if value == v {
-			f.Selected = append(f.Selected, value)
-			return nil
-		}
+	if slices.Contains(f.validValues, value) {
+		f.Selected = append(f.Selected, value)
+		return nil
 	}
 	return fmt.Errorf("invalid value '%s', allowed: %s", value, joinValues(f.validValues))
 }
@@ -126,51 +125,50 @@ func init() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployJust(cmd *cobra.Command, args []string) {
-	// fallback repo to current dir if not provided
+	op := "tabularasa.deploy.just"
+
 	var err error
 	if flags.repo == "" {
 		flags.repo, err = domovoi.CurrentDir()
-		horus.CheckErr(err)
+		horus.CheckErr(err, horus.WithOp(op))
 	}
 
-	// // ensure `.just` directory exists
-	// // TODO: double check
-	// justDirPath := filepath.Join(path, dotjust)
-	// horus.CheckErr(domovoi.EnsureDirExist(justDirPath, verbose))
+	replaces := []mbomboReplace{
+		Replace("APP", flags.repo),
+		Replace("EXE", strings.ToLower(flags.repo)),
+	}
 
-	// // deploy combined .justfile
-	// justfileDest := filepath.Join(path, "."+justfile)
-	// jfParams := newCopyParams(
-	// 	filepath.Join(home, justDir),
-	// 	justfileDest,
-	// )
-	// jfParams.Files = append([]string{HEADER}, lang.Selected...)
-	// jfParams.Reps = buildDeployReplacements(repo)
-	// horus.CheckErr(concatenateFiles(jfParams, dotjust))
+	pairs := []filePair{
+		// BUG: append `.just` extension
+		{append([]string{HEADER}, lang.Selected...), ".jusfile"},
+		// TODO: add just config
+	}
 
-	// // deploy each language's config
-	// for _, langOpt := range lang.Selected {
-	// 	srcConf := filepath.Join(home, justDir, langOpt+dotconf)
-	// 	dstConf := filepath.Join(justDirPath, langOpt+dotconf)
-	// 	confParams := newCopyParams(srcConf, dstConf)
-	// 	confParams.Reps = buildDeployReplacements(repo)
-	// 	horus.CheckErr(copyFile(confParams))
+	for _, p := range pairs {
+		mf := NewMbomboForge(
+			dirs.just,
+			p.out,
+			p.files,
+			replaces...,
+		)
 
-	// 	// include Python installer if deploying Python
-	// 	if langOpt == "py" {
-	// 		srcInst := filepath.Join(home, justDir, pyinstall)
-	// 		dstInst := filepath.Join(justDirPath, pyinstall)
-	// 		instParams := newCopyParams(srcInst, dstInst)
-	// 		instParams.Reps = buildDeployReplacements(repo)
-	// 		horus.CheckErr(copyFile(instParams))
-	// 	}
-	// }
+		horus.CheckErr(
+			domovoi.ExecSh(mf.Cmd()),
+			horus.WithOp(op),
+			horus.WithCategory("shell_command"),
+			horus.WithMessage("Failed to execute mbombo forge command"),
+			horus.WithDetails(map[string]any{
+				"command": mf.Cmd(),
+			}),
+		)
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployReadme(cmd *cobra.Command, args []string) {
 
+	// BUG: tui works, no deployment. probably must bind variables
 	p := tea.NewProgram(initialModel())
 	if err := p.Start(); err != nil {
 		horus.CheckErr(err)
@@ -180,13 +178,23 @@ func runDeployReadme(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployTodor(cmd *cobra.Command, args []string) {
+	op := "tabularasa.deploy.todor"
 
-	// // source: $TABULARASA_HOME/todorDir/todor
-	// src := filepath.Join(dirs.home, dirs.todor, todor)
+	mf := NewMbomboForge(
+		dirs.todor,
+		".todor",
+		[]string{"todor"},
+	)
 
-	// // destination: <projectPath>/.todor
-	// dest := filepath.Join(flags.path, "."+todor)
-
+	horus.CheckErr(
+		domovoi.ExecSh(mf.Cmd()),
+		horus.WithOp(op),
+		horus.WithCategory("shell_command"),
+		horus.WithMessage("Failed to execute mbombo forge command"),
+		horus.WithDetails(map[string]any{
+			"command": mf.Cmd(),
+		}),
+	)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
