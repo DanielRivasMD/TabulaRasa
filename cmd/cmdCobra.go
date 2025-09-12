@@ -78,16 +78,16 @@ type mbomboReplace struct {
 }
 
 type mbomboForge struct {
-	in      string
-	out     string
-	file    string
-	replace []mbomboReplace
+	in       string
+	out      string
+	files    []string
+	replaces []mbomboReplace
 }
 
 // pair up template and output in one slice
 type filePair struct {
-	file string
-	out  string
+	files []string
+	out   string
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,10 +106,10 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.app"
 	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
 
+	var err error
 	if flags.repo == "" {
-		// TODO: add error handling & potentially domovoi implementation
-		dir, _ := os.Getwd()
-		flags.repo = filepath.Base(dir)
+		flags.repo, err = domovoi.CurrentDir()
+		horus.CheckErr(err, horus.WithOp(op))
 	}
 
 	replaces := []mbomboReplace{
@@ -122,12 +122,12 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	}
 
 	pairs := []filePair{
-		{"main.txt", "main.go"},
-		{"root.txt", filepath.Join("cmd", "root.go")},
-		{"completion.txt", filepath.Join("cmd", "cmdCompletion.go")},
-		{"identity.txt", filepath.Join("cmd", "cmdIdentity.go")},
-		{"utilHelp.txt", filepath.Join("cmd", "utilHelp.go")},
-		{"utilExample.txt", filepath.Join("cmd", "utilExample.go")},
+		{[]string{"main.txt"}, "main.go"},
+		{[]string{"root.txt"}, filepath.Join("cmd", "root.go")},
+		{[]string{"completion.txt"}, filepath.Join("cmd", "cmdCompletion.go")},
+		{[]string{"identity.txt"}, filepath.Join("cmd", "cmdIdentity.go")},
+		{[]string{"utilHelp.txt"}, filepath.Join("cmd", "utilHelp.go")},
+		{[]string{"utilExample.txt"}, filepath.Join("cmd", "utilExample.go")},
 	}
 
 	// now a simple for‐range
@@ -135,7 +135,7 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 		mf := NewMbomboForge(
 			dirs.cobra,
 			p.out,
-			p.file,
+			p.files,
 			replaces...,
 		)
 
@@ -186,7 +186,7 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	mf := NewMbomboForge(
 		dirs.cobra,
 		filepath.Join("cmd", "cmd"+upperFirst(params.cmd)+".go"),
-		"cmd.txt",
+		[]string{"cmd.txt"},
 		replaces...,
 	)
 
@@ -219,15 +219,15 @@ func runCobraUtil(cmd *cobra.Command, args []string) {
 	var pair filePair
 	switch params.util {
 	case "help":
-		pair = filePair{"utilHelp.txt", filepath.Join("cmd", "utilHelp.go")}
+		pair = filePair{[]string{"utilHelp.txt"}, filepath.Join("cmd", "utilHelp.go")}
 	case "example":
-		pair = filePair{"utilExample.txt", filepath.Join("cmd", "utilExample.go")}
+		pair = filePair{[]string{"utilExample.txt"}, filepath.Join("cmd", "utilExample.go")}
 	}
 
 	mf := NewMbomboForge(
 		dirs.cobra,
 		pair.out,
-		pair.file,
+		pair.files,
 		replaces...,
 	)
 
@@ -245,14 +245,15 @@ func runCobraUtil(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func NewMbomboForge(
-	inDir, outFile, tplFile string,
+	inDir, outFile string,
+	tplFiles []string,
 	replaces ...mbomboReplace,
 ) mbomboForge {
 	return mbomboForge{
-		in:      inDir,
-		out:     outFile,
-		file:    tplFile,
-		replace: replaces,
+		in:       inDir,
+		out:      outFile,
+		files:    tplFiles,
+		replaces: replaces,
 	}
 }
 
@@ -261,25 +262,28 @@ func Replace(key, val string) mbomboReplace {
 }
 
 func (m mbomboForge) Cmd() string {
-	// build each --replace line
-	var lines []string
-	for _, r := range m.replace {
-		lines = append(lines,
-			fmt.Sprintf(`--replace %s="%s"`, r.old, r.new),
-		)
+	var files []string
+	for _, f := range m.files {
+		files = append(files, fmt.Sprintf(`--files %s`, f))
 	}
-	replBlock := strings.Join(lines, " \\\n")
+	fileBlock := strings.Join(files, " \\\n")
+
+	var replaces []string
+	for _, r := range m.replaces {
+		replaces = append(replaces, fmt.Sprintf(`--replace %s="%s"`, r.old, r.new))
+	}
+	replaceBlock := strings.Join(replaces, " \\\n")
 
 	return fmt.Sprintf(
 		`mbombo forge \
 --in %s \
 --out %s \
---files %s \
+%s \
 %s`,
 		m.in,
 		m.out,
-		m.file,
-		replBlock,
+		fileBlock,
+		replaceBlock,
 	)
 }
 
