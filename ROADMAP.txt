@@ -1,17 +1,18 @@
 - add an option for full deployment (just, todor, readme) => `tab deploy --full --lang go`
 - refactor deploy
 - use `domovoi` for help & example
+- relocate structs => root
 
 ==================================================
 cmd/cmdCobra.go
-  line 109    TODO   add error handling & potentially domovoi implementation
-  line 141    TODO   better error check
-  line 148    BUG    domovoi.RemoveFile not working properly
-  line 155    TODO   better error check
-  line 159    TODO   set up copy & replace for LICENSE, as well as tab completion on the suffix pattern
-  line 184    TODO   relocate help & example to util files
-  line 185    TODO   better error check
-  line 217    TODO   better error check
+  line 156    BUG    domovoi.RemoveFile not working properly
+  line 163    TODO   better error check
+  line 167    TODO   set up copy & replace for LICENSE, as well as tab completion on the suffix pattern
+  line 193    TODO   relocate help & example to util files
+cmd/cmdDeploy.go
+  line 142    BUG    append `.just` extension
+  line 144    TODO   add just config
+  line 171    BUG    tui works, no deployment. probably must bind variables
 cmd/cmdIdentity.go
   line 47     TODO   complete identity
 cmd/root.go
