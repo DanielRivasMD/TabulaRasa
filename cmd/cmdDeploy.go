@@ -145,7 +145,7 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 	}
 
 	for _, p := range pairs {
-		mf := NewMbomboForge(
+		mf := newMbomboConfig(
 			dirs.just,
 			p.out,
 			p.files,
@@ -180,7 +180,7 @@ func runDeployReadme(cmd *cobra.Command, args []string) {
 func runDeployTodor(cmd *cobra.Command, args []string) {
 	op := "tabularasa.deploy.todor"
 
-	mf := NewMbomboForge(
+	mf := newMbomboConfig(
 		dirs.todor,
 		".todor",
 		[]string{"todor"},
