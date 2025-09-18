@@ -243,23 +243,14 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 
 	// now a simple for‐range
 	for _, p := range pairs {
-		mf := newMbomboConfig(
-			dirs.cobra,
-			p.out,
-			p.files,
-			replaces...,
-		)
-
-		horus.CheckErr(
-			domovoi.ExecSh(mf.Cmd()),
-			horus.WithOp(op),
-			horus.WithCategory("shell_command"),
-			horus.WithMessage("Failed to execute mbombo forge command"),
-			horus.WithDetails(map[string]any{
-				"command": mf.Cmd(),
-			}),
-		)
-
+		mbomboForging(
+			op,
+			newMbomboConfig(
+				dirs.cobra,
+				p.out,
+				p.files,
+				replaces...,
+			))
 	}
 
 	// Initialize Go module and tidy dependencies
@@ -299,14 +290,14 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 
 	replaces := cobraCmdReplacements()
 
-	mf := newMbomboConfig(
-		dirs.cobra,
-		filepath.Join("cmd", "cmd"+upperFirst(params.cmd)+".go"),
-		cobraCmdSkeleton,
-		replaces...,
-	)
-
-	mbomboForging(op, mf)
+	mbomboForging(
+		op,
+		newMbomboConfig(
+			dirs.cobra,
+			filepath.Join("cmd", "cmd"+upperFirst(params.cmd)+".go"),
+			cobraCmdSkeleton,
+			replaces...,
+		))
 
 	injections := []struct {
 		srcTmp string
@@ -328,17 +319,16 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	for _, inj := range injections {
 		tmpPath := filepath.Join(dirs.cobra, inj.srcTmp)
 		targetPath := filepath.Join("cmd", inj.target)
-
 		horus.CheckErr(CopyFile(targetPath, tmpPath))
 
-		m := newMbomboConfig(
-			dirs.cobra,
-			targetPath,
-			inj.block,
-			replaces...,
-		)
-
-		mbomboForging(op, m)
+		mbomboForging(
+			op,
+			newMbomboConfig(
+				dirs.cobra,
+				targetPath,
+				inj.block,
+				replaces...,
+			))
 		os.Remove(tmpPath)
 	}
 }
@@ -373,14 +363,14 @@ func runCobraUtil(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	mf := newMbomboConfig(
-		dirs.cobra,
-		pair.out,
-		pair.files,
-		replaces...,
-	)
-
-	mbomboForging(op, mf)
+	mbomboForging(
+		op,
+		newMbomboConfig(
+			dirs.cobra,
+			pair.out,
+			pair.files,
+			replaces...,
+		))
 }
 
 func cobraUtilReplacements() []mbomboReplace {
