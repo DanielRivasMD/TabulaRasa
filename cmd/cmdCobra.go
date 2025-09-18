@@ -124,10 +124,10 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	pairs := []filePair{
 		{[]string{"main.txt"}, "main.go"},
 		{[]string{"root.txt"}, filepath.Join("cmd", "root.go")},
-		{[]string{"completion.txt"}, filepath.Join("cmd", "cmdCompletion.go")},
-		{[]string{"identity.txt"}, filepath.Join("cmd", "cmdIdentity.go")},
-		{[]string{"utilHelp.txt"}, filepath.Join("cmd", "utilHelp.go")},
-		{[]string{"utilExample.txt"}, filepath.Join("cmd", "utilExample.go")},
+		{[]string{"cmdCompletion.txt"}, filepath.Join("cmd", "cmdCompletion.go")},
+		{[]string{"cmdIdentity.txt"}, filepath.Join("cmd", "cmdIdentity.go")},
+		{[]string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "help.var", "line.new", "line.break"}, filepath.Join("cmd", "utilHelp.go")},
+		{[]string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "example.var", "line.new", "line.break"}, filepath.Join("cmd", "utilExample.go")},
 	}
 
 	// now a simple for‐range
@@ -186,11 +186,10 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	mf := NewMbomboForge(
 		dirs.cobra,
 		filepath.Join("cmd", "cmd"+upperFirst(params.cmd)+".go"),
-		[]string{"cmd.txt"},
+		[]string{"GPLv3.license", "cmd.package", "line.new", "line.break", "line.new", "cobra.import", "line.new", "line.break", "line.new", "cmd.var", "line.new", "line.break", "line.new", "init.func", "line.new", "line.break", "line.new", "run.func", "line.new", "line.break"},
 		replaces...,
 	)
 
-	// TODO: relocate help & example to util files
 	horus.CheckErr(
 		domovoi.ExecSh(mf.Cmd()),
 		horus.WithOp(op),
@@ -200,6 +199,45 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 			"command": mf.Cmd(),
 		}),
 	)
+
+	horus.CheckErr(CopyFile(filepath.Join("cmd", "utilHelp.go"), filepath.Join(dirs.cobra, "utilHelp.tmp")))
+	mh := NewMbomboForge(
+		dirs.cobra,
+		filepath.Join("cmd", "utilHelp.go"),
+		[]string{"utilHelp.tmp", "line.new", "help.var", "line.new", "line.break"},
+		replaces...,
+	)
+	os.Remove(filepath.Join(dirs.cobra, "utilHelp.tmp"))
+
+	horus.CheckErr(
+		domovoi.ExecSh(mh.Cmd()),
+		horus.WithOp(op),
+		horus.WithCategory("shell_command"),
+		horus.WithMessage("Failed to execute mbombo forge command"),
+		horus.WithDetails(map[string]any{
+			"command": mh.Cmd(),
+		}),
+	)
+
+	horus.CheckErr(CopyFile(filepath.Join("cmd", "utilExample.go"), filepath.Join(dirs.cobra, "utilExample.tmp")))
+	me := NewMbomboForge(
+		dirs.cobra,
+		filepath.Join("cmd", "utilExample.go"),
+		[]string{"utilExample.tmp", "line.new", "example.var", "line.new", "line.break"},
+		replaces...,
+	)
+	os.Remove(filepath.Join(dirs.cobra, "utilExample.tmp"))
+
+	horus.CheckErr(
+		domovoi.ExecSh(me.Cmd()),
+		horus.WithOp(op),
+		horus.WithCategory("shell_command"),
+		horus.WithMessage("Failed to execute mbombo forge command"),
+		horus.WithDetails(map[string]any{
+			"command": me.Cmd(),
+		}),
+	)
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
