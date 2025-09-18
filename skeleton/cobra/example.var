@@ -1,0 +1,4 @@
+var exampleCOMMAND_UPPERCASE = domovoi.FormatExample(
+	"COMMAND_LOWERCASE",
+	[]string{"help"},
+)

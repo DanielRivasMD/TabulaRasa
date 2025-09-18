@@ -1,0 +1,8 @@
+var COMMAND_LOWERCASECmd = &cobra.Command{
+	Use:     "COMMAND_LOWERCASE",
+	Short:   "",
+	Long:    helpCOMMAND_UPPERCASE,
+	Example: exampleCOMMAND_UPPERCASE,
+
+	Run: runCOMMAND_UPPERCASE,
+}
