@@ -1,0 +1,7 @@
+var (
+	flags   babelFlags
+)
+
+type COMMAND_LOWERCASEFlags struct {
+	verbose bool
+}

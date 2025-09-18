@@ -1,0 +1,5 @@
+var rootCmd = &cobra.Command{
+	Use:     "COMMAND_LOWERCASE",
+	Long:    helpRoot,
+	Example: exampleRoot,
+}

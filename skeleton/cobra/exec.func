@@ -1,0 +1,3 @@
+func Execute() {
+	horus.CheckErr(rootCmd.Execute())
+}
