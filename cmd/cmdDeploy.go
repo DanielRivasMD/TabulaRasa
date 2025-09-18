@@ -132,11 +132,7 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 		flags.repo, err = domovoi.CurrentDir()
 		horus.CheckErr(err, horus.WithOp(op))
 	}
-
-	replaces := []mbomboReplace{
-		Replace("APP", flags.repo),
-		Replace("EXE", strings.ToLower(flags.repo)),
-	}
+	replaces := deployJustReplacements()
 
 	pairs := []filePair{
 		// BUG: append `.just` extension
@@ -145,34 +141,30 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 	}
 
 	for _, p := range pairs {
-		mf := newMbomboConfig(
-			dirs.just,
-			p.out,
-			p.files,
-			replaces...,
-		)
+		mbomboForging(
+			op,
+			newMbomboConfig(
+				dirs.just,
+				p.out,
+				p.files,
+				replaces...,
+			))
+	}
+}
 
-		horus.CheckErr(
-			domovoi.ExecSh(mf.Cmd()),
-			horus.WithOp(op),
-			horus.WithCategory("shell_command"),
-			horus.WithMessage("Failed to execute mbombo forge command"),
-			horus.WithDetails(map[string]any{
-				"command": mf.Cmd(),
-			}),
-		)
+func deployJustReplacements() []mbomboReplace {
+	return []mbomboReplace{
+		Replace("APP", flags.repo),
+		Replace("EXE", strings.ToLower(flags.repo)),
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployReadme(cmd *cobra.Command, args []string) {
-
 	// BUG: tui works, no deployment. probably must bind variables
 	p := tea.NewProgram(initialModel())
-	if err := p.Start(); err != nil {
-		horus.CheckErr(err)
-	}
+	horus.CheckErr(p.Start())
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,21 +172,13 @@ func runDeployReadme(cmd *cobra.Command, args []string) {
 func runDeployTodor(cmd *cobra.Command, args []string) {
 	op := "tabularasa.deploy.todor"
 
-	mf := newMbomboConfig(
-		dirs.todor,
-		".todor",
-		[]string{"todor"},
-	)
-
-	horus.CheckErr(
-		domovoi.ExecSh(mf.Cmd()),
-		horus.WithOp(op),
-		horus.WithCategory("shell_command"),
-		horus.WithMessage("Failed to execute mbombo forge command"),
-		horus.WithDetails(map[string]any{
-			"command": mf.Cmd(),
-		}),
-	)
+	mbomboForging(
+		op,
+		newMbomboConfig(
+			dirs.todor,
+			".todor",
+			[]string{"todor"},
+		))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

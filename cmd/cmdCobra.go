@@ -229,7 +229,6 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 		flags.repo, err = domovoi.CurrentDir()
 		horus.CheckErr(err, horus.WithOp(op))
 	}
-
 	replaces := cobraAppReplacements()
 
 	pairs := []filePair{
@@ -287,7 +286,6 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.cmd"
 	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
 	params.cmd = args[0]
-
 	replaces := cobraCmdReplacements()
 
 	mbomboForging(
@@ -349,7 +347,6 @@ func runCobraUtil(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.util"
 	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
 	params.util = args[0]
-
 	replaces := cobraUtilReplacements()
 
 	var pair filePair
