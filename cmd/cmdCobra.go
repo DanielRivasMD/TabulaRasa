@@ -122,10 +122,10 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	}
 
 	pairs := []filePair{
-		{[]string{"main.txt"}, "main.go"},
-		{[]string{"root.txt"}, filepath.Join("cmd", "root.go")},
-		{[]string{"cmdCompletion.txt"}, filepath.Join("cmd", "cmdCompletion.go")},
-		{[]string{"cmdIdentity.txt"}, filepath.Join("cmd", "cmdIdentity.go")},
+		{[]string{"GPLv3.license", "main.package", "line.new", "line.break", "line.new", "repo.import", "line.new", "line.break", "line.new", "main.func", "line.new", "line.break"}, "main.go"},
+		{[]string{"GPLv3.license", "cmd.package", "line.new", "line.break", "line.new", "cobra_horus.import", "line.new", "line.break", "line.new", "root.var", "line.new", "line.break", "line.new", "exec.func", "line.new", "line.break", "line.new", "flags.struct", "line.new", "line.break", "line.new", "root.func", "line.new", "line.break"}, filepath.Join("cmd", "root.go")},
+		{[]string{"completion.cmd"}, filepath.Join("cmd", "cmdCompletion.go")},
+		{[]string{"identity.cmd"}, filepath.Join("cmd", "cmdIdentity.go")},
 		{[]string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "help.var", "line.new", "line.break"}, filepath.Join("cmd", "utilHelp.go")},
 		{[]string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "example.var", "line.new", "line.break"}, filepath.Join("cmd", "utilExample.go")},
 	}
@@ -257,9 +257,9 @@ func runCobraUtil(cmd *cobra.Command, args []string) {
 	var pair filePair
 	switch params.util {
 	case "help":
-		pair = filePair{[]string{"utilHelp.txt"}, filepath.Join("cmd", "utilHelp.go")}
+		pair = filePair{[]string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "help.var", "line.new", "line.break"}, filepath.Join("cmd", "utilHelp.go")}
 	case "example":
-		pair = filePair{[]string{"utilExample.txt"}, filepath.Join("cmd", "utilExample.go")}
+		pair = filePair{[]string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "example.var", "line.new", "line.break"}, filepath.Join("cmd", "utilExample.go")}
 	}
 
 	mf := NewMbomboForge(
