@@ -19,6 +19,9 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"fmt"
+	"io"
+	"os"
 	"path/filepath"
 	"unicode"
 
@@ -132,6 +135,36 @@ func upperFirst(s string) string {
 	runes := []rune(s)
 	runes[0] = unicode.ToUpper(runes[0])
 	return string(runes)
+}
+
+func CopyFile(src, dst string) error {
+	in, err := os.Open(src)
+	if err != nil {
+		return fmt.Errorf("failed to open source: %w", err)
+	}
+	defer in.Close()
+
+	out, err := os.Create(dst)
+	if err != nil {
+		return fmt.Errorf("failed to create destination: %w", err)
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, in)
+	if err != nil {
+		return fmt.Errorf("failed to copy data: %w", err)
+	}
+
+	// Optional: preserve permissions
+	info, err := os.Stat(src)
+	if err == nil {
+		err = os.Chmod(dst, info.Mode())
+		if err != nil {
+			return fmt.Errorf("failed to set permissions: %w", err)
+		}
+	}
+
+	return nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
