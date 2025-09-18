@@ -65,4 +65,10 @@ var helpDeployTodor = domovoi.FormatHelp(
 	"Deploy top-level todor config",
 )
 
+var helpEngrave = domovoi.FormatHelp(
+	"Daniel Rivas",
+	"<danielrivasmd@gmail.com>",
+	"",
+)
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
