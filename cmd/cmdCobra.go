@@ -207,7 +207,6 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 		[]string{"utilHelp.tmp", "line.new", "help.var", "line.new", "line.break"},
 		replaces...,
 	)
-	os.Remove(filepath.Join(dirs.cobra, "utilHelp.tmp"))
 
 	horus.CheckErr(
 		domovoi.ExecSh(mh.Cmd()),
@@ -218,6 +217,7 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 			"command": mh.Cmd(),
 		}),
 	)
+	os.Remove(filepath.Join(dirs.cobra, "utilHelp.tmp"))
 
 	horus.CheckErr(CopyFile(filepath.Join("cmd", "utilExample.go"), filepath.Join(dirs.cobra, "utilExample.tmp")))
 	me := NewMbomboForge(
@@ -226,7 +226,6 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 		[]string{"utilExample.tmp", "line.new", "example.var", "line.new", "line.break"},
 		replaces...,
 	)
-	os.Remove(filepath.Join(dirs.cobra, "utilExample.tmp"))
 
 	horus.CheckErr(
 		domovoi.ExecSh(me.Cmd()),
@@ -237,6 +236,7 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 			"command": me.Cmd(),
 		}),
 	)
+	os.Remove(filepath.Join(dirs.cobra, "utilExample.tmp"))
 
 }
 
