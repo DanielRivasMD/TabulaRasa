@@ -6,9 +6,10 @@ cmd/cmdCobra.go
   line 264    TODO   better error check
   line 268    TODO   set up copy & replace for LICENSE, as well as tab completion on the suffix pattern
 cmd/cmdDeploy.go
-  line 138    BUG    append `.just` extension
-  line 140    TODO   add just config
-  line 165    BUG    tui works, no deployment. probably must bind variables
+  line 21     BUG    deploy root flags
+  line 140    BUG    append `.just` extension
+  line 142    TODO   add just config
+  line 167    BUG    tui works, no deployment. probably must bind variables
 cmd/cmdIdentity.go
   line 47     TODO   complete identity
 cmd/root.go

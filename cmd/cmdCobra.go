@@ -35,7 +35,7 @@ import (
 
 var cobraCmd = &cobra.Command{
 	Use:     "cobra",
-	Short:   "Construct cobra apps, cmds & import utilities",
+	Short:   "Construct cobra apps, cmds & import utils",
 	Long:    helpCobra,
 	Example: exampleCobra,
 }
