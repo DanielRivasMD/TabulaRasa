@@ -3,8 +3,6 @@
   "tags": [
     "bug",
     "doc",
-    "feat",
-    "rfac",
     "todo",
     "wip",
     "fix",
@@ -14,8 +12,6 @@
     "tags": {
         "bug": "red",
         "doc": "blue",
-        "feat": "magenta",
-        "rfac": "white",
         "todo": "green",
         "wip": "yellow",
         "fix": "cyan",
