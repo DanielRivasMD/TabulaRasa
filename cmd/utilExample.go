@@ -59,10 +59,4 @@ var exampleDeployTodor = domovoi.FormatExample(
 	[]string{"deploy", "todor"},
 )
 
-var exampleEngrave = domovoi.FormatExample(
-	"engrave",
-	[]string{"help"},
-	[]string{"help"},
-)
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
