@@ -1,4 +1,5 @@
 - add an option for full deployment (just, todor, readme) => `tab deploy --full --lang go`
+- tab deploy seems in trouble!
 
 ==================================================
 cmd/cmdCobra.go
