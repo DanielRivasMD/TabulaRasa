@@ -5,16 +5,14 @@
     "doc",
     "todo",
     "wip",
-    "fix",
   ],
 
   "styles": {
     "tags": {
         "bug": "red",
         "doc": "blue",
-        "todo": "green",
-        "wip": "yellow",
-        "fix": "cyan",
+        "todo": "yellow",
+        "wip": "green",
     }
   }
 }
