@@ -23,7 +23,9 @@ package cmd
 import (
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
@@ -164,9 +166,42 @@ func deployJustReplacements() []mbomboReplace {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployReadme(cmd *cobra.Command, args []string) {
-	// BUG: tui works, no deployment. probably must bind variables
+	op := "tabularasa.deploy.readme"
+
 	p := tea.NewProgram(initialModel())
-	horus.CheckErr(p.Start())
+	m, err := p.Run() // Run returns (tea.Model, error)
+	horus.CheckErr(err, horus.WithOp(op))
+
+	// Type assert back to our model
+	final, ok := m.(model)
+	if !ok {
+		horus.CheckErr(fmt.Errorf("unexpected model type"), horus.WithOp(op))
+	}
+
+	// Now you have the captured values
+	desc := final.description
+	lic := final.license
+
+	repo, err := domovoi.CurrentDir()
+	horus.CheckErr(err)
+
+	// Example: build replacements for README
+	replaces := []mbomboReplace{
+		Replace("REPOSITORY", repo),
+		Replace("OVERVIEW", desc),
+		Replace("LICENSE", lic),
+		Replace("YEAR", strconv.Itoa(time.Now().Year())),
+	}
+
+	mbomboForging(
+		op,
+		newMbomboConfig(
+			dirs.readme,
+			"README.md",
+			[]string{"readme.md"},
+			replaces...,
+		),
+	)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
