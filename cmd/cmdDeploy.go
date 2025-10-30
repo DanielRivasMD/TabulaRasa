@@ -78,7 +78,7 @@ type LangType struct {
 	Selected    []string
 }
 
-var validLangs = []string{"go", "golib", "jl", "py", "rs", "rslib"}
+var validLangs = []string{"go", "jl", "py", "rs", "R"}
 
 func (f *LangType) String() string {
 	if len(f.Selected) > 0 {
@@ -120,10 +120,6 @@ func init() {
 
 	// deploy just
 	_ = deployJustCmd.MarkFlagRequired("lang")
-
-	// deploy readme
-	deployReadmeCmd.Flags().StringVarP(&flags.description, "description", "D", "", "Project overview text")
-	deployReadmeCmd.Flags().StringVarP(&flags.license, "license", "L", "", "License to appear in README")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,10 +134,19 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 	}
 	replaces := deployJustReplacements()
 
+	files := []string{HEADER}
+
+	for _, sel := range lang.Selected {
+		switch sel {
+		case "go":
+			files = append(files, "go.just")
+		case "rs":
+			files = append(files, "rs.just")
+		}
+	}
+
 	pairs := []filePair{
-		// BUG: append `.just` extension
-		{append([]string{HEADER}, lang.Selected...), ".jusfile"},
-		// TODO: add just config
+		{files, ".justfile"},
 	}
 
 	for _, p := range pairs {
