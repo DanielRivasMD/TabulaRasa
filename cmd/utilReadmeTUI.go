@@ -15,75 +15,70 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// langItem wraps a string so it satisfies list.Item (FilterValue)
-type langItem string
-
-func (i langItem) FilterValue() string { return string(i) }
-
-type step int
-
 const (
-	chooseLang step = iota
-	enterDesc
-	enterLicense
+	enterDesc step = iota
+	chooseLicense
 	confirm
 	done
 )
 
+var (
+	licenses = []string{"MIT", "GPLv3"}
+)
+
+type step int
+type licenseItem string
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func (i licenseItem) FilterValue() string { return string(i) }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 type model struct {
-	step         step
-	langList     list.Model
-	descInput    textinput.Model
-	licInput     textinput.Model
-	selectedLang string
-	description  string
-	license      string
+	step        step
+	descInput   textinput.Model
+	licList     list.Model
+	description string
+	license     string
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func initialModel() model {
-	// build list.Items from validLangs
-	items := make([]list.Item, len(validLangs))
-	for i, l := range validLangs {
-		items[i] = langItem(l)
-	}
-	l := list.New(items, itemDelegate{}, 20, 5)
-	l.Title = "Select README Language"
-	l.SetShowStatusBar(false)
-	l.SetFilteringEnabled(false)
-
 	// description input
 	d := textinput.New()
 	d.Placeholder = "Project description"
 	d.Focus()
 
-	// license input
-	li := textinput.New()
-	li.Placeholder = "License (e.g. MIT)"
+	// license list
+	licenses := licenses
+	items := make([]list.Item, len(licenses))
+	for i, l := range licenses {
+		items[i] = licenseItem(l)
+	}
+	l := list.New(items, itemDelegate{}, 20, 5)
+	l.Title = "Select License"
+	l.SetShowStatusBar(false)
+	l.SetFilteringEnabled(false)
 
 	return model{
-		step:      chooseLang,
-		langList:  l,
+		step:      enterDesc,
 		descInput: d,
-		licInput:  li,
+		licList:   l,
 	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// itemDelegate renders our langItem
+// itemDelegate renders our list items
 type itemDelegate struct{}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func (itemDelegate) Height() int                               { return 1 }
 func (itemDelegate) Spacing() int                              { return 0 }
 func (itemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 func (itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	str := listItem.(langItem)
+	str := listItem.(licenseItem)
 	cursor := " "
 	if index == m.Index() {
 		cursor = ">"
@@ -91,41 +86,29 @@ func (itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.I
 	fmt.Fprintf(w, "%s %s\n", cursor, str)
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 func (m model) Init() tea.Cmd {
 	return textinput.Blink
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch m.step {
-	case chooseLang:
-		// allow arrow/enter handling in the list
-		var cmd tea.Cmd
-		m.langList, cmd = m.langList.Update(msg)
-		if key, ok := msg.(tea.KeyMsg); ok && key.String() == "enter" {
-			// capture selection
-			sel := m.langList.SelectedItem().(langItem)
-			m.selectedLang = string(sel)
-			m.step = enterDesc
-			m.descInput.Focus()
-		}
-		return m, cmd
-
 	case enterDesc:
-		// textinput handles typing
 		var cmd tea.Cmd
 		m.descInput, cmd = m.descInput.Update(msg)
 		if key, ok := msg.(tea.KeyMsg); ok && key.String() == "enter" {
 			m.description = m.descInput.Value()
-			m.step = enterLicense
-			m.licInput.Focus()
+			m.step = chooseLicense
 		}
 		return m, cmd
 
-	case enterLicense:
+	case chooseLicense:
 		var cmd tea.Cmd
-		m.licInput, cmd = m.licInput.Update(msg)
+		m.licList, cmd = m.licList.Update(msg)
 		if key, ok := msg.(tea.KeyMsg); ok && key.String() == "enter" {
-			m.license = m.licInput.Value()
+			sel := m.licList.SelectedItem().(licenseItem)
+			m.license = string(sel)
 			m.step = confirm
 		}
 		return m, cmd
@@ -133,13 +116,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case confirm:
 		if key, ok := msg.(tea.KeyMsg); ok && key.String() == "enter" {
 			m.step = done
-			// fire off deploy in background
-			go m.deploy()
 		}
 		return m, nil
 
 	case done:
-		// exit the TUI
 		return m, tea.Quit
 	}
 
@@ -148,67 +128,26 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	switch m.step {
-	case chooseLang:
-		return "\n" + m.langList.View() + "\n(↑/↓: navigate • enter: select)\n"
-
 	case enterDesc:
 		return fmt.Sprintf(
 			"\nEnter a short project description:\n\n  %s\n",
 			m.descInput.View(),
 		)
 
-	case enterLicense:
-		return fmt.Sprintf(
-			"\nEnter license identifier:\n\n  %s\n",
-			m.licInput.View(),
-		)
+	case chooseLicense:
+		return "\n" + m.licList.View() + "\n(↑/↓: navigate • enter: select)\n"
 
 	case confirm:
 		return fmt.Sprintf(
-			"\nConfirm settings:\n\n  language: %s\n  description: %s\n  license: %s\n\nPress ENTER to deploy\n",
-			m.selectedLang, m.description, m.license,
+			"\nConfirm settings:\n\n  description: %s\n  license: %s\n\nPress ENTER to finish\n",
+			m.description, m.license,
 		)
 
 	case done:
-		return "\nDeployment triggered! Exiting…\n"
+		return "\nCaptured values! Exiting…\n"
 	}
 
 	return ""
-}
-
-// deploy() calls your existing Cobra logic using the collected values.
-func (m model) deploy() {
-	// fallback to current dir
-	// repo, err := domovoi.CurrentDir()
-	// horus.CheckErr(err)
-
-	// // build copy params
-	// srcDir := filepath.Join(dirs.home, dirs.readme)
-	// destFile := filepath.Join(flags.path, dirs.readme)
-
-	// params := newCopyParams(srcDir, destFile)
-	// params.Files = []string{
-	// 	overview,
-	// 	filepath.Join("02" + m.selectedLang + "_install.md"),
-	// 	usage,
-	// 	filepath.Join("04" + m.selectedLang + "_dev.md"),
-	// 	faq,
-	// }
-
-	// // replacements + concat
-	// reps, repErr := buildReadmeReplacements(
-	// 	m.selectedLang,
-	// 	m.description,
-	// 	repo,
-	// 	user,
-	// 	author,
-	// 	m.license,
-	// 	path,
-	// )
-	// horus.CheckErr(repErr)
-
-	// params.Reps = reps
-	// horus.CheckErr(concatenateFiles(params, ""))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
