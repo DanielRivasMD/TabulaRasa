@@ -39,8 +39,8 @@ _default:
 # config
 ####################################################################################################
 
-goapp := 'TabulaRasa'
-goexe := 'tabularasa'
+app := 'TabulaRasa'
+exe := 'tabularasa'
 dir   := '.tabularasa'
 
 ####################################################################################################
@@ -49,7 +49,7 @@ dir   := '.tabularasa'
 
 # build exec
 [group('go')]
-build app=goapp:
+build app=app:
   @echo "\n\033[1;33mBuilding\033[0;37m...\n=================================================="
   go build -v -o excalibur/{{app}}
 
@@ -57,7 +57,7 @@ build app=goapp:
 
 # install locally
 [group('go')]
-install app=goapp exe=goexe dir=dir:
+install dir=dir app=app exe=exe:
   @echo "\n\033[1;33mInstalling\033[0;37m...\n=================================================="
   go install
   mv -v "${HOME}/go/bin/{{app}}" "${HOME}/go/bin/{{exe}}"
@@ -76,13 +76,5 @@ install app=goapp exe=goexe dir=dir:
 [group('go')]
 watch:
   watchexec --clear --watch cmd -- 'just install'
-
-####################################################################################################
-
-# print help
-[group('go')]
-@help:
-  @echo "\n\033[1;33mPrinting\033[0;37m...\n=================================================="
-  go run -- --help
 
 ####################################################################################################
