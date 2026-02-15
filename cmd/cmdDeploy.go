@@ -114,11 +114,7 @@ var (
 func init() {
 	rootCmd.AddCommand(deployCmd)
 	deployCmd.AddCommand(deployJustCmd, deployReadmeCmd, deployTodorCmd)
-
-	// deploy
 	deployCmd.PersistentFlags().VarP(lang, "lang", "l", "Templates to deploy (allowed: "+joinValues(validLangs)+")")
-
-	// deploy just
 	_ = deployJustCmd.MarkFlagRequired("lang")
 }
 
