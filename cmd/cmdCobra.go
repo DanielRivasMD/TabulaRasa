@@ -72,16 +72,6 @@ var cobraUtilCmd = &cobra.Command{
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func init() {
-	rootCmd.AddCommand(cobraCmd)
-	cobraCmd.AddCommand(cobraAppCmd, cobraCmdCmd, cobraUtilCmd)
-
-	// cobra app
-	cobraAppCmd.Flags().BoolVarP(&flags.force, "force", "f", false, "Force install go dependencies")
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 var skel = skeletons{
 	gplv3License:     "GPLv3.license",
 	mainPackage:      "main.package",
@@ -216,6 +206,14 @@ var completionSkeleton = []string{
 
 var identitySkeleton = []string{
 	skel.identityCmd,
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func init() {
+	rootCmd.AddCommand(cobraCmd)
+	cobraCmd.AddCommand(cobraAppCmd, cobraCmdCmd, cobraUtilCmd)
+	cobraAppCmd.Flags().BoolVarP(&flags.force, "force", "f", false, "Force install go dependencies")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
