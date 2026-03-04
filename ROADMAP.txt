@@ -1,13 +1,10 @@
 - add an option for full deployment (just, todor, readme) => `tab deploy --full --lang go`
-- tab deploy seems in trouble!
+- update cobra templates to comply with json embeddings
 
 ==================================================
 cmd/cmdCobra.go
-  line 257    BUG    domovoi.RemoveFile not working properly
-  line 264    TODO   better error check
-  line 268    TODO   set up copy & replace for LICENSE, as well as tab completion on the suffix pattern
-cmd/cmdDeploy.go
-  line 21     BUG    deploy root flags
+  line 262    TODO   better error check
+  line 266    TODO   set up copy & replace for LICENSE, as well as tab completion on the suffix pattern
 cmd/cmdIdentity.go
   line 47     TODO   complete identity
 cmd/root.go
