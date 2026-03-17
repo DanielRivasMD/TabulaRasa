@@ -1,5 +1,0 @@
-var helpCOMMAND_UPPERCASE = domovoi.FormatHelp(
-	"AUTHOR",
-	"EMAIL",
-	"",
-)

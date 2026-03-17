@@ -1,3 +1,0 @@
-func init() {
-	rootCmd.PersistentFlags().BoolVarP(&flags.verbose, "verbose", "v", false, "Enable verbose diagnostics")
-}

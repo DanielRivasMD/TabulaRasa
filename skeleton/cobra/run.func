@@ -1,2 +1,0 @@
-func runCOMMAND_UPPERCASE(cmd *cobra.Command, args []string) {
-}

@@ -1,3 +1,0 @@
-func init() {
-	rootCmd.AddCommand(COMMAND_LOWERCASECmd)
-}
