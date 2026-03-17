@@ -19,6 +19,7 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -60,8 +61,29 @@ func CobraCmdCmd() *cobra.Command {
 
 func runCobraApp(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.app"
-	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 
+	shouldInit := false
+	_, errMod := os.Stat("go.mod")
+	if errMod == nil {
+		// go.mod exists
+		if !cobraAppFlags.force {
+			horus.CheckErr(fmt.Errorf("a Go module already exists (go.mod). Use --force to overwrite"),
+				horus.WithOp(op), horus.WithMessage("existing go.mod detected"))
+		} else {
+			for _, f := range []string{"go.mod", "go.sum"} {
+				if err := os.Remove(f); err != nil && !os.IsNotExist(err) {
+					horus.CheckErr(err, horus.WithOp(op), horus.WithMessage("failed to remove "+f))
+				}
+			}
+			shouldInit = true
+		}
+	} else if os.IsNotExist(errMod) {
+		shouldInit = true
+	} else {
+		horus.CheckErr(errMod, horus.WithOp(op), horus.WithMessage("failed to check go.mod existence"))
+	}
+
+	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 	repo := horus.Must(domovoi.CurrentDir())
 	replaces := []moldReplace{
 		Replace("XXX_REPO_XXX", repo),
@@ -87,9 +109,7 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 		moldForging(op, newMoldConfig(configDirs.cobra, out, []string{templateFile}, replaces...))
 	}
 
-	if cobraAppFlags.force {
-		os.Remove("go.mod")
-		os.Remove("go.sum")
+	if shouldInit {
 		horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+cobraFlags.user+"/"+repo))
 		horus.CheckErr(domovoi.ExecCmd("go", "mod", "tidy"))
 	}
