@@ -20,6 +20,7 @@ package cmd
 
 import (
 	"embed"
+	"path/filepath"
 	"sync"
 
 	"github.com/DanielRivasMD/domovoi"
@@ -93,8 +94,9 @@ func GetRootCmd() *cobra.Command {
 		rootCmd.PersistentFlags().StringVarP(&rootFlags.user, "user", "", "DanielRivasMD", "GitHub username")
 		rootCmd.PersistentFlags().StringVarP(&rootFlags.author, "author", "", "Daniel Rivas", "Author name")
 		rootCmd.PersistentFlags().StringVarP(&rootFlags.email, "email", "", "<danielrivasmd@gmail.com>", "Author email")
-
 		rootCmd.Version = VERSION
+
+		cobra.OnInitialize(initConfigDirs)
 	})
 	return rootCmd
 }
@@ -110,6 +112,19 @@ func BuildCommands() {
 		CobraCmd(),
 		DeployCmd(),
 	)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func initConfigDirs() {
+	var err error
+	configDirs.home, err = domovoi.FindHome(false) // verbose false for init
+	horus.CheckErr(err, horus.WithCategory("init_error"), horus.WithMessage("getting home directory"))
+	configDirs.tabularasa = filepath.Join(configDirs.home, ".tabularasa")
+	configDirs.cobra = filepath.Join(configDirs.tabularasa, "cobra")
+	configDirs.just = filepath.Join(configDirs.tabularasa, "just")
+	configDirs.readme = filepath.Join(configDirs.tabularasa, "readme")
+	configDirs.todor = filepath.Join(configDirs.tabularasa, "todor")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
