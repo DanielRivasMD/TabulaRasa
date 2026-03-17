@@ -1,13 +1,13 @@
 module github.com/DanielRivasMD/TabulaRasa
 
-go 1.23.4
+go 1.25
 
 require (
-	github.com/DanielRivasMD/domovoi v0.0.0-20250910075839-83597940b8dd
-	github.com/DanielRivasMD/horus v1.0.0
+	github.com/DanielRivasMD/domovoi v0.2.0
+	github.com/DanielRivasMD/horus v1.1.0
 	github.com/charmbracelet/bubbles v0.21.0
 	github.com/charmbracelet/bubbletea v1.3.6
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.10.2
 	github.com/ttacon/chalk v0.0.0-20160626202418-22c06c80ed31
 )
 
@@ -35,7 +35,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/sahilm/fuzzy v0.1.1 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/sync v0.15.0 // indirect
