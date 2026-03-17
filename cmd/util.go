@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 	"unicode"
 
@@ -37,11 +38,6 @@ type moldForge struct {
 	out      string
 	files    []string
 	replaces []moldReplace
-}
-
-type filePair struct {
-	files []string
-	out   string
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,6 +123,12 @@ func upperFirst(s string) string {
 	runes := []rune(s)
 	runes[0] = unicode.ToUpper(runes[0])
 	return string(runes)
+}
+
+func templateMapping(outputFile string) string {
+	ext := filepath.Ext(outputFile)
+	base := strings.TrimSuffix(outputFile, ext)
+	return base + "_" + ext[1:]
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
