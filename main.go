@@ -20,8 +20,9 @@ import "github.com/DanielRivasMD/TabulaRasa/cmd"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// entry point
 func main() {
+	cmd.InitDocs()
+	cmd.BuildCommands()
 	cmd.Execute()
 }
 
