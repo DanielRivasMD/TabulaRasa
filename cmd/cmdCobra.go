@@ -19,7 +19,6 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -40,7 +39,6 @@ func CobraCmd() *cobra.Command {
 	cmd.AddCommand(
 		CobraAppCmd(),
 		CobraCmdCmd(),
-		CobraUtilCmd(),
 	)
 	return cmd
 }
@@ -54,13 +52,6 @@ func CobraAppCmd() *cobra.Command {
 func CobraCmdCmd() *cobra.Command {
 	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("cmd", runCobraCmd,
 		domovoi.WithArgs(cobra.ExactArgs(1)),
-	))
-}
-
-func CobraUtilCmd() *cobra.Command {
-	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("util", runCobraUtil,
-		domovoi.WithArgs(cobra.MaximumNArgs(1)),
-		domovoi.WithValidArgs([]string{"help", "example"}),
 	))
 }
 
@@ -78,12 +69,12 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	}
 
 	replaces := []moldReplace{
-		Replace("REPOSITORY", repo),
-		Replace("COMMAND_LOWERCASE", strings.ToLower(repo)),
-		Replace("COMMAND_UPPERCASE", "Root"),
-		Replace("AUTHOR", rootFlags.author),
-		Replace("EMAIL", rootFlags.email),
-		Replace("YEAR", strconv.Itoa(time.Now().Year())),
+		Replace("XXX_REPO_XXX", repo),
+		Replace("XXX_CMD_LOWERCASE_XXX", strings.ToLower(repo)),
+		Replace("XXX_CMD_UPPERCASE_XXX", "Root"),
+		Replace("XXX_AUTHOR_XXX", rootFlags.author),
+		Replace("XXX_EMAIL_XXX", rootFlags.email),
+		Replace("XXX_YEAR_XXX", strconv.Itoa(time.Now().Year())),
 	}
 
 	cobraMainSkeleton := []string{"GPLv3.license", "main.package", "line.new", "line.break", "line.new", "repo.import", "line.new", "line.break", "line.new", "main.func", "line.new", "line.break"}
@@ -122,11 +113,11 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 
 	cmdName := args[0]
 	replaces := []moldReplace{
-		Replace("COMMAND_LOWERCASE", lowerFirst(cmdName)),
-		Replace("COMMAND_UPPERCASE", upperFirst(cmdName)),
-		Replace("AUTHOR", rootFlags.author),
-		Replace("EMAIL", rootFlags.email),
-		Replace("YEAR", strconv.Itoa(time.Now().Year())),
+		Replace("XXX_CMD_LOWERCASE_XXX", lowerFirst(cmdName)),
+		Replace("XXX_CMD_UPPERCASE_XXX", upperFirst(cmdName)),
+		Replace("XXX_AUTHOR_XXX", rootFlags.author),
+		Replace("XXX_EMAIL_XXX", rootFlags.email),
+		Replace("XXX_YEAR_XXX", strconv.Itoa(time.Now().Year())),
 	}
 
 	cobraCmdSkeleton := []string{"GPLv3.license", "cmd.package", "line.new", "line.break", "line.new", "cobra.import", "line.new", "line.break", "line.new", "cmd.var", "line.new", "line.break", "line.new", "init.func", "line.new", "line.break", "line.new", "run.func", "line.new", "line.break"}
@@ -150,36 +141,6 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 		moldForging(op, newMoldConfig(configDirs.cobra, targetPath, inj.block, replaces...))
 		os.Remove(tmpPath)
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-func runCobraUtil(cmd *cobra.Command, args []string) {
-	op := "tabularasa.cobra.util"
-	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
-
-	utilType := args[0]
-	replaces := []moldReplace{
-		Replace("COMMAND_LOWERCASE", lowerFirst(utilType)),
-		Replace("COMMAND_UPPERCASE", upperFirst(utilType)),
-		Replace("AUTHOR", rootFlags.author),
-		Replace("EMAIL", rootFlags.email),
-	}
-
-	var skeleton []string
-	var outFile string
-	switch utilType {
-	case "help":
-		skeleton = []string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "help.var", "line.new", "line.break"}
-		outFile = filepath.Join("cmd", "utilHelp.go")
-	case "example":
-		skeleton = []string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "example.var", "line.new", "line.break"}
-		outFile = filepath.Join("cmd", "utilExample.go")
-	default:
-		horus.CheckErr(fmt.Errorf("unknown util type: %s", utilType))
-	}
-
-	moldForging(op, newMoldConfig(configDirs.cobra, outFile, skeleton, replaces...))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

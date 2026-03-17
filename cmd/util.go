@@ -38,6 +38,7 @@ type moldForge struct {
 	files    []string
 	replaces []moldReplace
 }
+
 type filePair struct {
 	files []string
 	out   string
