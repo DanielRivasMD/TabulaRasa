@@ -12,7 +12,7 @@
         "bug": "red",
         "doc": "blue",
         "todo": "yellow",
-        "wip": "green",
+        "wip": "cyan",
     }
   }
 }
