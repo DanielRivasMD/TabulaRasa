@@ -61,12 +61,8 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.app"
 	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 
-	repo := rootFlags.repo
-	if repo == "" {
-		var err error
-		repo, err = domovoi.CurrentDir()
-		horus.CheckErr(err)
-	}
+	repo, err := domovoi.CurrentDir()
+	horus.CheckErr(err)
 
 	replaces := []moldReplace{
 		Replace("XXX_REPO_XXX", repo),
