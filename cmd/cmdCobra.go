@@ -77,24 +77,19 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 		Replace("XXX_YEAR_XXX", strconv.Itoa(time.Now().Year())),
 	}
 
-	cobraMainSkeleton := []string{"GPLv3.license", "main.package", "line.new", "line.break", "line.new", "repo.import", "line.new", "line.break", "line.new", "main.func", "line.new", "line.break"}
-	cobraRootSkeleton := []string{"GPLv3.license", "cmd.package", "line.new", "line.break", "line.new", "cobra_horus.import", "line.new", "line.break", "line.new", "root.var", "line.new", "line.break", "line.new", "exec.func", "line.new", "line.break", "line.new", "flags.struct", "line.new", "line.break", "line.new", "root.func", "line.new", "line.break"}
-	completionSkeleton := []string{"completion.cmd"}
-	identitySkeleton := []string{"identity.cmd"}
-	utilHelpSkeleton := []string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "help.var", "line.new", "line.break"}
-	utilExampleSkeleton := []string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "example.var", "line.new", "line.break"}
-
-	pairs := []filePair{
-		{cobraMainSkeleton, "main.go"},
-		{cobraRootSkeleton, filepath.Join("cmd", "root.go")},
-		{completionSkeleton, filepath.Join("cmd", "cmdCompletion.go")},
-		{identitySkeleton, filepath.Join("cmd", "cmdIdentity.go")},
-		{utilHelpSkeleton, filepath.Join("cmd", "utilHelp.go")},
-		{utilExampleSkeleton, filepath.Join("cmd", "utilExample.go")},
+	outputs := []string{
+		"main.go",
+		filepath.Join("cmd", "root.go"),
+		filepath.Join("cmd", "cmdCompletion.go"),
+		filepath.Join("cmd", "cmdIdentity.go"),
 	}
 
-	for _, p := range pairs {
-		moldForging(op, newMoldConfig(configDirs.cobra, p.out, p.files, replaces...))
+	for _, out := range outputs {
+		templateFile := templateMapping(filepath.Base(out))
+		if dir := filepath.Dir(out); dir != "." {
+			horus.CheckErr(domovoi.CreateDir(dir, rootFlags.verbose))
+		}
+		moldForging(op, newMoldConfig(configDirs.cobra, out, []string{templateFile}, replaces...))
 	}
 
 	if cobraAppForce {
@@ -120,27 +115,9 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 		Replace("XXX_YEAR_XXX", strconv.Itoa(time.Now().Year())),
 	}
 
-	cobraCmdSkeleton := []string{"GPLv3.license", "cmd.package", "line.new", "line.break", "line.new", "cobra.import", "line.new", "line.break", "line.new", "cmd.var", "line.new", "line.break", "line.new", "init.func", "line.new", "line.break", "line.new", "run.func", "line.new", "line.break"}
 	outFile := filepath.Join("cmd", "cmd"+upperFirst(cmdName)+".go")
-	moldForging(op, newMoldConfig(configDirs.cobra, outFile, cobraCmdSkeleton, replaces...))
-
-	injectionHelpSkeleton := []string{"utilHelp.tmp", "line.new", "help.var", "line.new", "line.break"}
-	injectionExampleSkeleton := []string{"utilExample.tmp", "line.new", "example.var", "line.new", "line.break"}
-
-	for _, inj := range []struct {
-		tmp    string
-		target string
-		block  []string
-	}{
-		{"utilHelp.tmp", "utilHelp.go", injectionHelpSkeleton},
-		{"utilExample.tmp", "utilExample.go", injectionExampleSkeleton},
-	} {
-		tmpPath := filepath.Join(configDirs.cobra, inj.tmp)
-		targetPath := filepath.Join("cmd", inj.target)
-		horus.CheckErr(CopyFile(targetPath, tmpPath))
-		moldForging(op, newMoldConfig(configDirs.cobra, targetPath, inj.block, replaces...))
-		os.Remove(tmpPath)
-	}
+	const templateFile = "cmdCmd_go"
+	moldForging(op, newMoldConfig(configDirs.cobra, outFile, []string{templateFile}, replaces...))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
