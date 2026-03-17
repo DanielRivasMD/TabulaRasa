@@ -1,5 +1,3 @@
-- add an option for full deployment (just, todor, readme) => `tab deploy --full --lang go`
-- update cobra templates to comply with json embeddings
 
 ==================================================
 cmd/cmdCobra.go
