@@ -1,0 +1,141 @@
+{
+  "identity": {
+    "use": "identity",
+    "hidden": true
+  },
+  "completion": {
+    "use": "completion [bash|zsh|fish|powershell]",
+    "hidden": true,
+    "long": "To load completions:\n\nBash:\n\n  $ source <(%[1]s completion bash)\n\n  # To load completions for each session, execute once:\n  # Linux:\n  $ %[1]s completion bash > /etc/bash_completion.d/%[1]s\n  # macOS:\n  $ %[1]s completion bash > $(brew --prefix)/etc/bash_completion.d/%[1]s\n\nZsh:\n\n  # If shell completion is not already enabled in your environment,\n  # you will need to enable it. You can execute the following once:\n\n  $ echo \"autoload -U compinit; compinit\" >> ~/.zshrc\n\n  # To load completions for each session, execute once:\n  $ %[1]s completion zsh > \"${fpath[1]}/_%[1]s\"\n\n  # You will need to start a new shell for this setup to take effect.\n\nfish:\n\n  $ %[1]s completion fish | source\n\n  # To load completions for each session, execute once:\n  $ %[1]s completion fish > ~/.config/fish/completions/%[1]s.fish\n\nPowerShell:\n\n  PS> %[1]s completion powershell | Out-String | Invoke-Expression\n\n  # To load completions for every new session, run:\n  PS> %[1]s completion powershell > %[1]s.ps1\n  # and source this file from your PowerShell profile.",
+    "valid_args": [
+      "bash",
+      "zsh",
+      "fish",
+      "powershell"
+    ]
+  },
+  "root": {
+    "use": "tab",
+    "short": "Template deployment tool",
+    "long": "Provide a set of templates to facilitate software deployment",
+    "example_usages": [
+      [
+        "help"
+      ]
+    ]
+  },
+  "cobra": {
+    "use": "cobra",
+    "short": "Construct cobra apps, cmds & import utils",
+    "long": "Enables the creation of cobra applications using predefined templates for rapid development",
+    "example_usages": [
+      [
+        "cobra"
+      ]
+    ]
+  },
+  "app": {
+    "use": "app",
+    "short": "Construct cobra apps from templates",
+    "long": "Construct cobra apps from predefined templates",
+    "example_usages": [
+      [
+        "cobra",
+        "app"
+      ],
+      [
+        "cobra",
+        "app",
+        "--force"
+      ]
+    ]
+  },
+  "cmd": {
+    "use": "cmd <command-name>",
+    "short": "Build cobra cmds from templates",
+    "long": "Build cobra commands from predefined templates",
+    "example_usages": [
+      [
+        "cobra",
+        "cmd",
+        "ExampleCmd"
+      ]
+    ]
+  },
+  "util": {
+    "use": "util {help|example}",
+    "short": "Import utility templates",
+    "long": "Deploy a utility from predefined templates",
+    "example_usages": [
+      [
+        "cobra",
+        "util",
+        "help"
+      ],
+      [
+        "cobra",
+        "util",
+        "example"
+      ]
+    ]
+  },
+  "deploy": {
+    "use": "deploy",
+    "short": "Deploy config templates",
+    "long": "Deploy selected config templates into your project",
+    "example_usages": [
+      [
+        "deploy"
+      ]
+    ]
+  },
+  "just": {
+    "use": "just",
+    "short": "Build system files",
+    "long": "Deploy justfile & language‑specific configs",
+    "example_usages": [
+      [
+        "deploy",
+        "just",
+        "--lang",
+        "go"
+      ],
+      [
+        "deploy",
+        "just",
+        "--lang",
+        "rs"
+      ]
+    ]
+  },
+  "readme": {
+    "use": "readme",
+    "short": "README scaffold",
+    "long": "Deploy readme template with sections: overview, install/dev guides, usage & FAQ snippets",
+    "example_usages": [
+      [
+        "deploy",
+        "readme"
+      ],
+      [
+        "deploy",
+        "readme",
+        "--description",
+        "Awesome project",
+        "--license",
+        "MIT"
+      ]
+    ]
+  },
+  "todor": {
+    "use": "todor",
+    "short": "Task-tracker starter",
+    "long": "Deploy top-level todor config",
+    "example_usages": [
+      [
+        "deploy",
+        "todor"
+      ]
+    ]
+  }
+}
