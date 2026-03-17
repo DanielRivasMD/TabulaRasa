@@ -19,11 +19,8 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
-	"fmt"
-	"io"
-	"os"
-	"path/filepath"
-	"unicode"
+	"embed"
+	"sync"
 
 	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
@@ -32,27 +29,29 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var rootCmd = &cobra.Command{
-	Use:     "tab",
-	Long:    helpRoot,
-	Example: exampleRoot,
-}
+//go:embed docs.json
+var docsFS embed.FS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func Execute() {
-	horus.CheckErr(rootCmd.Execute())
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-var (
-	dirs   configDirs
-	flags  cobraFlags
-	params cobraParams
+const (
+	APP     = "tab"
+	VERSION = "v0.1.0"
+	AUTHOR  = "Daniel Rivas"
+	EMAIL   = "<danielrivasmd@gmail.com>"
 )
 
-type configDirs struct {
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+type rootFlag struct {
+	verbose bool
+	repo    string
+	user    string
+	author  string
+	email   string
+}
+
+type configDir struct {
 	home       string
 	tabularasa string
 	cobra      string
@@ -61,110 +60,62 @@ type configDirs struct {
 	todor      string
 }
 
-type cobraFlags struct {
-	// root
-	verbose     bool
-	author      string
-	email       string
-	repo        string
-	user        string
-	description string
-	license     string
+var (
+	onceRoot   sync.Once
+	rootCmd    *cobra.Command
+	rootFlags  rootFlag
+	configDirs configDir
+)
 
-	// cobra.app
-	force bool
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-type cobraParams struct {
-	// cobra.cmd
-	cmd string
-
-	// cobra.util
-	util string
+func InitDocs() {
+	info := domovoi.AppInfo{
+		Name:    APP,
+		Version: VERSION,
+		Author:  AUTHOR,
+		Email:   EMAIL,
+	}
+	domovoi.SetGlobalDocsConfig(docsFS, info)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func init() {
-	rootCmd.PersistentFlags().BoolVarP(&flags.verbose, "verbose", "v", false, "Enable verbose diagnostic output")
+func GetRootCmd() *cobra.Command {
+	onceRoot.Do(func() {
+		d := horus.Must(domovoi.GlobalDocs())
+		var err error
+		rootCmd, err = d.MakeCmd("root", nil)
+		horus.CheckErr(err)
 
-	rootCmd.PersistentFlags().StringVarP(&flags.repo, "repo", "", "", "Repository name")
-	rootCmd.PersistentFlags().StringVarP(&flags.user, "user", "", "DanielRivasMD", "GitHub username")
-	rootCmd.PersistentFlags().StringVarP(&flags.author, "author", "", "Daniel Rivas", "Author name")
-	rootCmd.PersistentFlags().StringVarP(&flags.email, "email", "", "<danielrivasmd@gmail.com>", "Author email")
+		rootCmd.PersistentFlags().BoolVarP(&rootFlags.verbose, "verbose", "v", false, "Enable verbose diagnostic output")
+		rootCmd.PersistentFlags().StringVarP(&rootFlags.repo, "repo", "", "", "Repository name")
+		rootCmd.PersistentFlags().StringVarP(&rootFlags.user, "user", "", "DanielRivasMD", "GitHub username")
+		rootCmd.PersistentFlags().StringVarP(&rootFlags.author, "author", "", "Daniel Rivas", "Author name")
+		rootCmd.PersistentFlags().StringVarP(&rootFlags.email, "email", "", "<danielrivasmd@gmail.com>", "Author email")
 
-	// TODO: update flag requirements
-	_ = rootCmd.MarkFlagRequired("path")
-	_ = rootCmd.MarkFlagRequired("repo")
-
-	cobra.OnInitialize(initConfigDirs)
+		rootCmd.Version = VERSION
+	})
+	return rootCmd
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func initConfigDirs() {
-	var err error
-	dirs.home, err = domovoi.FindHome(flags.verbose)
-	horus.CheckErr(err, horus.WithCategory("init_error"), horus.WithMessage("getting home directory"))
-	dirs.tabularasa = filepath.Join(dirs.home, ".tabularasa")
-	dirs.cobra = filepath.Join(dirs.tabularasa, "cobra")
-	dirs.just = filepath.Join(dirs.tabularasa, "just")
-	dirs.readme = filepath.Join(dirs.tabularasa, "readme")
-	dirs.todor = filepath.Join(dirs.tabularasa, "todor")
+func BuildCommands() {
+	root := GetRootCmd()
+	root.AddCommand(
+		CompletionCmd(),
+		IdentityCmd(),
+
+		CobraCmd(),
+		DeployCmd(),
+	)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// lowerFirst returns s with its first Unicode letter lower-cased.
-// If s is empty, it returns s unchanged.
-func lowerFirst(s string) string {
-	if s == "" {
-		return s
-	}
-	runes := []rune(s)
-	runes[0] = unicode.ToLower(runes[0])
-	return string(runes)
-}
-
-// upperFirst returns s with its first Unicode letter upper-cased.
-// If s is empty, it returns s unchanged.
-func upperFirst(s string) string {
-	if s == "" {
-		return s
-	}
-	runes := []rune(s)
-	runes[0] = unicode.ToUpper(runes[0])
-	return string(runes)
-}
-
-func CopyFile(src, dst string) error {
-	in, err := os.Open(src)
-	if err != nil {
-		return fmt.Errorf("failed to open source: %w", err)
-	}
-	defer in.Close()
-
-	out, err := os.Create(dst)
-	if err != nil {
-		return fmt.Errorf("failed to create destination: %w", err)
-	}
-	defer out.Close()
-
-	_, err = io.Copy(out, in)
-	if err != nil {
-		return fmt.Errorf("failed to copy data: %w", err)
-	}
-
-	// Optional: preserve permissions
-	info, err := os.Stat(src)
-	if err == nil {
-		err = os.Chmod(dst, info.Mode())
-		if err != nil {
-			return fmt.Errorf("failed to set permissions: %w", err)
-		}
-	}
-
-	return nil
+func Execute() {
+	horus.CheckErr(GetRootCmd().Execute())
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
