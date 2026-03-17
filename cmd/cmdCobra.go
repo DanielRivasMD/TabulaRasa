@@ -33,201 +33,65 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var cobraCmd = &cobra.Command{
-	Use:     "cobra",
-	Short:   "Construct cobra apps, cmds & import utils",
-	Long:    helpCobra,
-	Example: exampleCobra,
+var cobraAppForce bool
+
+func CobraCmd() *cobra.Command {
+	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("cobra", nil))
+	cmd.AddCommand(
+		CobraAppCmd(),
+		CobraCmdCmd(),
+		CobraUtilCmd(),
+	)
+	return cmd
 }
 
-var cobraAppCmd = &cobra.Command{
-	Use:     "app",
-	Short:   "Construct cobra apps from templates",
-	Long:    helpCobraApp,
-	Example: exampleCobraApp,
-
-	Run: runCobraApp,
+func CobraAppCmd() *cobra.Command {
+	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("app", runCobraApp))
+	cmd.Flags().BoolVarP(&cobraAppForce, "force", "f", false, "Force install go dependencies")
+	return cmd
 }
 
-var cobraCmdCmd = &cobra.Command{
-	Use:     "cmd",
-	Short:   "Build cobra cmds from templates",
-	Long:    helpCobraCmd,
-	Example: exampleCobraCmd,
-
-	Run: runCobraCmd,
+func CobraCmdCmd() *cobra.Command {
+	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("cmd", runCobraCmd,
+		domovoi.WithArgs(cobra.ExactArgs(1)),
+	))
 }
 
-var cobraUtilCmd = &cobra.Command{
-	Use:     "util",
-	Short:   "Import utility templates",
-	Long:    helpCobraUtil,
-	Example: exampleCobraUtil,
-
-	Args:      cobra.MaximumNArgs(1),
-	ValidArgs: []string{"help", "example"},
-
-	Run: runCobraUtil,
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-var skel = skeletons{
-	gplv3License:     "GPLv3.license",
-	mainPackage:      "main.package",
-	cmdPackage:       "cmd.package",
-	importRepo:       "repo.import",
-	importCobra:      "cobra.import",
-	importCobraHorus: "cobra_horus.import",
-	importDomovoi:    "domovoi.import",
-	initFunc:         "init.func",
-	runFunc:          "run.func",
-	mainFunc:         "main.func",
-	rootFunc:         "root.func",
-	execFunc:         "exec.func",
-	flagsStruct:      "flags.struct",
-	cmdVar:           "cmd.var",
-	rootVar:          "root.var",
-	helpVar:          "help.var",
-	exampleVar:       "example.var",
-	lineNew:          "line.new",
-	lineBreak:        "line.break",
-	completionCmd:    "completion.cmd",
-	identityCmd:      "identity.cmd",
-	tmpHelp:          "utilHelp.tmp",
-	tmpExample:       "utilExample.tmp",
-}
-
-type skeletons struct {
-	gplv3License     string
-	mainPackage      string
-	cmdPackage       string
-	importRepo       string
-	importCobra      string
-	importCobraHorus string
-	importDomovoi    string
-	initFunc         string
-	runFunc          string
-	mainFunc         string
-	rootFunc         string
-	execFunc         string
-	flagsStruct      string
-	cmdVar           string
-	rootVar          string
-	helpVar          string
-	exampleVar       string
-	lineNew          string
-	lineBreak        string
-	completionCmd    string
-	identityCmd      string
-	tmpHelp          string
-	tmpExample       string
-}
-
-var cobraMainSkeleton = []string{
-	skel.gplv3License,
-	skel.mainPackage,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.importRepo,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.mainFunc,
-	skel.lineNew, skel.lineBreak,
-}
-
-var cobraRootSkeleton = []string{
-	skel.gplv3License,
-	skel.cmdPackage,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.importCobraHorus,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.rootVar,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.execFunc,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.flagsStruct,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.rootFunc,
-	skel.lineNew, skel.lineBreak,
-}
-
-var cobraCmdSkeleton = []string{
-	skel.gplv3License,
-	skel.cmdPackage,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.importCobra,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.cmdVar,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.initFunc,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.runFunc,
-	skel.lineNew, skel.lineBreak,
-}
-
-var injectionHelpSkeleton = []string{
-	skel.tmpHelp,
-	skel.lineNew,
-	skel.helpVar,
-	skel.lineNew,
-	skel.lineBreak,
-}
-
-var injectionExampleSkeleton = []string{
-	skel.tmpExample,
-	skel.lineNew,
-	skel.exampleVar,
-	skel.lineNew,
-	skel.lineBreak,
-}
-
-var utilHelpSkeleton = []string{
-	skel.lineBreak, skel.lineNew,
-	skel.cmdPackage,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.importDomovoi,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.helpVar,
-	skel.lineNew, skel.lineBreak,
-}
-
-var utilExampleSkeleton = []string{
-	skel.lineBreak, skel.lineNew,
-	skel.cmdPackage,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.importDomovoi,
-	skel.lineNew, skel.lineBreak, skel.lineNew,
-	skel.exampleVar,
-	skel.lineNew, skel.lineBreak,
-}
-
-var completionSkeleton = []string{
-	skel.completionCmd,
-}
-
-var identitySkeleton = []string{
-	skel.identityCmd,
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-func init() {
-	rootCmd.AddCommand(cobraCmd)
-	cobraCmd.AddCommand(cobraAppCmd, cobraCmdCmd, cobraUtilCmd)
-	cobraAppCmd.Flags().BoolVarP(&flags.force, "force", "f", false, "Force install go dependencies")
+func CobraUtilCmd() *cobra.Command {
+	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("util", runCobraUtil,
+		domovoi.WithArgs(cobra.MaximumNArgs(1)),
+		domovoi.WithValidArgs([]string{"help", "example"}),
+	))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runCobraApp(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.app"
-	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
+	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 
-	var err error
-	if flags.repo == "" {
-		flags.repo, err = domovoi.CurrentDir()
-		horus.CheckErr(err, horus.WithOp(op))
+	repo := rootFlags.repo
+	if repo == "" {
+		var err error
+		repo, err = domovoi.CurrentDir()
+		horus.CheckErr(err)
 	}
-	replaces := cobraAppReplacements()
+
+	replaces := []moldReplace{
+		Replace("REPOSITORY", repo),
+		Replace("COMMAND_LOWERCASE", strings.ToLower(repo)),
+		Replace("COMMAND_UPPERCASE", "Root"),
+		Replace("AUTHOR", rootFlags.author),
+		Replace("EMAIL", rootFlags.email),
+		Replace("YEAR", strconv.Itoa(time.Now().Year())),
+	}
+
+	cobraMainSkeleton := []string{"GPLv3.license", "main.package", "line.new", "line.break", "line.new", "repo.import", "line.new", "line.break", "line.new", "main.func", "line.new", "line.break"}
+	cobraRootSkeleton := []string{"GPLv3.license", "cmd.package", "line.new", "line.break", "line.new", "cobra_horus.import", "line.new", "line.break", "line.new", "root.var", "line.new", "line.break", "line.new", "exec.func", "line.new", "line.break", "line.new", "flags.struct", "line.new", "line.break", "line.new", "root.func", "line.new", "line.break"}
+	completionSkeleton := []string{"completion.cmd"}
+	identitySkeleton := []string{"identity.cmd"}
+	utilHelpSkeleton := []string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "help.var", "line.new", "line.break"}
+	utilExampleSkeleton := []string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "example.var", "line.new", "line.break"}
 
 	pairs := []filePair{
 		{cobraMainSkeleton, "main.go"},
@@ -238,43 +102,15 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 		{utilExampleSkeleton, filepath.Join("cmd", "utilExample.go")},
 	}
 
-	// now a simple for‐range
 	for _, p := range pairs {
-		mbomboForging(
-			op,
-			newMbomboConfig(
-				dirs.cobra,
-				p.out,
-				p.files,
-				replaces...,
-			))
+		moldForging(op, newMoldConfig(configDirs.cobra, p.out, p.files, replaces...))
 	}
 
-	// Initialize Go module and tidy dependencies
-	if flags.force {
-		// BUG: domovoi.RemoveFile not working properly
-		// domovoi.RemoveFile("go.mod", flags.verbose)
-		// domovoi.RemoveFile("go.sum", flags.verbose)
+	if cobraAppForce {
 		os.Remove("go.mod")
 		os.Remove("go.sum")
-	}
-
-	// TODO: better error check
-	horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+flags.user+"/"+flags.repo))
-	horus.CheckErr(domovoi.ExecCmd("go", "mod", "tidy"))
-
-	// TODO: set up copy & replace for LICENSE, as well as tab completion on the suffix pattern
-
-}
-
-func cobraAppReplacements() []mbomboReplace {
-	return []mbomboReplace{
-		Replace("REPOSITORY", flags.repo),
-		Replace("COMMAND_LOWERCASE", strings.ToLower(flags.repo)),
-		Replace("COMMAND_UPPERCASE", "Root"),
-		Replace("AUTHOR", flags.author),
-		Replace("EMAIL", flags.email),
-		Replace("YEAR", strconv.Itoa(time.Now().Year())),
+		horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+rootFlags.user+"/"+repo))
+		horus.CheckErr(domovoi.ExecCmd("go", "mod", "tidy"))
 	}
 }
 
@@ -282,60 +118,37 @@ func cobraAppReplacements() []mbomboReplace {
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.cmd"
-	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
-	params.cmd = args[0]
-	replaces := cobraCmdReplacements()
+	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 
-	mbomboForging(
-		op,
-		newMbomboConfig(
-			dirs.cobra,
-			filepath.Join("cmd", "cmd"+upperFirst(params.cmd)+".go"),
-			cobraCmdSkeleton,
-			replaces...,
-		))
+	cmdName := args[0]
+	replaces := []moldReplace{
+		Replace("COMMAND_LOWERCASE", lowerFirst(cmdName)),
+		Replace("COMMAND_UPPERCASE", upperFirst(cmdName)),
+		Replace("AUTHOR", rootFlags.author),
+		Replace("EMAIL", rootFlags.email),
+		Replace("YEAR", strconv.Itoa(time.Now().Year())),
+	}
 
-	injections := []struct {
-		srcTmp string
+	cobraCmdSkeleton := []string{"GPLv3.license", "cmd.package", "line.new", "line.break", "line.new", "cobra.import", "line.new", "line.break", "line.new", "cmd.var", "line.new", "line.break", "line.new", "init.func", "line.new", "line.break", "line.new", "run.func", "line.new", "line.break"}
+	outFile := filepath.Join("cmd", "cmd"+upperFirst(cmdName)+".go")
+	moldForging(op, newMoldConfig(configDirs.cobra, outFile, cobraCmdSkeleton, replaces...))
+
+	injectionHelpSkeleton := []string{"utilHelp.tmp", "line.new", "help.var", "line.new", "line.break"}
+	injectionExampleSkeleton := []string{"utilExample.tmp", "line.new", "example.var", "line.new", "line.break"}
+
+	for _, inj := range []struct {
+		tmp    string
 		target string
 		block  []string
 	}{
-		{
-			srcTmp: skel.tmpHelp,
-			target: "utilHelp.go",
-			block:  injectionHelpSkeleton,
-		},
-		{
-			srcTmp: skel.tmpExample,
-			target: "utilExample.go",
-			block:  injectionExampleSkeleton,
-		},
-	}
-
-	for _, inj := range injections {
-		tmpPath := filepath.Join(dirs.cobra, inj.srcTmp)
+		{"utilHelp.tmp", "utilHelp.go", injectionHelpSkeleton},
+		{"utilExample.tmp", "utilExample.go", injectionExampleSkeleton},
+	} {
+		tmpPath := filepath.Join(configDirs.cobra, inj.tmp)
 		targetPath := filepath.Join("cmd", inj.target)
 		horus.CheckErr(CopyFile(targetPath, tmpPath))
-
-		mbomboForging(
-			op,
-			newMbomboConfig(
-				dirs.cobra,
-				targetPath,
-				inj.block,
-				replaces...,
-			))
+		moldForging(op, newMoldConfig(configDirs.cobra, targetPath, inj.block, replaces...))
 		os.Remove(tmpPath)
-	}
-}
-
-func cobraCmdReplacements() []mbomboReplace {
-	return []mbomboReplace{
-		Replace("COMMAND_LOWERCASE", lowerFirst(params.cmd)),
-		Replace("COMMAND_UPPERCASE", upperFirst(params.cmd)),
-		Replace("AUTHOR", flags.author),
-		Replace("EMAIL", flags.email),
-		Replace("YEAR", strconv.Itoa(time.Now().Year())),
 	}
 }
 
@@ -343,38 +156,30 @@ func cobraCmdReplacements() []mbomboReplace {
 
 func runCobraUtil(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.util"
-	horus.CheckErr(domovoi.CreateDir("cmd", flags.verbose), horus.WithOp(op))
-	params.util = args[0]
-	replaces := cobraUtilReplacements()
+	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 
-	var pair filePair
-	switch params.util {
+	utilType := args[0]
+	replaces := []moldReplace{
+		Replace("COMMAND_LOWERCASE", lowerFirst(utilType)),
+		Replace("COMMAND_UPPERCASE", upperFirst(utilType)),
+		Replace("AUTHOR", rootFlags.author),
+		Replace("EMAIL", rootFlags.email),
+	}
+
+	var skeleton []string
+	var outFile string
+	switch utilType {
 	case "help":
-		pair = filePair{utilHelpSkeleton, filepath.Join("cmd", "utilHelp.go")}
+		skeleton = []string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "help.var", "line.new", "line.break"}
+		outFile = filepath.Join("cmd", "utilHelp.go")
 	case "example":
-		pair = filePair{utilExampleSkeleton, filepath.Join("cmd", "utilExample.go")}
+		skeleton = []string{"line.break", "line.new", "cmd.package", "line.new", "line.break", "line.new", "domovoi.import", "line.new", "line.break", "line.new", "example.var", "line.new", "line.break"}
+		outFile = filepath.Join("cmd", "utilExample.go")
 	default:
-		horus.CheckErr(fmt.Errorf("unknown util type: %s", params.util), horus.WithOp(op))
-		return
+		horus.CheckErr(fmt.Errorf("unknown util type: %s", utilType))
 	}
 
-	mbomboForging(
-		op,
-		newMbomboConfig(
-			dirs.cobra,
-			pair.out,
-			pair.files,
-			replaces...,
-		))
-}
-
-func cobraUtilReplacements() []mbomboReplace {
-	return []mbomboReplace{
-		Replace("COMMAND_LOWERCASE", lowerFirst(params.util)),
-		Replace("COMMAND_UPPERCASE", upperFirst(params.util)),
-		Replace("AUTHOR", flags.author),
-		Replace("EMAIL", flags.email),
-	}
+	moldForging(op, newMoldConfig(configDirs.cobra, outFile, skeleton, replaces...))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
