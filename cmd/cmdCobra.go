@@ -70,8 +70,7 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 
 	replaces := []moldReplace{
 		Replace("XXX_REPO_XXX", repo),
-		Replace("XXX_CMD_LOWERCASE_XXX", strings.ToLower(repo)),
-		Replace("XXX_CMD_UPPERCASE_XXX", "Root"),
+		Replace("XXX_CLI_LOWERCASE_XXX", strings.ToLower(repo)),
 		Replace("XXX_AUTHOR_XXX", rootFlags.author),
 		Replace("XXX_EMAIL_XXX", rootFlags.email),
 		Replace("XXX_YEAR_XXX", strconv.Itoa(time.Now().Year())),
@@ -80,6 +79,7 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	outputs := []string{
 		"main.go",
 		filepath.Join("cmd", "root.go"),
+		filepath.Join("cmd", "docs.json"),
 		filepath.Join("cmd", "cmdCompletion.go"),
 		filepath.Join("cmd", "cmdIdentity.go"),
 	}
