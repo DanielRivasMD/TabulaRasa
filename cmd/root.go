@@ -46,10 +46,6 @@ const (
 
 type rootFlag struct {
 	verbose bool
-	repo    string
-	user    string
-	author  string
-	email   string
 }
 
 type configDir struct {
@@ -90,10 +86,6 @@ func GetRootCmd() *cobra.Command {
 		horus.CheckErr(err)
 
 		rootCmd.PersistentFlags().BoolVarP(&rootFlags.verbose, "verbose", "v", false, "Enable verbose diagnostic output")
-		rootCmd.PersistentFlags().StringVarP(&rootFlags.repo, "repo", "", "", "Repository name")
-		rootCmd.PersistentFlags().StringVarP(&rootFlags.user, "user", "", "DanielRivasMD", "GitHub username")
-		rootCmd.PersistentFlags().StringVarP(&rootFlags.author, "author", "", "Daniel Rivas", "Author name")
-		rootCmd.PersistentFlags().StringVarP(&rootFlags.email, "email", "", "<danielrivasmd@gmail.com>", "Author email")
 		rootCmd.Version = VERSION
 
 		cobra.OnInitialize(initConfigDirs)

@@ -32,10 +32,11 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var cobraAppForce bool
-
 func CobraCmd() *cobra.Command {
 	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("cobra", nil))
+	cmd.PersistentFlags().StringVarP(&cobraFlags.user, "user", "", "DanielRivasMD", "GitHub username")
+	cmd.PersistentFlags().StringVarP(&cobraFlags.author, "author", "", "Daniel Rivas", "Author name")
+	cmd.PersistentFlags().StringVarP(&cobraFlags.email, "email", "", "<danielrivasmd@gmail.com>", "Author email")
 	cmd.AddCommand(
 		CobraAppCmd(),
 		CobraCmdCmd(),
@@ -45,7 +46,7 @@ func CobraCmd() *cobra.Command {
 
 func CobraAppCmd() *cobra.Command {
 	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("app", runCobraApp))
-	cmd.Flags().BoolVarP(&cobraAppForce, "force", "f", false, "Force install go dependencies")
+	cmd.Flags().BoolVarP(&cobraAppFlags.force, "force", "f", false, "Force install go dependencies")
 	return cmd
 }
 
@@ -61,14 +62,12 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.app"
 	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 
-	repo, err := domovoi.CurrentDir()
-	horus.CheckErr(err)
-
+	repo := horus.Must(domovoi.CurrentDir())
 	replaces := []moldReplace{
 		Replace("XXX_REPO_XXX", repo),
 		Replace("XXX_CLI_LOWERCASE_XXX", strings.ToLower(repo)),
-		Replace("XXX_AUTHOR_XXX", rootFlags.author),
-		Replace("XXX_EMAIL_XXX", rootFlags.email),
+		Replace("XXX_AUTHOR_XXX", cobraFlags.author),
+		Replace("XXX_EMAIL_XXX", cobraFlags.email),
 		Replace("XXX_YEAR_XXX", strconv.Itoa(time.Now().Year())),
 	}
 
@@ -88,10 +87,10 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 		moldForging(op, newMoldConfig(configDirs.cobra, out, []string{templateFile}, replaces...))
 	}
 
-	if cobraAppForce {
+	if cobraAppFlags.force {
 		os.Remove("go.mod")
 		os.Remove("go.sum")
-		horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+rootFlags.user+"/"+repo))
+		horus.CheckErr(domovoi.ExecCmd("go", "mod", "init", "github.com/"+cobraFlags.user+"/"+repo))
 		horus.CheckErr(domovoi.ExecCmd("go", "mod", "tidy"))
 	}
 }
@@ -106,8 +105,8 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	replaces := []moldReplace{
 		Replace("XXX_CMD_LOWERCASE_XXX", lowerFirst(cmdName)),
 		Replace("XXX_CMD_UPPERCASE_XXX", upperFirst(cmdName)),
-		Replace("XXX_AUTHOR_XXX", rootFlags.author),
-		Replace("XXX_EMAIL_XXX", rootFlags.email),
+		Replace("XXX_AUTHOR_XXX", cobraFlags.author),
+		Replace("XXX_EMAIL_XXX", cobraFlags.email),
 		Replace("XXX_YEAR_XXX", strconv.Itoa(time.Now().Year())),
 	}
 
@@ -115,5 +114,22 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	const templateFile = "cmdCmd_go"
 	moldForging(op, newMoldConfig(configDirs.cobra, outFile, []string{templateFile}, replaces...))
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+type cobraFlag struct {
+	user   string
+	author string
+	email  string
+}
+
+type cobraAppFlag struct {
+	force bool
+}
+
+var (
+	cobraFlags    cobraFlag
+	cobraAppFlags cobraAppFlag
+)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
