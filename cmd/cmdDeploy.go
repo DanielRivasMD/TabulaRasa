@@ -18,11 +18,8 @@ package cmd
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// BUG: deploy root flags
-
 import (
 	"fmt"
-	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -35,105 +32,63 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var deployCmd = &cobra.Command{
-	Use:     "deploy",
-	Short:   "Deploy config templates",
-	Long:    helpDeploy,
-	Example: exampleDeploy,
-}
-
-var deployJustCmd = &cobra.Command{
-	Use:     "just",
-	Short:   "Build system files",
-	Long:    helpDeployJust,
-	Example: exampleDeployJust,
-
-	Run: runDeployJust,
-}
-
-var deployReadmeCmd = &cobra.Command{
-	Use:     "readme",
-	Short:   "README scaffold",
-	Long:    helpDeployReadme,
-	Example: exampleDeployReadme,
-
-	Run: runDeployReadme,
-}
-
-var deployTodorCmd = &cobra.Command{
-	Use:     "todor",
-	Short:   "Task-tracker starter",
-	Long:    helpDeployTodor,
-	Example: exampleDeployTodor,
-
-	Run: runDeployTodor,
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-const HEADER = "head.just"
+var langFlag LangType
 
 type LangType struct {
-	validValues []string
-	Selected    []string
+	Selected []string
 }
 
-var validLangs = []string{"go", "jl", "py", "rs", "R"}
+func (l *LangType) String() string { return strings.Join(l.Selected, ",") }
+func (l *LangType) Set(v string) error {
+	l.Selected = append(l.Selected, v)
+	return nil
+}
+func (l *LangType) Type() string { return "lang" }
 
-func (f *LangType) String() string {
-	if len(f.Selected) > 0 {
-		return f.Selected[0]
-	}
-	return ""
+func DeployCmd() *cobra.Command {
+	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("deploy", nil))
+	cmd.PersistentFlags().VarP(&langFlag, "lang", "l", "Templates to deploy (allowed: go, jl, py, rs, R)")
+	cmd.AddCommand(
+		DeployJustCmd(),
+		DeployReadmeCmd(),
+		DeployTodorCmd(),
+	)
+	return cmd
 }
 
-func (f *LangType) Set(value string) error {
-	if slices.Contains(f.validValues, value) {
-		f.Selected = append(f.Selected, value)
-		return nil
-	}
-	return fmt.Errorf("invalid value '%s', allowed: %s", value, joinValues(f.validValues))
+func DeployJustCmd() *cobra.Command {
+	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("just", runDeployJust))
+	_ = cmd.MarkFlagRequired("lang")
+	return cmd
 }
 
-func (f *LangType) Type() string {
-	return "LangType"
+func DeployReadmeCmd() *cobra.Command {
+	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("readme", runDeployReadme))
 }
 
-func joinValues(values []string) string {
-	return strings.Join(values, ", ")
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-var (
-	lang = &LangType{validValues: validLangs}
-)
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-func init() {
-	rootCmd.AddCommand(deployCmd)
-	deployCmd.AddCommand(deployJustCmd, deployReadmeCmd, deployTodorCmd)
-	deployCmd.PersistentFlags().VarP(lang, "lang", "l", "Templates to deploy (allowed: "+joinValues(validLangs)+")")
-	_ = deployJustCmd.MarkFlagRequired("lang")
+func DeployTodorCmd() *cobra.Command {
+	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("todor", runDeployTodor))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployJust(cmd *cobra.Command, args []string) {
 	op := "tabularasa.deploy.just"
-
-	var err error
-	if flags.repo == "" {
-		flags.repo, err = domovoi.CurrentDir()
-		horus.CheckErr(err, horus.WithOp(op))
+	repo := rootFlags.repo
+	if repo == "" {
+		var err error
+		repo, err = domovoi.CurrentDir()
+		horus.CheckErr(err)
 	}
-	replaces := deployJustReplacements()
 
-	files := []string{HEADER}
+	replaces := []moldReplace{
+		Replace("APP", repo),
+		Replace("EXE", strings.ToLower(repo)),
+	}
 
-	for _, sel := range lang.Selected {
-		switch sel {
+	files := []string{"head.just"}
+	for _, lang := range langFlag.Selected {
+		switch lang {
 		case "go":
 			files = append(files, "go.just")
 		case "rs":
@@ -141,82 +96,38 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	pairs := []filePair{
-		{files, ".justfile"},
-	}
-
-	for _, p := range pairs {
-		mbomboForging(
-			op,
-			newMbomboConfig(
-				dirs.just,
-				p.out,
-				p.files,
-				replaces...,
-			))
-	}
-}
-
-func deployJustReplacements() []mbomboReplace {
-	return []mbomboReplace{
-		Replace("APP", flags.repo),
-		Replace("EXE", strings.ToLower(flags.repo)),
-	}
+	moldForging(op, newMoldConfig(configDirs.just, ".justfile", files, replaces...))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployReadme(cmd *cobra.Command, args []string) {
 	op := "tabularasa.deploy.readme"
-
 	p := tea.NewProgram(initialModel())
-	m, err := p.Run() // Run returns (tea.Model, error)
-	horus.CheckErr(err, horus.WithOp(op))
+	m, err := p.Run()
+	horus.CheckErr(err)
 
-	// Type assert back to our model
 	final, ok := m.(model)
 	if !ok {
-		horus.CheckErr(fmt.Errorf("unexpected model type"), horus.WithOp(op))
+		horus.CheckErr(fmt.Errorf("unexpected model type"))
 	}
-
-	// Now you have the captured values
-	desc := final.description
-	lic := final.license
 
 	repo, err := domovoi.CurrentDir()
 	horus.CheckErr(err)
 
-	// Example: build replacements for README
-	replaces := []mbomboReplace{
+	replaces := []moldReplace{
 		Replace("REPOSITORY", repo),
-		Replace("OVERVIEW", desc),
-		Replace("LICENSE", lic),
+		Replace("OVERVIEW", final.description),
+		Replace("LICENSE", final.license),
 		Replace("YEAR", strconv.Itoa(time.Now().Year())),
 	}
 
-	mbomboForging(
-		op,
-		newMbomboConfig(
-			dirs.readme,
-			"README.md",
-			[]string{"readme.md"},
-			replaces...,
-		),
-	)
+	moldForging(op, newMoldConfig(configDirs.readme, "README.md", []string{"readme.md"}, replaces...))
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployTodor(cmd *cobra.Command, args []string) {
 	op := "tabularasa.deploy.todor"
-
-	mbomboForging(
-		op,
-		newMbomboConfig(
-			dirs.todor,
-			".todor",
-			[]string{"todor"},
-		))
+	moldForging(op, newMoldConfig(configDirs.todor, ".todor", []string{"todor"}))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
