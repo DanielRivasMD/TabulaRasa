@@ -32,12 +32,19 @@ import (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func DeployCmd() *cobra.Command {
-	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("deploy", nil))
+	deployFlags.language = langValue{allowed: []string{"go", "rs"}}
+	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("deploy", runDeploy))
+	cmd.Flags().VarP(&deployFlags.language, "lang", "l", "Templates to deploy (allowed: go, rs)")
 	cmd.AddCommand(
 		DeployJustCmd(),
 		DeployReadmeCmd(),
 		DeployTodorCmd(),
 	)
+
+	horus.CheckErr(cmd.RegisterFlagCompletionFunc("lang", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return deployFlags.language.allowed, cobra.ShellCompDirectiveNoFileComp
+	}))
+
 	return cmd
 }
 
@@ -63,7 +70,7 @@ func DeployTodorCmd() *cobra.Command {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func runDeployJust(cmd *cobra.Command, args []string) {
+func deployJust(lang string) {
 	op := "tabularasa.deploy.just"
 
 	repo := horus.Must(domovoi.CurrentDir())
@@ -73,7 +80,7 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 	}
 
 	files := []string{"head.just"}
-	switch deployFlags.language.value {
+	switch lang {
 	case "go":
 		files = append(files, "go.just")
 	case "rs":
@@ -81,6 +88,29 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 	}
 
 	moldForging(op, newMoldConfig(configDirs.just, ".justfile", files, replaces...))
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func runDeploy(cmd *cobra.Command, args []string) {
+	lang := ""
+	if f := cmd.Flag("lang"); f != nil && f.Changed {
+		lang = f.Value.String()
+	}
+
+	deployJust(lang)
+	runDeployReadme(cmd, args)
+	runDeployTodor(cmd, args)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func runDeployJust(cmd *cobra.Command, args []string) {
+	langFlag := cmd.Flag("lang")
+	if langFlag == nil {
+		horus.CheckErr(fmt.Errorf("internal error: lang flag not found"))
+	}
+	deployJust(langFlag.Value.String())
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
