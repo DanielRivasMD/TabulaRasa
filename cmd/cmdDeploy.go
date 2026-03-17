@@ -19,6 +19,7 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -41,9 +42,14 @@ func DeployCmd() *cobra.Command {
 }
 
 func DeployJustCmd() *cobra.Command {
+	deployFlags.language = langValue{allowed: []string{"go", "rs"}}
 	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("just", runDeployJust))
-	cmd.Flags().StringVarP(&deployFlags.language, "lang", "l", "", "Templates to deploy (allowed: go, jl, py, rs, R)")
-	horus.CheckErr(cmd.MarkFlagRequired("lang"))
+	cmd.Flags().VarP(&deployFlags.language, "lang", "l", "Templates to deploy (allowed: go, rs)")
+
+	horus.CheckErr(cmd.RegisterFlagCompletionFunc("lang", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return deployFlags.language.allowed, cobra.ShellCompDirectiveNoFileComp
+	}))
+
 	return cmd
 }
 
@@ -67,7 +73,7 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 	}
 
 	files := []string{"head.just"}
-	switch deployFlags.language {
+	switch deployFlags.language.value {
 	case "go":
 		files = append(files, "go.just")
 	case "rs":
@@ -99,7 +105,30 @@ func runDeployTodor(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 type deployFlag struct {
-	language string
+	language langValue
+}
+
+type langValue struct {
+	value   string
+	allowed []string
+}
+
+func (l *langValue) String() string {
+	return l.value
+}
+
+func (l *langValue) Set(s string) error {
+	for _, a := range l.allowed {
+		if a == s {
+			l.value = s
+			return nil
+		}
+	}
+	return fmt.Errorf("invalid language %q, allowed: %v", s, l.allowed)
+}
+
+func (l *langValue) Type() string {
+	return "lang"
 }
 
 var (
