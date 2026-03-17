@@ -19,14 +19,12 @@ package cmd
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/DanielRivasMD/domovoi"
 	"github.com/DanielRivasMD/horus"
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
 
@@ -82,8 +80,8 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 	}
 
 	replaces := []moldReplace{
-		Replace("APP", repo),
-		Replace("EXE", strings.ToLower(repo)),
+		Replace("XXX_APP_XXX", repo),
+		Replace("XXX_EXE_XXX", strings.ToLower(repo)),
 	}
 
 	files := []string{"head.just"}
@@ -103,23 +101,13 @@ func runDeployJust(cmd *cobra.Command, args []string) {
 
 func runDeployReadme(cmd *cobra.Command, args []string) {
 	op := "tabularasa.deploy.readme"
-	p := tea.NewProgram(initialModel())
-	m, err := p.Run()
-	horus.CheckErr(err)
-
-	final, ok := m.(model)
-	if !ok {
-		horus.CheckErr(fmt.Errorf("unexpected model type"))
-	}
 
 	repo, err := domovoi.CurrentDir()
 	horus.CheckErr(err)
 
 	replaces := []moldReplace{
-		Replace("REPOSITORY", repo),
-		Replace("OVERVIEW", final.description),
-		Replace("LICENSE", final.license),
-		Replace("YEAR", strconv.Itoa(time.Now().Year())),
+		Replace("XXX_REPO_XXX", repo),
+		Replace("XXX_YEAR_XXX", strconv.Itoa(time.Now().Year())),
 	}
 
 	moldForging(op, newMoldConfig(configDirs.readme, "README.md", []string{"readme.md"}, replaces...))
