@@ -16,7 +16,6 @@
   },
   "root": {
     "use": "tab",
-    "short": "Template deployment tool",
     "long": "Provide a set of templates to facilitate software deployment",
     "example_usages": [
       [
@@ -62,23 +61,6 @@
       ]
     ]
   },
-  "util": {
-    "use": "util {help|example}",
-    "short": "Import utility templates",
-    "long": "Deploy a utility from predefined templates",
-    "example_usages": [
-      [
-        "cobra",
-        "util",
-        "help"
-      ],
-      [
-        "cobra",
-        "util",
-        "example"
-      ]
-    ]
-  },
   "deploy": {
     "use": "deploy",
     "short": "Deploy config templates",
@@ -116,14 +98,6 @@
       [
         "deploy",
         "readme"
-      ],
-      [
-        "deploy",
-        "readme",
-        "--description",
-        "Awesome project",
-        "--license",
-        "MIT"
       ]
     ]
   },
