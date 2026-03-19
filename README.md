@@ -16,7 +16,7 @@ Placeholders like `XXX_REPO_XXX` are replaced with user‑supplied values
 ### Technical Architecture
 
 TabulaRasa is a Go‑based CLI built with **Cobra**  
-It relies on an external tool, **`mbombo forge`**, to concatenate template files
+It relies on an external tool, **`mbombo`**, to concatenate template files
 and perform token replacement
 
 - Commands are defined in `cmd/` using the factory pattern

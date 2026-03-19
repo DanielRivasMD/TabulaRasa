@@ -51,7 +51,7 @@ func moldForging(op string, mf moldForge) {
 		domovoi.ExecSh(mf.Cmd()),
 		horus.WithOp(op),
 		horus.WithCategory("shell_command"),
-		horus.WithMessage("Failed to execute mbombo forge command"),
+		horus.WithMessage("Failed to execute mbombo command"),
 		horus.WithDetails(map[string]any{"command": mf.Cmd()}),
 	)
 }
@@ -71,7 +71,7 @@ func (m moldForge) Cmd() string {
 	}
 	replaceBlock := strings.Join(replaces, " \\\n")
 
-	return fmt.Sprintf(`mbombo forge \
+	return fmt.Sprintf(`mbombo \
 --in %s \
 --out %s \
 %s \
