@@ -44,9 +44,14 @@ const (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-type rootFlag struct {
-	verbose bool
-}
+var (
+	onceRoot  sync.Once
+	rootCmd   *cobra.Command
+	rootFlags struct {
+		verbose bool
+	}
+	configDirs configDir
+)
 
 type configDir struct {
 	home       string
@@ -56,13 +61,6 @@ type configDir struct {
 	readme     string
 	todor      string
 }
-
-var (
-	onceRoot   sync.Once
-	rootCmd    *cobra.Command
-	rootFlags  rootFlag
-	configDirs configDir
-)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -95,15 +93,8 @@ func GetRootCmd() *cobra.Command {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func BuildCommands() {
-	root := GetRootCmd()
-	root.AddCommand(
-		CompletionCmd(),
-		IdentityCmd(),
-
-		CobraCmd(),
-		DeployCmd(),
-	)
+func Execute() {
+	horus.CheckErr(GetRootCmd().Execute())
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,8 +112,15 @@ func initConfigDirs() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func Execute() {
-	horus.CheckErr(GetRootCmd().Execute())
+func BuildCommands() {
+	root := GetRootCmd()
+	root.AddCommand(
+		CompletionCmd(),
+		IdentityCmd(),
+
+		CobraCmd(),
+		DeployCmd(),
+	)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
