@@ -1,0 +1,47 @@
+####################################################################################################
+
+module XXX_ROOT_XXXCLI
+
+####################################################################################################
+
+using ArgParse
+using Avicenna.Flow
+using ..XXX_ROOT_XXXFlow: demo
+
+####################################################################################################
+
+function main(args = ARGS)
+  s = ArgParseSettings()
+  @add_arg_table! s begin
+    "--id"
+    required = true
+
+    "--scale"
+    arg_type = Float64
+    default = 1.0
+
+    "--no-cache"
+    action = :store_true
+  end
+
+  parsed_args = parse_args(args, s)
+  demo_data = [1.0, 2.0, 3.0, 4.0, 5.0]
+
+  config =
+    Dict("id" => parsed_args["id"], "data" => demo_data, "scale" => parsed_args["scale"])
+
+  cache = Flow.Cache("cache/demo", !parsed_args["no-cache"])
+  result = Flow.run(demo, config, cache = cache)
+
+  println("Analysis complete:")
+  println("  Mean: ", result.stage_outputs["analyze"].summary["mean"])
+  println("  Cache hits: ", join(result.cache_hits, ", "))
+
+  return 0
+end
+
+####################################################################################################
+
+end
+
+####################################################################################################
