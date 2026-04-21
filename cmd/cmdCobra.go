@@ -52,9 +52,10 @@ func CobraAppCmd() *cobra.Command {
 }
 
 func CobraCmdCmd() *cobra.Command {
-	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("cmd", runCobraCmd,
+	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("cmd", runCobraCmd,
 		domovoi.WithArgs(cobra.ExactArgs(1)),
 	))
+	return cmd
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,8 +122,10 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.cmd"
 	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 
+	repo := horus.Must(domovoi.CurrentDir())
 	cmdName := args[0]
 	replaces := []moldReplace{
+		Replace("XXX_CLI_LOWERCASE_XXX", strings.ToLower(repo)),
 		Replace("XXX_CMD_LOWERCASE_XXX", lowerFirst(cmdName)),
 		Replace("XXX_CMD_UPPERCASE_XXX", upperFirst(cmdName)),
 		Replace("XXX_AUTHOR_XXX", cobraFlags.author),
