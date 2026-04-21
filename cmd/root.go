@@ -120,6 +120,7 @@ func BuildCommands() {
 
 		CobraCmd(),
 		DeployCmd(),
+		EtchCmd(),
 	)
 }
 
