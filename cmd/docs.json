@@ -23,6 +23,11 @@
       ]
     ]
   },
+  "etch": {
+    "use": "etch",
+    "short": "Initialize configuration directories",
+    "long": "Create the necessary directory structure for tabularasa configuration"
+  },
   "cobra": {
     "use": "cobra",
     "short": "Construct cobra apps, cmds & import utils",
