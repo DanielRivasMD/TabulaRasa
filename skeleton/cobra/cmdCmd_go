@@ -28,7 +28,7 @@ import (
 
 func XXX_CMD_UPPERCASE_XXXCmd() *cobra.Command {
 	d := horus.Must(domovoi.GlobalDocs())
-	cmd := horus.Must(d.MakeCmd("forge", runXXX_CMD_UPPERCASE_XXX))
+	cmd := horus.Must(d.MakeCmd("XXX_CMD_LOWERCASE_XXX", runXXX_CMD_UPPERCASE_XXX))
 
 	return cmd
 }
