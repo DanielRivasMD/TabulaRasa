@@ -1,4 +1,6 @@
 - make release v1.0.0
 
+update rust just skeleton to accomodate cargo install path ., cargo build, cargo check
+
 ==================================================
 ==================================================
