@@ -31,7 +31,7 @@
   "cobra": {
     "use": "cobra",
     "short": "Construct cobra apps, cmds & import utils",
-    "long": "Create cobra applications using predefined templates for rapid development",
+    "long": "Create cobra applications using predefined templates",
     "example_usages": [
       [
         "cobra"
@@ -41,7 +41,7 @@
   "app": {
     "use": "app",
     "short": "Construct cobra apps",
-    "long": "Construct cobra apps from predefined templates",
+    "long": "Construct cobra apps",
     "example_usages": [
       [
         "cobra",
@@ -57,7 +57,7 @@
   "cmd": {
     "use": "cmd <command-name>",
     "short": "Build cobra commands",
-    "long": "Build cobra commands from predefined templates",
+    "long": "Build cobra commands",
     "example_usages": [
       [
         "cobra",
@@ -69,7 +69,7 @@
   "deploy": {
     "use": "deploy",
     "short": "Deploy config templates",
-    "long": "Deploy config prededine templates",
+    "long": "Deploy config templates",
     "example_usages": [
       [
         "deploy"
