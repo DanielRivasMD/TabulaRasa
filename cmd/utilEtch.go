@@ -32,6 +32,7 @@ func createSubdirs(d configDir, verbose bool, op string) {
 		label, path string
 	}{
 		{"tabularasa root", d.tabularasa},
+		{"avicenna", d.avicenna},
 		{"cobra", d.cobra},
 		{"just", d.just},
 		{"readme", d.readme},
