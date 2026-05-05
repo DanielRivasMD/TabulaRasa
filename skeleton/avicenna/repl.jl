@@ -1,32 +1,21 @@
 ####################################################################################################
 
-module XXX_ROOT_XXXREPL
+module XXX_ROOT2_XXXREPL
 
 ####################################################################################################
 
-using Avicenna.Flow
-using ..XXX_ROOT_XXXCore
-using ..XXX_ROOT_XXXFlow: demo
+using Avicenna.Flow: Cache, launch
+using ..XXX_ROOT2_XXXFlow: flow
 
 ####################################################################################################
 
-function get_cache(no_cache::Bool = false)
-  return Workflow.Cache("cache/demo", !no_cache)
-end
+export run
 
-function run_demo(id::String, scale::Float64 = 1.0; no_cache::Bool = false)
-  config = Dict("id" => id, "data" => [1.0, 2.0, 3.0, 4.0, 5.0], "scale" => scale)
-  Flow.run(demo, config, cache = get_cache(no_cache))
-end
+####################################################################################################
 
-function inspect_stage(result, stage::String)
-  return result.stage_outputs[stage]
-end
-
-function clear_cache!()
-  rm("cache/demo", recursive = true, force = true)
-  mkpath("cache/demo")
-  @info "Cache cleared"
+function run()
+  cache = Cache("cache/_", !no_cache)
+  return launch(flow, config, cache = cache)
 end
 
 ####################################################################################################
