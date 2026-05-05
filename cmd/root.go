@@ -56,6 +56,7 @@ var (
 type configDir struct {
 	home       string
 	tabularasa string
+	avicenna   string
 	cobra      string
 	just       string
 	readme     string
@@ -104,6 +105,7 @@ func initConfigDirs() {
 	configDirs.home, err = domovoi.FindHome(false) // verbose false for init
 	horus.CheckErr(err, horus.WithCategory("init_error"), horus.WithMessage("getting home directory"))
 	configDirs.tabularasa = filepath.Join(configDirs.home, ".tabularasa")
+	configDirs.avicenna = filepath.Join(configDirs.tabularasa, "avicenna")
 	configDirs.cobra = filepath.Join(configDirs.tabularasa, "cobra")
 	configDirs.just = filepath.Join(configDirs.tabularasa, "just")
 	configDirs.readme = filepath.Join(configDirs.tabularasa, "readme")
