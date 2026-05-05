@@ -42,8 +42,8 @@ type moldForge struct {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func newMoldConfig(inDir, outFile string, tplFiles []string, replaces ...moldReplace) moldForge {
-	return moldForge{in: inDir, out: outFile, files: tplFiles, replaces: replaces}
+func newMoldConfig(inDir, outFile string, templateFiles []string, replaces ...moldReplace) moldForge {
+	return moldForge{in: inDir, out: outFile, files: templateFiles, replaces: replaces}
 }
 
 func moldForging(op string, mf moldForge) {
