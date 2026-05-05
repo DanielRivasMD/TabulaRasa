@@ -1,9 +1,10 @@
 - make release v1.0.0
 
-add avicenna templates
-deprecate julia skeletons
-
 
 
 ==================================================
+cmd/cmdDeploy.go
+  line 84     TODO   relocate op
+  line 107    TODO   redundant with runDeployJust?
+  line 191    TODO   refactor deploy flag
 ==================================================
