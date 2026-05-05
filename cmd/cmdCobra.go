@@ -140,19 +140,15 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-type cobraFlag struct {
-	user   string
-	author string
-	email  string
-}
-
-type cobraAppFlag struct {
-	force bool
-}
-
 var (
-	cobraFlags    cobraFlag
-	cobraAppFlags cobraAppFlag
+	cobraFlags struct {
+		user   string
+		author string
+		email  string
+	}
+	cobraAppFlags struct {
+		force bool
+	}
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
