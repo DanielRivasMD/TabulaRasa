@@ -20,6 +20,7 @@ package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -36,6 +37,7 @@ func DeployCmd() *cobra.Command {
 	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("deploy", runDeploy))
 	cmd.Flags().VarP(&deployFlags.language, "lang", "l", "Templates to deploy (allowed: go, rs)")
 	cmd.AddCommand(
+		DeployAvicennaCmd(),
 		DeployJustCmd(),
 		DeployReadmeCmd(),
 		DeployTodorCmd(),
@@ -44,6 +46,14 @@ func DeployCmd() *cobra.Command {
 	horus.CheckErr(cmd.RegisterFlagCompletionFunc("lang", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		return deployFlags.language.allowed, cobra.ShellCompDirectiveNoFileComp
 	}))
+
+	return cmd
+}
+
+func DeployAvicennaCmd() *cobra.Command {
+	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("avicenna", runDeployAvicenna))
+	cmd.Flags().StringVarP(&deployAvicennaFlags.module, "module", "", "", "Module name")
+	cmd.Flags().StringVarP(&deployAvicennaFlags.letter, "letter", "", "", "Module two-letter")
 
 	return cmd
 }
@@ -71,6 +81,7 @@ func DeployTodorCmd() *cobra.Command {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func deployJust(lang string) {
+	// TODO: relocate op
 	op := "tabularasa.deploy.just"
 
 	repo := horus.Must(domovoi.CurrentDir())
@@ -93,6 +104,7 @@ func deployJust(lang string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeploy(cmd *cobra.Command, args []string) {
+	// TODO: redundant with runDeployJust?
 	lang := ""
 	if f := cmd.Flag("lang"); f != nil && f.Changed {
 		lang = f.Value.String()
@@ -101,6 +113,46 @@ func runDeploy(cmd *cobra.Command, args []string) {
 	deployJust(lang)
 	runDeployReadme(cmd, args)
 	runDeployTodor(cmd, args)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func runDeployAvicenna(cmd *cobra.Command, args []string) {
+	op := "tabularasa.deploy.avicenna"
+
+	srcDir := filepath.Join("src")
+	utilDir := filepath.Join(srcDir, "util")
+	flowDir := filepath.Join(srcDir, "flow")
+	interDir := filepath.Join(srcDir, "inter")
+	cliDir := filepath.Join(interDir, "cli")
+	replDir := filepath.Join(interDir, "repl")
+
+	horus.CheckErr(domovoi.CreateDir(srcDir, rootFlags.verbose))
+	horus.CheckErr(domovoi.CreateDir(utilDir, rootFlags.verbose))
+	horus.CheckErr(domovoi.CreateDir(flowDir, rootFlags.verbose))
+	horus.CheckErr(domovoi.CreateDir(interDir, rootFlags.verbose))
+	horus.CheckErr(domovoi.CreateDir(cliDir, rootFlags.verbose))
+	horus.CheckErr(domovoi.CreateDir(replDir, rootFlags.verbose))
+
+	twoLetter := strings.ToLower(deployAvicennaFlags.letter)
+
+	rootOut := filepath.Join(srcDir, deployAvicennaFlags.module+".jl")
+	utilOut := filepath.Join(utilDir, twoLetter+"util.jl")
+	flowOut := filepath.Join(flowDir, twoLetter+"flow.jl")
+	cliOut := filepath.Join(cliDir, twoLetter+"cli.jl")
+	replOut := filepath.Join(replDir, twoLetter+"repl.jl")
+
+	replaces := []moldReplace{
+		Replace("XXX_ROOT_XXX", deployAvicennaFlags.module),
+		Replace("XXX_ROOT2_XXX", deployAvicennaFlags.letter),
+		Replace("XXX_ROOT2_LOWERCASE_XXX", twoLetter),
+	}
+
+	moldForging(op, newMoldConfig(configDirs.avicenna, rootOut, []string{"root.jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, utilOut, []string{"util.jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, flowOut, []string{"flow.jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, cliOut, []string{"cli.jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, replOut, []string{"repl.jl"}, replaces...))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,6 +179,8 @@ func runDeployReadme(cmd *cobra.Command, args []string) {
 	moldForging(op, newMoldConfig(configDirs.readme, "README.md", []string{"readme.md"}, replaces...))
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 func runDeployTodor(cmd *cobra.Command, args []string) {
 	op := "tabularasa.deploy.todor"
 	moldForging(op, newMoldConfig(configDirs.todor, ".todor", []string{"todor"}))
@@ -134,6 +188,7 @@ func runDeployTodor(cmd *cobra.Command, args []string) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// TODO: refactor deploy flag
 type deployFlag struct {
 	language langValue
 }
@@ -164,5 +219,10 @@ func (l *langValue) Type() string {
 var (
 	deployFlags deployFlag
 )
+
+var deployAvicennaFlags struct {
+	module string
+	letter string
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
