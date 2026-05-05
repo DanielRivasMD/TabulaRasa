@@ -4,15 +4,14 @@ module XXX_ROOT_XXX
 
 ####################################################################################################
 
-include("util/util_XXX_ROOT_LOWERCASE_XXX.jl")
-include("flow/flow_XXX_ROOT_LOWERCASE_XXX.jl")
-include("inter/cli/cli_XXX_ROOT_LOWERCASE_XXX.jl")
-include("inter/repl/repl_XXX_ROOT_LOWERCASE_XXX.jl")
-include("inter/doc/doc_XXX_ROOT_LOWERCASE_XXX.jl")
+include("util/XXX_ROOT2_LOWERCASE_XXXutil.jl")
+include("flow/XXX_ROOT2_LOWERCASE_XXXflow.jl")
+include("inter/cli/XXX_ROOT2_LOWERCASE_XXXcli.jl")
+include("inter/repl/XXX_ROOT2_LOWERCASE_XXXrepl.jl")
 
 ####################################################################################################
 
-export XXX_ROOT_XXXCore, XXX_ROOT_XXXFlow, XXX_ROOT_XXXCLI, XXX_ROOT_XXXREPL
+export XXX_ROOT2_XXXCore, XXX_ROOT2_XXXFlow, XXX_ROOT2_XXXCLI, XXX_ROOT2_XXXREPL
 
 ####################################################################################################
 
