@@ -1,33 +1,27 @@
 ####################################################################################################
 
-module XXX_ROOT_XXXFlow
+module XXX_ROOT2_XXXFlow
 
 ####################################################################################################
 
-using Avicenna.Flow
-using ..XXX_ROOT_XXXCore
+using Avicenna.Flow: Stage, Config
+using ..XXX_ROOT2_XXXCore
 
 ####################################################################################################
 
-export demo
+export flow
 
 ####################################################################################################
 
-const demo = Config(
-  "demo_analysis",
+const flow = Config(
+  "",
   [
-    Stage("load", (config, _) -> DemoCore.load_raw(config["id"], config["data"]), "1.0"),
-    Stage(
-      "transform",
-      (config, prev) -> DemoCore.transform(prev["load"], Dict("scale" => config["scale"])),
-      "1.0",
-    ),
-    Stage("analyze", (_, prev) -> DemoCore.analyze(prev["transform"]), "1.0"),
+    Stage("01", (config, _) -> XXX_ROOT2_XXXCore.func(), "1.0"),
+    Stage("02", (config, prev) -> XXX_ROOT2_XXXCore.func(), "1.0"),
+    Stage("03", (config, prev) -> XXX_ROOT2_XXXCore.func(), "1.0"),
   ],
   "1.0",
 )
-
-export Cache, Stage, Config, Result, run, demo
 
 ####################################################################################################
 
