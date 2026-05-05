@@ -76,6 +76,17 @@
       ]
     ]
   },
+  "avicenna": {
+    "use": "avicenna",
+    "short": "Scientific analysis framework",
+    "long": "Deploy Scientific analysis framework",
+    "example_usages": [
+      [
+        "deploy",
+        "avicenna"
+      ]
+    ]
+  },
   "just": {
     "use": "just",
     "short": "Build system files",
