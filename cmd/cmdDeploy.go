@@ -143,16 +143,15 @@ func runDeployAvicenna(cmd *cobra.Command, args []string) {
 	replOut := filepath.Join(replDir, twoLetter+"repl.jl")
 
 	replaces := []moldReplace{
-		Replace("XXX_ROOT_XXX", deployAvicennaFlags.module),
 		Replace("XXX_ROOT2_XXX", deployAvicennaFlags.letter),
 		Replace("XXX_ROOT2_LOWERCASE_XXX", twoLetter),
 	}
 
-	moldForging(op, newMoldConfig(configDirs.avicenna, rootOut, []string{"root.jl"}, replaces...))
-	moldForging(op, newMoldConfig(configDirs.avicenna, utilOut, []string{"util.jl"}, replaces...))
-	moldForging(op, newMoldConfig(configDirs.avicenna, flowOut, []string{"flow.jl"}, replaces...))
-	moldForging(op, newMoldConfig(configDirs.avicenna, cliOut, []string{"cli.jl"}, replaces...))
-	moldForging(op, newMoldConfig(configDirs.avicenna, replOut, []string{"repl.jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, rootOut, []string{"root_jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, utilOut, []string{"util_jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, flowOut, []string{"flow_jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, cliOut, []string{"cli_jl"}, replaces...))
+	moldForging(op, newMoldConfig(configDirs.avicenna, replOut, []string{"repl_jl"}, replaces...))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

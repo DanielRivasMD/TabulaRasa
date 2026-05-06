@@ -14,7 +14,7 @@ export run
 
 ####################################################################################################
 
-function main(args = ARGS)
+function run(args = ARGS)
   s = ArgParseSettings()
   @add_arg_table! s begin
     "--no-cache"
@@ -25,7 +25,9 @@ function main(args = ARGS)
     action = :store_false
   end
 
-  config = Dict()
+  parsed = parse_args(args, s)
+
+  config = Dict{String,Any}()
 
   cache = Cache("cache/_", !parsed["no-cache"])
   result = launch(flow, config, cache = cache)
