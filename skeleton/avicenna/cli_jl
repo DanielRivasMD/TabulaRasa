@@ -14,7 +14,7 @@ export run
 
 ####################################################################################################
 
-function run(args = ARGS)
+function run(args::Vector{String})
   s = ArgParseSettings()
   @add_arg_table! s begin
     "--no-cache"
@@ -24,17 +24,16 @@ function run(args = ARGS)
     help = "Enable verbose diagnostics"
     action = :store_false
   end
-
   parsed = parse_args(args, s)
 
   config = Dict{String,Any}()
 
-  cache = Cache("cache/_", !parsed["no-cache"])
+  cache = Cache("cache/XXX_MODULE_LOWERCASE_XXX", !parsed["no-cache"])
   result = launch(flow, config, cache = cache)
 
   if parsed["verbose"]
   end
-  return result
+  return 0
 end
 
 ####################################################################################################
