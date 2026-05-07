@@ -21,6 +21,7 @@ package cmd
 import (
 	"fmt"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -35,7 +36,7 @@ import (
 func DeployCmd() *cobra.Command {
 	deployFlags.language = langValue{allowed: []string{"go", "rs"}}
 	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("deploy", runDeploy))
-	cmd.Flags().VarP(&deployFlags.language, "lang", "l", "Templates to deploy (allowed: go, rs)")
+	cmd.PersistentFlags().VarP(&deployFlags.language, "lang", "l", "Templates to deploy (allowed: go, rs)")
 	cmd.AddCommand(
 		DeployAvicennaCmd(),
 		DeployJustCmd(),
@@ -59,15 +60,7 @@ func DeployAvicennaCmd() *cobra.Command {
 }
 
 func DeployJustCmd() *cobra.Command {
-	deployFlags.language = langValue{allowed: []string{"go", "rs"}}
-	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("just", runDeployJust))
-	cmd.Flags().VarP(&deployFlags.language, "lang", "l", "Templates to deploy (allowed: go, rs)")
-
-	horus.CheckErr(cmd.RegisterFlagCompletionFunc("lang", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		return deployFlags.language.allowed, cobra.ShellCompDirectiveNoFileComp
-	}))
-
-	return cmd
+	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("just", runDeployJust))
 }
 
 func DeployReadmeCmd() *cobra.Command {
@@ -80,10 +73,7 @@ func DeployTodorCmd() *cobra.Command {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func deployJust(lang string) {
-	// TODO: relocate op
-	op := "tabularasa.deploy.just"
-
+func deployJust(op, lang string) {
 	repo := horus.Must(domovoi.CurrentDir())
 	replaces := []moldReplace{
 		Replace("XXX_APP_XXX", repo),
@@ -104,13 +94,9 @@ func deployJust(lang string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeploy(cmd *cobra.Command, args []string) {
-	// TODO: redundant with runDeployJust?
-	lang := ""
-	if f := cmd.Flag("lang"); f != nil && f.Changed {
-		lang = f.Value.String()
-	}
+	op := "tabularasa.deploy"
 
-	deployJust(lang)
+	deployJust(op, langFlag(cmd))
 	runDeployReadme(cmd, args)
 	runDeployTodor(cmd, args)
 }
@@ -159,11 +145,9 @@ func runDeployAvicenna(cmd *cobra.Command, args []string) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func runDeployJust(cmd *cobra.Command, args []string) {
-	langFlag := cmd.Flag("lang")
-	if langFlag == nil {
-		horus.CheckErr(fmt.Errorf("internal error: lang flag not found"))
-	}
-	deployJust(langFlag.Value.String())
+	op := "tabularasa.deploy.just"
+
+	deployJust(op, langFlag(cmd))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,10 +173,15 @@ func runDeployTodor(cmd *cobra.Command, args []string) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// TODO: refactor deploy flag
-type deployFlag struct {
-	language langValue
+func langFlag(cmd *cobra.Command) string {
+	lang := ""
+	if f := cmd.Flag("lang"); f != nil && f.Changed {
+		lang = f.Value.String()
+	}
+	return lang
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 type langValue struct {
 	value   string
@@ -204,11 +193,9 @@ func (l *langValue) String() string {
 }
 
 func (l *langValue) Set(s string) error {
-	for _, a := range l.allowed {
-		if a == s {
-			l.value = s
-			return nil
-		}
+	if slices.Contains(l.allowed, s) {
+		l.value = s
+		return nil
 	}
 	return fmt.Errorf("invalid language %q, allowed: %v", s, l.allowed)
 }
@@ -218,7 +205,9 @@ func (l *langValue) Type() string {
 }
 
 var (
-	deployFlags deployFlag
+	deployFlags struct {
+		language langValue
+	}
 )
 
 var deployAvicennaFlags struct {
