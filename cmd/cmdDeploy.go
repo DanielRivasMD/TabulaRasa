@@ -143,6 +143,7 @@ func runDeployAvicenna(cmd *cobra.Command, args []string) {
 	replOut := filepath.Join(replDir, twoLetter+"repl.jl")
 
 	replaces := []moldReplace{
+		Replace("XXX_MODULE_LOWERCASE_XXX", strings.ToLower(deployAvicennaFlags.module)),
 		Replace("XXX_ROOT2_XXX", deployAvicennaFlags.letter),
 		Replace("XXX_ROOT2_LOWERCASE_XXX", twoLetter),
 	}
