@@ -120,39 +120,40 @@ func runDeploy(cmd *cobra.Command, args []string) {
 func runDeployAvicenna(cmd *cobra.Command, args []string) {
 	op := "tabularasa.deploy.avicenna"
 
-	srcDir := filepath.Join("src")
-	utilDir := filepath.Join(srcDir, "util")
-	flowDir := filepath.Join(srcDir, "flow")
+	srcDir := "src"
 	interDir := filepath.Join(srcDir, "inter")
-	cliDir := filepath.Join(interDir, "cli")
-	replDir := filepath.Join(interDir, "repl")
 
-	horus.CheckErr(domovoi.CreateDir(srcDir, rootFlags.verbose))
-	horus.CheckErr(domovoi.CreateDir(utilDir, rootFlags.verbose))
-	horus.CheckErr(domovoi.CreateDir(flowDir, rootFlags.verbose))
-	horus.CheckErr(domovoi.CreateDir(interDir, rootFlags.verbose))
-	horus.CheckErr(domovoi.CreateDir(cliDir, rootFlags.verbose))
-	horus.CheckErr(domovoi.CreateDir(replDir, rootFlags.verbose))
+	type target struct {
+		subdir string
+		tmpl   string
+		outFn  func(twoLetter, module string) string
+	}
+
+	targets := []target{
+		{subdir: srcDir, tmpl: "root_jl", outFn: func(_, module string) string { return module + ".jl" }},
+		{subdir: filepath.Join(srcDir, "util"), tmpl: "util_jl", outFn: func(twoLetter, _ string) string { return twoLetter + "util.jl" }},
+		{subdir: filepath.Join(srcDir, "flow"), tmpl: "flow_jl", outFn: func(twoLetter, _ string) string { return twoLetter + "flow.jl" }},
+		{subdir: filepath.Join(interDir, "cli"), tmpl: "cli_jl", outFn: func(twoLetter, _ string) string { return twoLetter + "cli.jl" }},
+		{subdir: filepath.Join(interDir, "repl"), tmpl: "repl_jl", outFn: func(twoLetter, _ string) string { return twoLetter + "repl.jl" }},
+	}
+
+	for _, t := range targets {
+		horus.CheckErr(domovoi.CreateDir(t.subdir, rootFlags.verbose))
+	}
 
 	twoLetter := strings.ToLower(deployAvicennaFlags.letter)
-
-	rootOut := filepath.Join(srcDir, deployAvicennaFlags.module+".jl")
-	utilOut := filepath.Join(utilDir, twoLetter+"util.jl")
-	flowOut := filepath.Join(flowDir, twoLetter+"flow.jl")
-	cliOut := filepath.Join(cliDir, twoLetter+"cli.jl")
-	replOut := filepath.Join(replDir, twoLetter+"repl.jl")
+	module := deployAvicennaFlags.module
 
 	replaces := []moldReplace{
-		Replace("XXX_MODULE_LOWERCASE_XXX", strings.ToLower(deployAvicennaFlags.module)),
+		Replace("XXX_MODULE_LOWERCASE_XXX", strings.ToLower(module)),
 		Replace("XXX_ROOT2_XXX", deployAvicennaFlags.letter),
 		Replace("XXX_ROOT2_LOWERCASE_XXX", twoLetter),
 	}
 
-	moldForging(op, newMoldConfig(configDirs.avicenna, rootOut, []string{"root_jl"}, replaces...))
-	moldForging(op, newMoldConfig(configDirs.avicenna, utilOut, []string{"util_jl"}, replaces...))
-	moldForging(op, newMoldConfig(configDirs.avicenna, flowOut, []string{"flow_jl"}, replaces...))
-	moldForging(op, newMoldConfig(configDirs.avicenna, cliOut, []string{"cli_jl"}, replaces...))
-	moldForging(op, newMoldConfig(configDirs.avicenna, replOut, []string{"repl_jl"}, replaces...))
+	for _, t := range targets {
+		outFile := filepath.Join(t.subdir, t.outFn(twoLetter, module))
+		moldForging(op, newMoldConfig(configDirs.avicenna, outFile, []string{t.tmpl}, replaces...))
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
