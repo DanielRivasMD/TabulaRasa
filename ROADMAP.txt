@@ -1,6 +1,25 @@
 - make release v1.0.0
 
 
+strengths:
+
+clean cli architecture
+consistent error handling
+decoupled template forging
+tab completion integrated
+idempotent operations
+
+weaknesses:
+
+external dependency
+overly complex flag propagation
+inconsistent initialisation
+no versioning of templates
+mixed concerns in util.go
+
+enhancements:
+
+
 
 ==================================================
 cmd/cmdDeploy.go
