@@ -22,8 +22,4 @@ enhancements:
 
 
 ==================================================
-cmd/cmdDeploy.go
-  line 84     TODO   relocate op
-  line 107    TODO   redundant with runDeployJust?
-  line 191    TODO   refactor deploy flag
 ==================================================
