@@ -15,7 +15,7 @@ export run
 
 function run()
   config = Dict{String,Any}()
-  cache = Cache("cache/_", !no_cache)
+  cache = Cache("cache/XXX_MODULE_LOWERCASE_XXX", !no_cache)
   return launch(flow, config, cache = cache)
 end
 
