@@ -33,6 +33,19 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var (
+	cobraFlags struct {
+		user   string
+		author string
+		email  string
+	}
+	cobraAppFlags struct {
+		force bool
+	}
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 func CobraCmd() *cobra.Command {
 	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("cobra", nil))
 	cmd.PersistentFlags().StringVarP(&cobraFlags.user, "user", "", "DanielRivasMD", "GitHub username")
@@ -120,6 +133,8 @@ func runCobraApp(cmd *cobra.Command, args []string) {
 
 func runCobraCmd(cmd *cobra.Command, args []string) {
 	op := "tabularasa.cobra.cmd"
+	// TODO: fetch buildcmds function & insert
+	// TODO: append documentation to docs.json
 	horus.CheckErr(domovoi.CreateDir("cmd", rootFlags.verbose))
 
 	repo := horus.Must(domovoi.CurrentDir())
@@ -137,18 +152,5 @@ func runCobraCmd(cmd *cobra.Command, args []string) {
 	const templateFile = "cmdCmd_go"
 	moldForging(op, newMoldConfig(configDirs.cobra, outFile, []string{templateFile}, replaces...))
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-var (
-	cobraFlags struct {
-		user   string
-		author string
-		email  string
-	}
-	cobraAppFlags struct {
-		force bool
-	}
-)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
