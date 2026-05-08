@@ -46,6 +46,7 @@ install dir=dir app=app exe=exe:
   @echo "\n\033[1;33mInstalling\033[0;37m...\n=================================================="
   go install
   mv -v "${HOME}/go/bin/{{app}}" "${HOME}/go/bin/{{exe}}"
+  "${HOME}/go/bin/{{exe}}" completion zsh > "${HOME}/.config/zsh_completion/_{{exe}}"
   @echo "\n\033[1;33mCopying\033[0;37m...\n=================================================="
   @if [ ! -d "${HOME}/{{dir}}" ]; then mkdir "${HOME}/{{dir}}"; fi
   @cp -v -R "skeleton/avicenna" "${HOME}/{{dir}}"
