@@ -22,4 +22,7 @@ enhancements:
 
 
 ==================================================
+cmd/cmdCobra.go
+  line 136    TODO   fetch buildcmds function & insert
+  line 137    TODO   append documentation to docs.json
 ==================================================
