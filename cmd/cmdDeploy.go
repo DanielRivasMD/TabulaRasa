@@ -33,6 +33,40 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+type langValue struct {
+	value   string
+	allowed []string
+}
+
+func (l *langValue) String() string {
+	return l.value
+}
+
+func (l *langValue) Set(s string) error {
+	if slices.Contains(l.allowed, s) {
+		l.value = s
+		return nil
+	}
+	return fmt.Errorf("invalid language %q, allowed: %v", s, l.allowed)
+}
+
+func (l *langValue) Type() string {
+	return "lang"
+}
+
+var (
+	deployFlags struct {
+		language langValue
+	}
+)
+
+var deployAvicennaFlags struct {
+	module string
+	letter string
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 func DeployCmd() *cobra.Command {
 	deployFlags.language = langValue{allowed: []string{"go", "rs"}}
 	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("deploy", runDeploy))
@@ -179,40 +213,6 @@ func langFlag(cmd *cobra.Command) string {
 		lang = f.Value.String()
 	}
 	return lang
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-type langValue struct {
-	value   string
-	allowed []string
-}
-
-func (l *langValue) String() string {
-	return l.value
-}
-
-func (l *langValue) Set(s string) error {
-	if slices.Contains(l.allowed, s) {
-		l.value = s
-		return nil
-	}
-	return fmt.Errorf("invalid language %q, allowed: %v", s, l.allowed)
-}
-
-func (l *langValue) Type() string {
-	return "lang"
-}
-
-var (
-	deployFlags struct {
-		language langValue
-	}
-)
-
-var deployAvicennaFlags struct {
-	module string
-	letter string
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
