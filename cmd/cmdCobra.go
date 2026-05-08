@@ -37,7 +37,7 @@ func CobraCmd() *cobra.Command {
 	cmd := horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("cobra", nil))
 	cmd.PersistentFlags().StringVarP(&cobraFlags.user, "user", "", "DanielRivasMD", "GitHub username")
 	cmd.PersistentFlags().StringVarP(&cobraFlags.author, "author", "", "Daniel Rivas", "Author name")
-	cmd.PersistentFlags().StringVarP(&cobraFlags.email, "email", "", "<danielrivasmd@gmail.com>", "Author email")
+	cmd.PersistentFlags().StringVarP(&cobraFlags.email, "email", "", "danielrivasmd@gmail.com", "Author email")
 	cmd.AddCommand(
 		CobraAppCmd(),
 		CobraCmdCmd(),
