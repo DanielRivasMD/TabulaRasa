@@ -67,9 +67,8 @@ func InitDocs() {
 
 func GetRootCmd() *cobra.Command {
 	onceRoot.Do(func() {
-		d := horus.Must(domovoi.GlobalDocs())
 		var err error
-		rootCmd, err = d.MakeCmd("root", nil)
+		rootCmd, err = horus.Must(domovoi.GlobalDocs()).MakeCmd("root", nil)
 		horus.CheckErr(err)
 
 		rootCmd.PersistentFlags().BoolVarP(&rootFlags.verbose, "verbose", "v", false, "Enable verbose diagnostics")
