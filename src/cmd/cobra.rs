@@ -52,28 +52,28 @@ pub fn run(
 
             fs::create_dir_all("cmd")?;
 
-            forge::forge_files("main.go", &[("main.go", skeleton::MAIN_GO)], &replacements, verbose)?;
+            forge::forge_files("main.go", &[("main.go", skeleton::cobra::MAIN)], &replacements, verbose)?;
             forge::forge_files(
                 "cmd/root.go",
-                &[("root.go", skeleton::ROOT_GO)],
+                &[("root.go", skeleton::cobra::ROOT)],
                 &replacements,
                 verbose,
             )?;
             forge::forge_files(
                 "cmd/docs.json",
-                &[("docs.json", skeleton::DOCS_JSON)],
+                &[("docs.json", skeleton::cobra::DOCS_JSON)],
                 &replacements,
                 verbose,
             )?;
             forge::forge_files(
                 "cmd/cmdCompletion.go",
-                &[("cmdCompletion.go", skeleton::CMD_COMPLETION_GO)],
+                &[("cmdCompletion.go", skeleton::cobra::CMD_COMPLETION)],
                 &replacements,
                 verbose,
             )?;
             forge::forge_files(
                 "cmd/cmdIdentity.go",
-                &[("cmdIdentity.go", skeleton::CMD_IDENTITY_GO)],
+                &[("cmdIdentity.go", skeleton::cobra::CMD_IDENTITY)],
                 &replacements,
                 verbose,
             )?;
@@ -107,7 +107,7 @@ pub fn run(
             let out_file = format!("cmd/cmd{cmd_upper}.go");
             forge::forge_files(
                 &out_file,
-                &[("cmdCmd_go", skeleton::CMD_GO_TEMPLATE)],
+                &[("cmdCmd_go", skeleton::cobra::CMD_TEMPLATE)],
                 &replacements,
                 verbose,
             )?;
