@@ -74,14 +74,17 @@ mod just {
     use crate::skeleton;
     use crate::util;
 
-    pub fn run(lang: &str, verbose: bool) -> anyResult<()> {
+    pub fn run(lang: Option<&str>, verbose: bool) -> anyResult<()> {
         let repo = util::current_dir_name()?;
         let lower_repo = repo.to_lowercase();
-        let mut files = vec![("head.just", skeleton::JUST_HEAD)];
-        match lang {
-            "go" => files.push(("go.just", skeleton::JUST_GO)),
-            "rs" => files.push(("rs.just", skeleton::JUST_RS)),
-            _ => anyhow::bail!("unsupported language: {lang}"),
+        let mut files = vec![("head.just", skeleton::just::HEAD)];
+
+        if let Some(lang_str) = lang {
+            match lang_str {
+                "go" => files.push(("go.just", skeleton::just::GO)),
+                "rs" => files.push(("rs.just", skeleton::just::RS)),
+                _ => anyhow::bail!("unsupported language: {lang_str}"),
+            }
         }
 
         let replacements = vec![
@@ -110,7 +113,7 @@ mod readme {
         ];
         forge::forge_files(
             "README.md",
-            &[("readme.md", skeleton::README_MD)],
+            &[("readme.md", skeleton::readme::MD)],
             &replacements,
             verbose,
         )
@@ -126,7 +129,7 @@ mod todor {
     use crate::skeleton;
 
     pub fn run(verbose: bool) -> anyResult<()> {
-        forge::forge_files(".todor", &[("todor", skeleton::TODOR)], &[], verbose)
+        forge::forge_files(".todor", &[("todor", skeleton::todor::TODOR)], &[], verbose)
     }
 }
 
