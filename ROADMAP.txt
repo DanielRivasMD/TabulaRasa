@@ -1,10 +1,5 @@
 - make release v1.0.0
 
-segregate cli logic
-segregate core logic
-
-
-
 strengths:
 
 clean cli architecture
