@@ -3,7 +3,7 @@
 pub const ROOT: &str = r#"
 ####################################################################################################
 
-module XXX_ROOT2_XXX
+module XXX_ROOT2_UPPERCASE_XXX
 
 ####################################################################################################
 
@@ -14,7 +14,7 @@ include("inter/repl/XXX_ROOT2_LOWERCASE_XXXrepl.jl")
 
 ####################################################################################################
 
-export XXX_ROOT2_XXXCore, XXX_ROOT2_XXXFlow, XXX_ROOT2_XXXCLI, XXX_ROOT2_XXXREPL
+export XXX_ROOT2_UPPERCASE_XXXCore, XXX_ROOT2_UPPERCASE_XXXFlow, XXX_ROOT2_UPPERCASE_XXXCLI, XXX_ROOT2_UPPERCASE_XXXREPL
 
 ####################################################################################################
 
@@ -28,7 +28,7 @@ end
 pub const UTIL: &str = r#"
 ####################################################################################################
 
-module XXX_ROOT2_XXXCore
+module XXX_ROOT2_UPPERCASE_XXXCore
 
 ####################################################################################################
 
@@ -54,12 +54,12 @@ end
 pub const FLOW: &str = r#"
 ####################################################################################################
 
-module XXX_ROOT2_XXXFlow
+module XXX_ROOT2_UPPERCASE_XXXFlow
 
 ####################################################################################################
 
 using Avicenna.Flow: Stage, Config
-using ..XXX_ROOT2_XXXCore
+using ..XXX_ROOT2_UPPERCASE_XXXCore
 
 ####################################################################################################
 
@@ -70,9 +70,9 @@ export flow
 const flow = Config(
   "",
   [
-    Stage("01", (config, _) -> XXX_ROOT2_XXXCore.func(), "1.0"),
-    Stage("02", (config, prev) -> XXX_ROOT2_XXXCore.func(), "1.0"),
-    Stage("03", (config, prev) -> XXX_ROOT2_XXXCore.func(), "1.0"),
+    Stage("01", (config, _) -> XXX_ROOT2_UPPERCASE_XXXCore.func(), "1.0"),
+    Stage("02", (config, prev) -> XXX_ROOT2_UPPERCASE_XXXCore.func(), "1.0"),
+    Stage("03", (config, prev) -> XXX_ROOT2_UPPERCASE_XXXCore.func(), "1.0"),
   ],
   "1.0",
 )
@@ -89,13 +89,13 @@ end
 pub const CLI: &str = r#"
 ####################################################################################################
 
-module XXX_ROOT2_XXXCLI
+module XXX_ROOT2_UPPERCASE_XXXCLI
 
 ####################################################################################################
 
 using ArgParse
 using Avicenna.Flow: Cache, launch
-using ..XXX_ROOT2_XXXFlow: flow
+using ..XXX_ROOT2_UPPERCASE_XXXFlow: flow
 
 ####################################################################################################
 
@@ -137,12 +137,12 @@ end
 pub const REPL: &str = r#"
 ####################################################################################################
 
-module XXX_ROOT2_XXXREPL
+module XXX_ROOT2_UPPERCASE_XXXREPL
 
 ####################################################################################################
 
 using Avicenna.Flow: Cache, launch
-using ..XXX_ROOT2_XXXFlow: flow
+using ..XXX_ROOT2_UPPERCASE_XXXFlow: flow
 
 ####################################################################################################
 
