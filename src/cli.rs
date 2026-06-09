@@ -73,9 +73,6 @@ pub enum DeploySub {
         /// Module name
         #[arg(long, default_value = "")]
         module: String,
-        /// Module two‑letter code
-        #[arg(long, default_value = "")]
-        letter: String,
     },
     /// Build system files
     Just,
