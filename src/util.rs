@@ -28,8 +28,4 @@ pub fn upper_first(s: &str) -> String {
     }
 }
 
-pub fn lang_flag(lang: Option<&str>) -> &str {
-    lang.unwrap_or("go") // default "go" matches original behaviour
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
