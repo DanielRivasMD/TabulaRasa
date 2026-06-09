@@ -1,0 +1,119 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+use anyhow::Result as anyResult;
+use anyhow::Context;
+use std::fs;
+use std::path::Path;
+use std::process::Command as StdCommand;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+use crate::cli;
+use crate::forge;
+use crate::skeleton;
+use crate::util;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub fn run(
+    sub: cli::CobraSub,
+    user: &str,
+    author: &str,
+    email: &str,
+    verbose: bool,
+) -> anyResult<()> {
+    match sub {
+        cli::CobraSub::App { force } => {
+            let repo = util::current_dir_name()?;
+            let should_init = if Path::new("go.mod").exists() {
+                if !force {
+                    anyhow::bail!("a Go module already exists (go.mod). Use --force to overwrite");
+                } else {
+                    for f in ["go.mod", "go.sum"] {
+                        let _ = fs::remove_file(f);
+                    }
+                    true
+                }
+            } else {
+                true
+            };
+
+            let lower_repo = repo.to_lowercase();
+            // For dynamic year, add `chrono` and use: chrono::Utc::now().year().to_string()
+            let year = "2026";
+
+            let replacements = vec![
+                forge::Replacement::token("XXX_REPO_XXX", &repo),
+                forge::Replacement::token("XXX_CLI_LOWERCASE_XXX", &lower_repo),
+                forge::Replacement::token("XXX_AUTHOR_XXX", author),
+                forge::Replacement::token("XXX_EMAIL_XXX", email),
+                forge::Replacement::token("XXX_YEAR_XXX", year),
+            ];
+
+            fs::create_dir_all("cmd")?;
+
+            forge::forge_files("main.go", &[("main.go", skeleton::MAIN_GO)], &replacements, verbose)?;
+            forge::forge_files(
+                "cmd/root.go",
+                &[("root.go", skeleton::ROOT_GO)],
+                &replacements,
+                verbose,
+            )?;
+            forge::forge_files(
+                "cmd/docs.json",
+                &[("docs.json", skeleton::DOCS_JSON)],
+                &replacements,
+                verbose,
+            )?;
+            forge::forge_files(
+                "cmd/cmdCompletion.go",
+                &[("cmdCompletion.go", skeleton::CMD_COMPLETION_GO)],
+                &replacements,
+                verbose,
+            )?;
+            forge::forge_files(
+                "cmd/cmdIdentity.go",
+                &[("cmdIdentity.go", skeleton::CMD_IDENTITY_GO)],
+                &replacements,
+                verbose,
+            )?;
+
+            if should_init {
+                StdCommand::new("go")
+                    .args(["mod", "init", &format!("github.com/{user}/{repo}")])
+                    .status()
+                    .context("go mod init failed")?;
+                StdCommand::new("go")
+                    .args(["mod", "tidy"])
+                    .status()
+                    .context("go mod tidy failed")?;
+            }
+        }
+        cli::CobraSub::Cmd { name } => {
+            let repo = util::current_dir_name()?;
+            let lower_repo = repo.to_lowercase();
+            let cmd_lower = util::lower_first(&name);
+            let cmd_upper = util::upper_first(&name);
+            let year = "2026";
+            let replacements = vec![
+                forge::Replacement::token("XXX_CLI_LOWERCASE_XXX", &lower_repo),
+                forge::Replacement::token("XXX_CMD_LOWERCASE_XXX", &cmd_lower),
+                forge::Replacement::token("XXX_CMD_UPPERCASE_XXX", &cmd_upper),
+                forge::Replacement::token("XXX_AUTHOR_XXX", author),
+                forge::Replacement::token("XXX_EMAIL_XXX", email),
+                forge::Replacement::token("XXX_YEAR_XXX", year),
+            ];
+
+            let out_file = format!("cmd/cmd{cmd_upper}.go");
+            forge::forge_files(
+                &out_file,
+                &[("cmdCmd_go", skeleton::CMD_GO_TEMPLATE)],
+                &replacements,
+                verbose,
+            )?;
+        }
+    }
+    Ok(())
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
