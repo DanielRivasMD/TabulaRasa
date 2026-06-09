@@ -33,6 +33,7 @@ pub enum Commands {
     },
     /// Deploy configuration templates
     Deploy {
+        // TODO: add option completion
         /// Templates to deploy (go, rs)
         #[arg(short, long)]
         lang: Option<String>,
@@ -70,6 +71,7 @@ pub enum CobraSub {
 pub enum DeploySub {
     /// Scientific analysis framework
     Avicenna {
+        // TODO: add graceful error out
         /// Module name
         #[arg(long, default_value = "")]
         module: String,

@@ -1,4 +1,5 @@
 - make release v1.0.0
+changelog => embeded templates
 
 strengths:
 
@@ -21,7 +22,7 @@ enhancements:
 
 
 ==================================================
-cmd/cmdCobra.go
-  line 136    TODO   fetch buildcmds function & insert
-  line 137    TODO   append documentation to docs.json
+src/cli.rs
+  line 36     TODO   add option completion
+  line 74     TODO   add graceful error out
 ==================================================
