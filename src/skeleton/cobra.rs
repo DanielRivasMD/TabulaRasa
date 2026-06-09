@@ -1,0 +1,250 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub const MAIN: &str = r#"
+package main
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import "github.com/DanielRivasMD/XXX_REPO_XXX/cmd"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func main() {
+	cmd.InitDocs()
+	cmd.BuildCommands()
+	cmd.Execute()
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+"#;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub const ROOT: &str = r#"
+package cmd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import (
+	"embed"
+	"sync"
+
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
+	"github.com/spf13/cobra"
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//go:embed docs.json
+var docsFS embed.FS
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub const (
+	APP     = "XXX_CLI_LOWERCASE_XXX"
+	VERSION = "v0.1.0"
+	AUTHOR  = "XXX_AUTHOR_XXX"
+	EMAIL   = "XXX_EMAIL_XXX"
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var (
+	onceRoot  sync.Once
+	rootCmd   *cobra.Command
+	rootFlags struct {
+		verbose bool
+	}
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func InitDocs() {
+	info := domovoi.AppInfo{
+		Name:    APP,
+		Version: VERSION,
+		Author:  AUTHOR,
+		Email:   EMAIL,
+	}
+	domovoi.SetGlobalDocsConfig(docsFS, info)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func GetRootCmd() *cobra.Command {
+	onceRoot.Do(func() {
+		var err error
+		rootCmd, err = horus.Must(domovoi.GlobalDocs()).MakeCmd("root", nil)
+		horus.CheckErr(err)
+
+		rootCmd.PersistentFlags().BoolVarP(&rootFlags.verbose, "verbose", "v", false, "Enable verbose diagnostics")
+		rootCmd.Version = VERSION
+	})
+	return rootCmd
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func Execute() {
+	horus.CheckErr(GetRootCmd().Execute())
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func BuildCommands() {
+	root := GetRootCmd()
+	root.AddCommand(
+		CompletionCmd(),
+		IdentityCmd(),
+
+
+	)
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+"#;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub const DOCS_JSON: &str = r#"
+{
+  "identity": {
+    "use": "identity",
+    "hidden": true
+  },
+  "completion": {
+    "use": "completion [bash|zsh|fish|powershell]",
+    "hidden": true,
+    "long": "To load completions:\n\nBash:\n\n  $ source <(%[1]s completion bash)\n\n  # To load completions for each session, execute once:\n  # Linux:\n  $ %[1]s completion bash > /etc/bash_completion.d/%[1]s\n  # macOS:\n  $ %[1]s completion bash > $(brew --prefix)/etc/bash_completion.d/%[1]s\n\nZsh:\n\n  # If shell completion is not already enabled in your environment,\n  # you will need to enable it. You can execute the following once:\n\n  $ echo \"autoload -U compinit; compinit\" >> ~/.zshrc\n\n  # To load completions for each session, execute once:\n  $ %[1]s completion zsh > \"${fpath[1]}/_%[1]s\"\n\n  # You will need to start a new shell for this setup to take effect\n\nfish:\n\n  $ %[1]s completion fish | source\n\n  # To load completions for each session, execute once:\n  $ %[1]s completion fish > ~/.config/fish/completions/%[1]s.fish\n\nPowerShell:\n\n  PS> %[1]s completion powershell | Out-String | Invoke-Expression\n\n  # To load completions for every new session, run:\n  PS> %[1]s completion powershell > %[1]s.ps1\n  # and source this file from your PowerShell profile",
+    "valid_args": [
+      "bash",
+      "zsh",
+      "fish",
+      "powershell"
+    ]
+  },
+  "root": {
+    "use": "XXX_CLI_LOWERCASE_XXX",
+    "long": "",
+    "example_usages": [
+      [
+        "help"
+      ]
+    ]
+  }
+}
+"#;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub const CMD_COMPLETION: &str = r#"
+package cmd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import (
+	"os"
+
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
+	"github.com/spf13/cobra"
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func CompletionCmd() *cobra.Command {
+	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("completion", runCompletion,
+		domovoi.WithArgs(cobra.ExactArgs(1)),
+		domovoi.WithValidArgs([]string{"bash", "zsh", "fish", "powershell"}),
+	))
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func runCompletion(cmd *cobra.Command, args []string) {
+	switch args[0] {
+	case "bash":
+		horus.CheckErr(cmd.Root().GenBashCompletion(os.Stdout))
+	case "zsh":
+		horus.CheckErr(cmd.Root().GenZshCompletion(os.Stdout))
+	case "fish":
+		horus.CheckErr(cmd.Root().GenFishCompletion(os.Stdout, true))
+	case "powershell":
+		horus.CheckErr(cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout))
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+"#;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub const CMD_IDENTITY: &str = r#"
+package cmd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import (
+	"fmt"
+
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
+	"github.com/spf13/cobra"
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func IdentityCmd() *cobra.Command {
+	return horus.Must(horus.Must(domovoi.GlobalDocs()).MakeCmd("identity", runIdentity,
+		domovoi.WithAliases([]string{"id"}),
+	))
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub const IDENT = ``
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func runIdentity(cmd *cobra.Command, args []string) {
+	fmt.Println()
+	fmt.Println(IDENT)
+	fmt.Println()
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+"#;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+pub const CMD_TEMPLATE: &str = r#"
+package cmd
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import (
+	"github.com/DanielRivasMD/domovoi"
+	"github.com/DanielRivasMD/horus"
+	"github.com/spf13/cobra"
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func XXX_CMD_UPPERCASE_XXXCmd() *cobra.Command {
+	d := horus.Must(domovoi.GlobalDocs())
+	cmd := horus.Must(d.MakeCmd("XXX_CMD_LOWERCASE_XXX", runXXX_CMD_UPPERCASE_XXX))
+
+	return cmd
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func runXXX_CMD_UPPERCASE_XXX(cmd *cobra.Command, args []string) {
+	op := "XXX_CLI_LOWERCASE_XXX.XXX_CMD_LOWERCASE_XXX"
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+"#;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
