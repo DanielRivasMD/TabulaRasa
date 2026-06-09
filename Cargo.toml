@@ -14,5 +14,5 @@ edition = "2024"
 anyhow = "1.0"
 clap = { version = "4", features = ["derive"] }
 clap_complete = "4"
-dirs = "5"
+dirs = "6"
 regex = "1"
