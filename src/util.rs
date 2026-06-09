@@ -28,4 +28,16 @@ pub fn upper_first(s: &str) -> String {
     }
 }
 
+pub fn two_letter_from_module(module: &str) -> anyResult<String> {
+    let caps: String = module.chars().filter(|c| c.is_ascii_uppercase()).collect();
+    if caps.len() < 2 {
+        anyhow::bail!(
+            "Cannot derive a two‑letter code from module \"{module}\": \
+             found {found} uppercase letter(s). Please provide --letter explicitly.",
+            found = caps.len()
+        );
+    }
+    Ok(caps[..2].to_string())
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
