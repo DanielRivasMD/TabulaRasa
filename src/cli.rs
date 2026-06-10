@@ -4,8 +4,19 @@ use clap::{Parser, Subcommand, ValueEnum};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+const HELP: &str = r"Blank slate deployment";
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #[derive(Parser)]
-#[command(name = "tab", version, about = "Blank slate deployment")]
+#[command(
+    name = env!("CARGO_PKG_NAME"),
+    version = env!("CARGO_PKG_VERSION"),
+    author = env!("CARGO_PKG_AUTHORS"),
+    about = env!("CARGO_PKG_DESCRIPTION"),
+    before_help = concat!(env!("CARGO_PKG_AUTHORS"), "\n", env!("CARGO_PKG_NAME"), " v", env!("CARGO_PKG_VERSION")),
+    long_about = HELP,
+)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
@@ -14,6 +25,8 @@ pub struct Cli {
     #[arg(short, long, global = true)]
     pub verbose: bool,
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #[derive(Subcommand)]
 pub enum Commands {
