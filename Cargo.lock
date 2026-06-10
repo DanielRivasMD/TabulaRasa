@@ -281,7 +281,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tab"
+name = "tabularasa"
 version = "0.1.0"
 dependencies = [
  "anyhow",
