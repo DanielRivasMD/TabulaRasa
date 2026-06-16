@@ -10,7 +10,7 @@ const HELP: &str = r"Blank slate deployment";
 
 #[derive(Parser)]
 #[command(
-    name = env!("CARGO_PKG_NAME"),
+    name = env!("CARGO_BIN_NAME"),
     version = env!("CARGO_PKG_VERSION"),
     author = env!("CARGO_PKG_AUTHORS"),
     about = env!("CARGO_PKG_DESCRIPTION"),
@@ -19,7 +19,7 @@ const HELP: &str = r"Blank slate deployment";
 )]
 pub struct Cli {
     #[command(subcommand)]
-    pub command: Commands,
+    pub command: Command,
 
     /// Enable verbose output
     #[arg(short, long, global = true)]
@@ -29,7 +29,7 @@ pub struct Cli {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #[derive(Subcommand)]
-pub enum Commands {
+pub enum Command {
     /// Construct cobra applications, commands & import utilities
     Cobra {
         #[command(subcommand)]
@@ -44,6 +44,7 @@ pub enum Commands {
         #[arg(long, default_value = "danielrivasmd@gmail.com")]
         email: String,
     },
+
     /// Deploy configuration templates
     Deploy {
         // TODO: add option completion
@@ -53,11 +54,16 @@ pub enum Commands {
         #[command(subcommand)]
         sub: Option<DeploySub>,
     },
+
     /// Initialize configuration directories
     Etch,
+
     /// Print identity
+    #[command(hide = true)]
     Identity,
+
     /// Generate shell completions
+    #[command(hide = true)]
     Completion {
         /// Shell for which to generate completions
         #[arg(value_enum)]
@@ -73,6 +79,7 @@ pub enum CobraSub {
         #[arg(short, long)]
         force: bool,
     },
+
     /// Construct cobra command
     Cmd {
         /// Command name
@@ -89,10 +96,13 @@ pub enum DeploySub {
         #[arg(long, default_value = "")]
         module: String,
     },
+
     /// Build system files
     Just,
+
     /// README scaffold
     Readme,
+
     /// Task‑tracker config
     Todor,
 }
