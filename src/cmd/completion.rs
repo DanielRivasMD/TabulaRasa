@@ -1,24 +1,33 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 use anyhow::Result as anyResult;
-use clap::CommandFactory;
+use clap::{CommandFactory, Command};
 use clap_complete::{generate, shells::*};
 use std::io;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-use crate::cli::{Cli, Shell};
+use crate::cli;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-pub fn run(shell: Shell) -> anyResult<()> {
-    let mut cmd = Cli::command();
+pub fn run(shell: cli::Shell) -> anyResult<()> {
+    let visible: Vec<_> = cli::Cli::command()
+        .get_subcommands()
+        .filter(|s| !s.is_hide_set())
+        .cloned()
+        .collect();
+
+    let mut cmd = Command::new(env!("CARGO_BIN_NAME"))
+        .subcommands(visible);
+
     let name = cmd.get_name().to_string();
+
     match shell {
-        Shell::Bash => generate(Bash, &mut cmd, name, &mut io::stdout()),
-        Shell::Zsh => generate(Zsh, &mut cmd, name, &mut io::stdout()),
-        Shell::Fish => generate(Fish, &mut cmd, name, &mut io::stdout()),
-        Shell::Powershell => generate(PowerShell, &mut cmd, name, &mut io::stdout()),
+        cli::Shell::Bash => generate(Bash, &mut cmd, name, &mut io::stdout()),
+        cli::Shell::Zsh => generate(Zsh, &mut cmd, name, &mut io::stdout()),
+        cli::Shell::Fish => generate(Fish, &mut cmd, name, &mut io::stdout()),
+        cli::Shell::Powershell => generate(PowerShell, &mut cmd, name, &mut io::stdout()),
     }
     Ok(())
 }
