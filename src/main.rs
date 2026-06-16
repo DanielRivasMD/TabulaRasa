@@ -2,7 +2,10 @@
 
 use anyhow::Result as anyResult;
 use clap::Parser;
-use cli::Cli;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+use cli::{Cli, Command};
 use cmd::{cobra, completion, deploy, etch, identity};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,16 +21,16 @@ mod util;
 fn main() -> anyResult<()> {
     let cli = Cli::parse();
     match cli.command {
-        cli::Commands::Cobra {
+        Command::Cobra {
             sub,
             user,
             author,
             email,
         } => cobra::run(sub, &user, &author, &email, cli.verbose)?,
-        cli::Commands::Deploy { lang, sub } => deploy::run(lang.as_deref(), sub, cli.verbose)?,
-        cli::Commands::Etch => etch::run(cli.verbose)?,
-        cli::Commands::Identity => identity::run()?,
-        cli::Commands::Completion { shell } => completion::run(shell)?,
+        Command::Deploy { lang, sub } => deploy::run(lang.as_deref(), sub, cli.verbose)?,
+        Command::Etch => etch::run(cli.verbose)?,
+        Command::Identity => identity::run()?,
+        Command::Completion { shell } => completion::run(shell)?,
     }
     Ok(())
 }
