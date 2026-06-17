@@ -44,11 +44,11 @@ pub fn run(
             let year = "2026";
 
             let replacements = vec![
-                forge::Replacement::token("XXX_REPO_XXX", &repo),
-                forge::Replacement::token("XXX_CLI_LOWERCASE_XXX", &lower_repo),
-                forge::Replacement::token("XXX_AUTHOR_XXX", author),
-                forge::Replacement::token("XXX_EMAIL_XXX", email),
-                forge::Replacement::token("XXX_YEAR_XXX", year),
+                issac::Replacement::token("XXX_REPO_XXX", &repo),
+                issac::Replacement::token("XXX_CLI_LOWERCASE_XXX", &lower_repo),
+                issac::Replacement::token("XXX_AUTHOR_XXX", author),
+                issac::Replacement::token("XXX_EMAIL_XXX", email),
+                issac::Replacement::token("XXX_YEAR_XXX", year),
             ];
 
             fs::create_dir_all("cmd")?;
@@ -97,12 +97,12 @@ pub fn run(
             let cmd_upper = util::upper_first(&name);
             let year = "2026";
             let replacements = vec![
-                forge::Replacement::token("XXX_CLI_LOWERCASE_XXX", &lower_repo),
-                forge::Replacement::token("XXX_CMD_LOWERCASE_XXX", &cmd_lower),
-                forge::Replacement::token("XXX_CMD_UPPERCASE_XXX", &cmd_upper),
-                forge::Replacement::token("XXX_AUTHOR_XXX", author),
-                forge::Replacement::token("XXX_EMAIL_XXX", email),
-                forge::Replacement::token("XXX_YEAR_XXX", year),
+                issac::Replacement::token("XXX_CLI_LOWERCASE_XXX", &lower_repo),
+                issac::Replacement::token("XXX_CMD_LOWERCASE_XXX", &cmd_lower),
+                issac::Replacement::token("XXX_CMD_UPPERCASE_XXX", &cmd_upper),
+                issac::Replacement::token("XXX_AUTHOR_XXX", author),
+                issac::Replacement::token("XXX_EMAIL_XXX", email),
+                issac::Replacement::token("XXX_YEAR_XXX", year),
             ];
 
             let out_file = format!("cmd/cmd{cmd_upper}.go");
