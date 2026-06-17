@@ -1,6 +1,4 @@
 - make release v1.0.0
-changelog => embeded templates
-unify mbombo & tabularasa into one repo
 
 
 
@@ -11,12 +9,13 @@ consistent error handling
 decoupled template forging
 tab completion integrated
 idempotent operations
+embeded templates
 
 weaknesses:
 
-external dependency
+* external dependency
 overly complex flag propagation
-inconsistent initialisation
+* inconsistent initialisation
 no versioning of templates
 mixed concerns in util.go
 
@@ -26,6 +25,9 @@ enhancements:
 
 ==================================================
 src/cli.rs
-  line 36     TODO   add option completion
-  line 74     TODO   add graceful error out
+  line 50     TODO   add option completion
+  line 91     TODO   create a struct DeployOpts to hold lang flag
+  line 96     TODO   add graceful error out
+src/cmd/cobra.rs
+  line 18     TODO   modularize subcommands
 ==================================================
