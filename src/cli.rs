@@ -60,6 +60,7 @@ pub enum Command {
 
     /// Print identity
     #[command(hide = true)]
+    #[command(aliases = &["id"])]
     Identity,
 
     /// Generate shell completions
