@@ -5,8 +5,6 @@ use anyhow::Result as anyResult;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 use crate::cli;
-use crate::cmd::deploy;
-
 use crate::forge;
 use crate::skeleton;
 use crate::util;
@@ -15,14 +13,14 @@ use crate::util;
 
 pub fn run(lang: Option<&str>, sub: Option<cli::DeploySub>, verbose: bool) -> anyResult<()> {
     match sub {
-        Some(cli::DeploySub::Avicenna { module }) => deploy::avicenna::run(&module, verbose)?,
-        Some(cli::DeploySub::Just) => deploy::just::run(lang, verbose)?,
-        Some(cli::DeploySub::Readme) => deploy::readme::run(verbose)?,
-        Some(cli::DeploySub::Todor) => deploy::todor::run(verbose)?,
+        Some(cli::DeploySub::Avicenna { module }) => avicenna::run(&module, verbose)?,
+        Some(cli::DeploySub::Just) => just::run(lang, verbose)?,
+        Some(cli::DeploySub::Readme) => readme::run(verbose)?,
+        Some(cli::DeploySub::Todor) => todor::run(verbose)?,
         None => {
-            deploy::just::run(lang, verbose)?;
-            deploy::readme::run(verbose)?;
-            deploy::todor::run(verbose)?;
+            just::run(lang, verbose)?;
+            readme::run(verbose)?;
+            todor::run(verbose)?;
         }
     }
     Ok(())
