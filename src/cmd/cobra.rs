@@ -1,7 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-use anyhow::Result as anyResult;
-use anyhow::Context;
+use anyhow::{Context, Result as anyResult};
 use std::fs;
 use std::path::Path;
 use std::process::Command as StdCommand;
@@ -53,7 +52,12 @@ pub fn run(
 
             fs::create_dir_all("cmd")?;
 
-            forge::forge_files("main.go", &[("main.go", skeleton::cobra::MAIN)], &replacements, verbose)?;
+            forge::forge_files(
+                "main.go",
+                &[("main.go", skeleton::cobra::MAIN)],
+                &replacements,
+                verbose,
+            )?;
             forge::forge_files(
                 "cmd/root.go",
                 &[("root.go", skeleton::cobra::ROOT)],
