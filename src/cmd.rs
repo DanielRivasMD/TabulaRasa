@@ -1,5 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+use anyhow::Result as anyResult;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 pub mod cobra;
 pub mod deploy;
 pub mod etch;
@@ -8,14 +12,13 @@ pub mod etch;
 
 pub mod completion {
 
-    use anyhow::Result as anyResult;
     use clap::{Command, CommandFactory};
     use clap_complete::{generate, shells::*};
     use std::io;
 
     use crate::cli;
 
-    pub fn run(shell: cli::Shell) -> anyResult<()> {
+    pub fn run(shell: cli::Shell) -> super::anyResult<()> {
         let visible: Vec<_> = cli::Cli::command()
             .get_subcommands()
             .filter(|s| !s.is_hide_set())
@@ -23,8 +26,16 @@ pub mod completion {
             .collect();
 
         let mut cmd = Command::new(env!("CARGO_BIN_NAME")).subcommands(visible);
-
         let name = cmd.get_name().to_string();
+
+        // Manually add global flags from the full CLI definition
+        let full = cli::Cli::command();
+        for arg in full.get_arguments() {
+            let nm = arg.get_id().as_str();
+            if nm == "verbose" {
+                cmd = cmd.arg(arg.clone());
+            }
+        }
 
         match shell {
             cli::Shell::Bash => generate(Bash, &mut cmd, name, &mut io::stdout()),
@@ -39,12 +50,10 @@ pub mod completion {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 pub mod identity {
-    use anyhow::Result as anyResult;
+    use colored::*;
 
-    pub const IDENTITY: &str = r#"Tabula Rasa"#;
-
-    pub fn run() -> anyResult<()> {
-        println!("{}", IDENTITY);
+    pub fn run() -> super::anyResult<()> {
+        println!("{tabularasa}", tabularasa = "TabulaRasa".cyan());
         Ok(())
     }
 }
