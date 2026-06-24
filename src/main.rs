@@ -5,15 +5,6 @@ use clap::Parser;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-use cli::{Cli, Command};
-use cmd::cobra;
-use cmd::completion;
-use cmd::deploy;
-use cmd::etch;
-use cmd::identity;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 mod cli;
 mod cmd;
 mod forge;
@@ -23,18 +14,18 @@ mod util;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 fn main() -> anyResult<()> {
-    let cli = Cli::parse();
+    let cli = cli::Cli::parse();
     match cli.command {
-        Command::Cobra {
+        cli::Command::Cobra {
             sub,
             user,
             author,
             email,
-        } => cobra::run(sub, &user, &author, &email, cli.verbose)?,
-        Command::Deploy { lang, sub } => deploy::run(lang.as_deref(), sub, cli.verbose)?,
-        Command::Etch => etch::run(cli.verbose)?,
-        Command::Identity => identity::run()?,
-        Command::Completion { shell } => completion::run(shell)?,
+        } => cmd::cobra::run(sub, &user, &author, &email, cli.verbose)?,
+        cli::Command::Deploy { lang, sub } => cmd::deploy::run(lang.as_deref(), sub, cli.verbose)?,
+        cli::Command::Etch => cmd::etch::run(cli.verbose)?,
+        cli::Command::Identity => cmd::identity::run()?,
+        cli::Command::Completion { shell } => cmd::completion::run(shell)?,
     }
     Ok(())
 }
