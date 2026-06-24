@@ -7,7 +7,7 @@ keywords = []
 categories = []
 readme = "README.md"
 description = ""
-edition = "2024"
+edition.workspace = true
 
 [[bin]]
 name = "tab"
@@ -20,5 +20,6 @@ issac = { path = "../issac" }
 anyhow = "1"
 clap = { version = "4", features = ["derive"] }
 clap_complete = "4"
+colored = "3"
 dirs = "6"
 regex = "1"
