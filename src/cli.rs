@@ -21,7 +21,7 @@ pub struct Cli {
     #[command(subcommand)]
     pub command: Command,
 
-    /// Enable verbose diagnostics
+    /// Enable verbose output
     #[arg(short, long, global = true)]
     pub verbose: bool,
 }
@@ -59,8 +59,7 @@ pub enum Command {
     Etch,
 
     /// Print identity
-    #[command(hide = true)]
-    #[command(aliases = &["id"])]
+    #[command(hide = true, aliases = &["id"])]
     Identity,
 
     /// Generate shell completions
