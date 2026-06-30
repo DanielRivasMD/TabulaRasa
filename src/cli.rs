@@ -21,8 +21,8 @@ pub struct Cli {
     #[command(subcommand)]
     pub command: Command,
 
-    /// Enable verbose output
-    #[arg(short, long, global = true)]
+    /// Enable verbose diagnostics
+    #[arg(global = true, short, long)]
     pub verbose: bool,
 }
 
